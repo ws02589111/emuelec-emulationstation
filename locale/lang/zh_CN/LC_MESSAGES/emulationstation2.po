@@ -10,6 +10,138 @@ msgstr ""
 "X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+msgid "AUDIO DEVICE"
+msgstr "音频设备"
+
+msgid "ENABLE SSH"
+msgstr "启用SSH"
+
+msgid "START AT BOOT"
+msgstr "开机启动"
+
+msgid "ENABLE RA BEZELS"
+msgstr "启用游戏边框"
+
+msgid "ENABLE RA SPLASH"
+msgstr "启用游戏闪图"
+
+msgid "ALWAYS SHOW BOOT VIDEO"
+msgstr "启用开机视频"
+
+msgid "DEFAULT YOUTUBE SEARCH WORD"
+msgstr "默认YouTube搜索关键字"
+
+msgid "AUTO CONFIG ADVANCEMAME GAMEPAD"
+msgstr "自动配置ADVANCEMAME游戏手柄"
+
+msgid "DANGER ZONE!"
+msgstr "危险区域！"
+
+msgid ""
+"WARNING THIS WILL RESTART EMULATIONSTATION!\n"
+"\n"
+"AFTER THE SCRIPT IS DONE REMEMBER TO COPY THE FILE /storage/downloads/"
+"ee_backup_config.zip TO SOME PLACE SAFE OR IT WILL BE DELETED ON NEXT "
+"REBOOT!\n"
+"\n"
+"BACKUP CURRENT CONFIG AND RESTART?"
+msgstr ""
+"警告：该操作将会导致EMULATIONSTATION重启\n"
+"\n"
+"当脚本执行完成后, 请记得将位于如下路径的 /storage/downloads/ee_backup_config.zip文件"
+"保存到其他安全的地方，已防止下次启动的时候被删除\n"
+"\n"
+"确定要备份当前的配置并重启吗?"
+
+
+msgid "BACKUP EMUELEC CONFIGS"
+msgstr "备份EMUELEC配置"
+
+msgid ""
+"WARNING: SYSTEM WILL RESET SCRIPTS AND BINARIES !\n"
+"UPDATE, DOWNLOADS, THEMES, BLUETOOTH PAIRINGS AND ROMS FOLDER WILL NOT BE "
+"AFFECTED.\n"
+"\n"
+"RESET SCRIPTS AND BINARIES TO DEFAULT AND RESTART?"
+msgstr ""
+"警告: 系统会重置所有的脚本和可执行程序 !\n"
+"UPDATE, DOWNLOADS, THEMES, BLUETOOTH PAIRINGS AND ROMS 文件夹不会受到影响。\n "
+"\n"
+"确定要重置所有的脚本和可执行程序并重启?"
+
+msgid "RESET EMUELEC SCRIPTS AND BINARIES TO DEFAULT"
+msgstr "重置EMUELEC脚本和可执行程序到默认"
+
+
+msgid ""
+"WARNING: RETROARCH CONFIG WILL RESET TO DEFAULT\n"
+"\n"
+"PER-CORE CONFIGURATIONS WILL NOT BE AFFECTED BUT NO BACKUP WILL BE CREATED!\n"
+"\n"
+"RESET RETROARCH CONFIG TO DEFAULT?"
+msgstr ""
+"警告: RETROARCH的配置将会被重置到默认配置 !\n"
+"\n"
+"核心的单独配置不会受到影响，但是也不会被备份!\n"
+"\n"
+"确定要重置RETROARCH的配置吗?"
+
+msgid "RESET RETROARCH CONFIG TO DEFAULT"
+msgstr "重置RETROARCH的配置到默认"
+
+msgid ""
+"WARNING: ALL CONFIGURATIONS WILL BE RESET AND NO BACKUP WILL BE CREATED!\n"
+"\n"
+"IF YOU WANT TO KEEP YOUR SETTINGS MAKE A BACKUP AND SAVE IT ON AN EXTERNAL "
+"DRIVE BEFORE RUNING THIS OPTION!\n"
+"\n"
+"RESET SYSTEM TO DEFAULT CONFIG AND RESTART?"
+msgstr ""
+"警告: 所有的配置都将会被重制到默认，并且不会创建任何备份!\n"
+"\n"
+"如果你想保持当前的配置，请在运行该功能之前将当前的配置备份到外部存储设备\n"
+"\n"
+"确定要重置系统配置到默认吗?"
+
+msgid "RESET SYSTEM TO DEFAULT CONFIG"
+msgstr "重置系统配置到默认"
+
+msgid "You are about to set EmuELEC Language to:"
+msgstr "你将要把EmuELEC的语言设置为:"
+
+msgid "ENABLE MAX PERFORMANCE"
+msgstr "启用最大性能"
+
+msgid "RESTART EMULATIONSTATION"
+msgstr "重启EMULATIONSTATION"
+
+msgid "REALLY RESTART EMULATIONSTATION?"
+msgstr "真的要重启EMULATIONSTATION吗?"
+
+msgid "START RETROARCH"
+msgstr "启动到RETROARCH"
+
+msgid "REALLY START RETROARCH?"
+msgstr "真的要启动到RETROARCH吗?"
+
+msgid "REBOOT FROM NAND"
+msgstr "重启至NAND"
+
+msgid "REALLY REBOOT FROM NAND?"
+msgstr "真的要重启至NAND?"
+
+msgid "BEZEL"
+msgstr "边框"
+
+msgid "You are about to set EmuELEC resolution to:"
+msgstr "你将要把EmuELEC的分辨率设置为:"
+
+msgid "Emulationstation will restart"
+msgstr "Emulationstation将要重启"
+
+msgid "EMUELEC SETTINGS"
+msgstr "EMUELEC设置"
+
 msgid "UPDATING BATOCERA"
 msgstr "更新 BATOCERA"
 
@@ -255,6 +387,9 @@ msgstr "KODI 媒体中心"
 
 msgid "RETROACHIEVEMENTS"
 msgstr "RetroArch成就"
+
+msgid "UPDATING EMUELEC"
+msgstr "EMUELEC更新中"
 
 msgid "GAMES SETTINGS"
 msgstr "游戏设置"
@@ -1172,7 +1307,7 @@ msgid "SELECT CONTENT TO INSTALL / REMOVE"
 msgstr "选择 安装/卸载 内容"
 
 msgid "MISC"
-msgstr ""
+msgstr "杂项"
 
 msgid "UNINSTALL ADDED TO QUEUE"
 msgstr "卸载任务已加入队列"
