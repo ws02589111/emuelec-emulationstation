@@ -1512,6 +1512,7 @@ std::vector<std::string> SystemData::getCoreNames(std::string emulatorName)
 
 bool SystemData::hasEmulatorSelection()
 {
+	return true;
 	if (isGroupSystem() || isCollection() || hasPlatformId(PlatformIds::PLATFORM_IGNORE))
 		return false;
 
