@@ -10,9 +10,6 @@ msgstr ""
 "X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "EMULATOR"
-msgstr "模拟器"
-
 msgid "AUDIO DEVICE"
 msgstr "音频设备"
 
