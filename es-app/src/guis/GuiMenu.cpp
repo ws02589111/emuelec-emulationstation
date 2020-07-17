@@ -3732,8 +3732,7 @@ void GuiMenu::popSpecificConfigurationGui(Window* mWindow, std::string title, st
 
 	std::string currentEmulator = fileData != nullptr ? fileData->getEmulator(false) : SystemConf::getInstance()->get(configName + ".emulator");
 	std::string currentCore = fileData != nullptr ? fileData->getCore(false) : SystemConf::getInstance()->get(configName + ".core");
-	Window *window = mWindow;
-	window->pushGui(new GuiMsgBox(window, (systemData->hasEmulatorSelection() ? "hasEmulatorSelection true " : "hasEmulatorSelection false")) + currentEmulator  + currentCore);
+	
 	if (systemData->hasEmulatorSelection())
 	{
 		std::string defaultCore = currentCore;
