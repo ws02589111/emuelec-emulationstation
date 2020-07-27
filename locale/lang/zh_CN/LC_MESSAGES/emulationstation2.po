@@ -1937,17 +1937,74 @@ msgstr "左"
 msgid "RIGHT"
 msgstr "右"
 
+msgid "D-PAD UP"
+msgstr "十字键 上"
+
+msgid "D-PAD DOWN"
+msgstr "十字键 上"
+
+msgid "D-PAD LEFT"
+msgstr "十字键 上"
+
+msgid "D-PAD RIGHT"
+msgstr "十字键 上"
+
+msgid "BUTTON A/EAST"
+msgstr "按钮A"
+
+msgid "BUTTON B/SOUTH"
+msgstr "按钮B"
+
+msgid "BUTTON X/NORTH"
+msgstr "按钮X"
+
+msgid "BUTTON Y/WEST"
+msgstr "按钮Y"
+
+msgid "LEFT SHOULDER"
+msgstr "L1键"
+
+msgid "RIGHT SHOULDER"
+msgstr "R1键"
+
+msgid "LEFT TRIGGER"
+msgstr "L2键"
+
+msgid "RIGHT TRIGGER"
+msgstr "R2键"
+
+msgid "LEFT THUMB"
+msgstr "左侧摇杆中键"
+
+msgid "RIGHT THUMB"
+msgstr "右侧摇杆中键"
+
 msgid "LEFT ANALOG UP"
-msgstr "左侧类比摇杆 上"
+msgstr "左侧摇杆 上"
 
 msgid "LEFT ANALOG LEFT"
-msgstr "左侧类比摇杆 左"
+msgstr "左侧摇杆 左"
+
+msgid "LEFT ANALOG DOWN"
+msgstr "左侧摇杆 下"
+
+msgid "LEFT ANALOG RIGHT"
+msgstr "左侧摇杆 右"
 
 msgid "RIGHT ANALOG UP"
-msgstr "右侧类比摇杆 上"
+msgstr "右侧摇杆 上"
+
+msgid "RIGHT ANALOG DOWN"
+msgstr "右侧摇杆 下"
+
+msgid "RIGHT ANALOG RIGHT"
+msgstr "右侧摇杆 右"
 
 msgid "RIGHT ANALOG LEFT"
-msgstr "右侧类比摇杆 左"
+msgstr "右侧摇杆 左"
+
+msgid "HOTKEY ENABLE"
+msgstr "热键"
 
 msgid "HOTKEY"
 msgstr "热键"
