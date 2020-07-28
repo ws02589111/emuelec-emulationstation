@@ -81,9 +81,7 @@ msgid ""
 "RESET RETROARCH CONFIG TO DEFAULT?"
 msgstr ""
 "警告: RETROARCH的配置将会被重置到默认配置 !\n"
-"\n"
 "核心的单独配置不会受到影响，但是也不会被备份!\n"
-"\n"
 "确定要重置RETROARCH的配置吗?"
 
 msgid "RESET RETROARCH CONFIG TO DEFAULT"
@@ -98,9 +96,7 @@ msgid ""
 "RESET SYSTEM TO DEFAULT CONFIG AND RESTART?"
 msgstr ""
 "警告: 所有的配置都将会被重制到默认，并且不会创建任何备份!\n"
-"\n"
 "如果你想保持当前的配置，请在运行该功能之前将当前的配置备份到外部存储设备\n"
-"\n"
 "确定要重置系统配置到默认吗?"
 
 msgid "RESET SYSTEM TO DEFAULT CONFIG"
@@ -1941,24 +1937,24 @@ msgid "D-PAD UP"
 msgstr "十字键 上"
 
 msgid "D-PAD DOWN"
-msgstr "十字键 上"
+msgstr "十字键 下"
 
 msgid "D-PAD LEFT"
-msgstr "十字键 上"
+msgstr "十字键 左"
 
 msgid "D-PAD RIGHT"
-msgstr "十字键 上"
+msgstr "十字键 右"
 
-msgid "BUTTON A/EAST"
+msgid "BUTTON A / EAST"
 msgstr "按钮A"
 
-msgid "BUTTON B/SOUTH"
+msgid "BUTTON B / SOUTH"
 msgstr "按钮B"
 
-msgid "BUTTON X/NORTH"
+msgid "BUTTON X / NORTH"
 msgstr "按钮X"
 
-msgid "BUTTON Y/WEST"
+msgid "BUTTON Y / WEST"
 msgstr "按钮Y"
 
 msgid "LEFT SHOULDER"
