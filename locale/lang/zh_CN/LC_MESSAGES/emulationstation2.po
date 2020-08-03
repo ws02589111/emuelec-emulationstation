@@ -373,7 +373,7 @@ msgid "Cpu number"
 msgstr "CPU 序列号"
 
 msgid "Cpu max frequence"
-msgstr ""
+msgstr "CPU 最大频率"
 
 msgid "Cpu feature"
 msgstr "CPU 特征"
@@ -1422,17 +1422,17 @@ msgid "NO DEVICE FOUND"
 msgstr "未找到设备"
 
 msgid "THEMES DOWNLOADER"
-msgstr ""
+msgstr "主题下载器"
 
 msgid "SELECT THEMES TO INSTALL / REMOVE"
-msgstr ""
+msgstr "选择主题进行安装/卸载"
 
 msgid "THEME UNINSTALLED SUCCESSFULLY"
-msgstr ""
+msgstr "主题卸载成功"
 
 #, c-format
 msgid "CURRENT THEME"
-msgstr ""
+msgstr "当前主题"
 
 msgid "EDIT METADATA"
 msgstr "编辑元数据"
@@ -1520,10 +1520,10 @@ msgid "enter path to map"
 msgstr "输入映射路径"
 
 msgid "Cartridge"
-msgstr ""
+msgstr "磁盘"
 
 msgid "enter path to cartridge"
-msgstr ""
+msgstr "输入磁盘路径"
 
 msgid "Alt BoxArt"
 msgstr ""
