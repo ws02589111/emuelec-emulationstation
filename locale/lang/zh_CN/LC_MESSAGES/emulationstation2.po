@@ -355,7 +355,7 @@ msgid "System"
 msgstr "系统"
 
 msgid "Architecture"
-msgstr "结构"
+msgstr "架构"
 
 msgid "Temperature"
 msgstr "温度"
@@ -370,7 +370,7 @@ msgid "Cpu model"
 msgstr "CPU 型号"
 
 msgid "Cpu number"
-msgstr "CPU 序列号"
+msgstr "CPU 数量"
 
 msgid "Cpu max frequence"
 msgstr "CPU 最大频率"
