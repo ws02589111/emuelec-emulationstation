@@ -380,6 +380,7 @@ EmulatorFeatures::Features EmulatorFeatures::parseFeatures(const std::string fea
 		if (trim == "internal_resolution") ret = ret | EmulatorFeatures::Features::internal_resolution;
 		if (trim == "videomode") ret = ret | EmulatorFeatures::Features::videomode;
 		if (trim == "colorization") ret = ret | EmulatorFeatures::Features::colorization;		
+		if (trim == "vertical") ret = ret | EmulatorFeatures::Features::vertical;		
 	}
 
 	return ret;
@@ -1417,7 +1418,7 @@ std::string SystemData::getDefaultEmulator()
 #ifndef _ENABLEEMUELEC
 	std::string emulator = SystemConf::getInstance()->get(getName() + ".emulator");
 #else
-	std::string emulator = getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + getName() + ".emulator' ");
+	std::string emulator = getShOutput(R"(emuelec-utils setemu get ')" + getName() + ".emulator' ");
 #endif
 #endif
 
@@ -1449,7 +1450,7 @@ std::string SystemData::getDefaultCore(const std::string emulatorName)
 #ifndef _ENABLEEMUELEC
 	std::string core = SystemConf::getInstance()->get(getName() + ".core");
 #else
-	std::string core = getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + getName() + ".core' ");
+	std::string core = getShOutput(R"(emuelec-utils setemu get ')" + getName() + ".core' ");
 #endif
 #endif
 

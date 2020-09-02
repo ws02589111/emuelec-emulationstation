@@ -16,6 +16,7 @@
 #include "guis/GuiSettings.h"
 #include "guis/GuiRetroAchievements.h" //batocera
 #include "guis/GuiGamelistOptions.h"
+#include "guis/GuiImageViewer.h"
 #include "views/UIModeController.h"
 #include "views/ViewController.h"
 #include "CollectionSystemManager.h"
@@ -65,7 +66,7 @@
 #define fake_gettext_battery      _("Battery")
 #define fake_gettext_cpu_model    _("Cpu model")
 #define fake_gettext_cpu_number   _("Cpu number")
-#define fake_gettext_cpu_number   _("Cpu max frequence")
+#define fake_gettext_cpu_frequency _("Cpu max frequency")
 #define fake_gettext_cpu_feature  _("Cpu feature")
 
 GuiMenu::GuiMenu(Window *window, bool animate) : GuiComponent(window), mMenu(window, _("MAIN MENU").c_str()), mVersion(window)
@@ -199,9 +200,6 @@ void GuiMenu::openEmuELECSettings()
 	std::string a;
 	auto emuelec_video_mode = std::make_shared< OptionListComponent<std::string> >(mWindow, "VIDEO MODE", false);
         std::vector<std::string> videomode;
-  /* for(std::stringstream ss(getShOutput(R"(~/.config/emuelec/scripts/get_supported_resolutions.sh)")); getline(ss, a, ','); ) {
-        videomode.push_back(a);
-	}*/
 		videomode.push_back("1080p60hz");
 		videomode.push_back("1080i60hz");
 		videomode.push_back("720p60hz");
@@ -213,18 +211,25 @@ void GuiMenu::openEmuELECSettings()
 		videomode.push_back("1080i50hz");
 		videomode.push_back("576cvbs");
 		videomode.push_back("Custom");
+		videomode.push_back("-- AUTO-DETECTED RESOLUTIONS --");
+   for(std::stringstream ss(getShOutput(R"(/emuelec/scripts/emuelec-utils resolutions)")); getline(ss, a, ','); ) {
+        videomode.push_back(a);
+	}
 		for (auto it = videomode.cbegin(); it != videomode.cend(); it++) {
 		emuelec_video_mode->add(*it, *it, SystemConf::getInstance()->get("ee_videomode") == *it); }
 		s->addWithLabel(_("VIDEO MODE"), emuelec_video_mode);
-	   	s->addSaveFunc([emuelec_video_mode, window] {
-			if (emuelec_video_mode->changed()) {
+	   	
+		s->addSaveFunc([this, emuelec_video_mode, window] {
+		
+		//bool v_need_reboot = false;
+	
+		if (emuelec_video_mode->changed()) {
 			std::string selectedVideoMode = emuelec_video_mode->getSelected();
+		if (emuelec_video_mode->getSelected() != "-- AUTO-DETECTED RESOLUTIONS --") { 
 			if (emuelec_video_mode->getSelected() != "Custom") {
 			std::string msg = _("You are about to set EmuELEC resolution to:") +"\n" + selectedVideoMode + "\n";
-			if(Utils::FileSystem::exists("/ee_s905")) {
-			msg += _("Emulationstation will restart") + ".\n";
-		}
 			msg += _("Do you want to proceed ?");
+		
 			window->pushGui(new GuiMsgBox(window, msg,
 				_("YES"), [selectedVideoMode] {
 					runSystemCommand("echo "+selectedVideoMode+" > /sys/class/display/mode", "", nullptr);
@@ -232,22 +237,23 @@ void GuiMenu::openEmuELECSettings()
 					LOG(LogInfo) << "Setting video to " << selectedVideoMode;
 					runSystemCommand("/storage/.config/emuelec/scripts/setres.sh", "", nullptr);
 					SystemConf::getInstance()->saveSystemConf();
-				if(Utils::FileSystem::exists("/ee_s905")) {
-					runSystemCommand("systemctl restart emustation", "", nullptr); 
-				}
-			}, _("NO"),nullptr));
+				//	v_need_reboot = true;
+				}, _("NO"),nullptr));
+		
 		} else { 
 			if(Utils::FileSystem::exists("/storage/.config/EE_VIDEO_MODE")) {
 				runSystemCommand("echo $(cat /storage/.config/EE_VIDEO_MODE) > /sys/class/display/mode", "", nullptr);
 				LOG(LogInfo) << "Setting custom video mode from /storage/.config/EE_VIDEO_MODE to " << runSystemCommand("cat /storage/.config/EE_VIDEO_MODE", "", nullptr);
 				SystemConf::getInstance()->set("ee_videomode", selectedVideoMode);
 				SystemConf::getInstance()->saveSystemConf();
+				//v_need_reboot = true;
 			} else { 
 				if(Utils::FileSystem::exists("/flash/EE_VIDEO_MODE")) {
 				runSystemCommand("echo $(cat /flash/EE_VIDEO_MODE) > /sys/class/display/mode", "", nullptr);
 				LOG(LogInfo) << "Setting custom video mode from /flash/EE_VIDEO_MODE to " << runSystemCommand("cat /flash/EE_VIDEO_MODE", "", nullptr);
 				SystemConf::getInstance()->set("ee_videomode", selectedVideoMode);
 				SystemConf::getInstance()->saveSystemConf();
+				//v_need_reboot = true;
 					} else {
 					runSystemCommand("echo " + SystemConf::getInstance()->get("ee_videomode")+ " > /sys/class/display/mode", "", nullptr);
 					std::string msg = "/storage/.config/EE_VIDEO_MODE or /flash/EE_VIDEO_MODE not found";
@@ -258,6 +264,9 @@ void GuiMenu::openEmuELECSettings()
 					}
 				}
 			}
+		   }	
+			//if (v_need_reboot)
+		 	mWindow->displayNotificationMessage(_U("\uF011  ") + _("A REBOOT OF THE SYSTEM IS REQUIRED TO APPLY THE NEW CONFIGURATION"));
 		 }
 		});
 		
@@ -339,7 +348,17 @@ void GuiMenu::openEmuELECSettings()
 				SystemConf::getInstance()->saveSystemConf();
 			}
 		});
-       
+
+       auto fps_enabled = std::make_shared<SwitchComponent>(mWindow);
+		bool fpsEnabled = SystemConf::getInstance()->get("global.showFPS") == "1";
+		fps_enabled->setState(fpsEnabled);
+		s->addWithLabel(_("SHOW RETROARCH FPS"), fps_enabled);
+		s->addSaveFunc([fps_enabled] {
+			bool fpsenabled = fps_enabled->getState();
+                SystemConf::getInstance()->set("global.showFPS", fpsenabled ? "1" : "0");
+				SystemConf::getInstance()->saveSystemConf();
+			});       
+
        auto bezels_enabled = std::make_shared<SwitchComponent>(mWindow);
 		bool bezelsEnabled = SystemConf::getInstance()->get("global.bezel") == "1";
 		bezels_enabled->setState(bezelsEnabled);
@@ -398,7 +417,7 @@ void GuiMenu::openEmuELECSettings()
 	row.makeAcceptInputHandler([window] {
 		window->pushGui(new GuiMsgBox(window, _("WARNING THIS WILL RESTART EMULATIONSTATION!\n\nAFTER THE SCRIPT IS DONE REMEMBER TO COPY THE FILE /storage/downloads/ee_backup_config.zip TO SOME PLACE SAFE OR IT WILL BE DELETED ON NEXT REBOOT!\n\nBACKUP CURRENT CONFIG AND RESTART?"), _("YES"),
 				[] { 
-				runSystemCommand("systemd-run /emuelec/scripts/ee_backup.sh b", "", nullptr);
+				runSystemCommand("systemd-run /emuelec/scripts/emuelec-utils backup backup", "", nullptr);
 				}, _("NO"), nullptr));
 	});
 	row.addElement(std::make_shared<TextComponent>(window, _("BACKUP EMUELEC CONFIGS"), Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
@@ -408,7 +427,7 @@ void GuiMenu::openEmuELECSettings()
 	row.makeAcceptInputHandler([window] {
 		window->pushGui(new GuiMsgBox(window, _("WARNING: SYSTEM WILL RESET SCRIPTS AND BINARIES !\nUPDATE, DOWNLOADS, THEMES, BLUETOOTH PAIRINGS AND ROMS FOLDER WILL NOT BE AFFECTED.\n\nRESET SCRIPTS AND BINARIES TO DEFAULT AND RESTART?"), _("YES"),
 				[] { 
-				runSystemCommand("systemd-run /emuelec/scripts/clearconfig.sh EMUS", "", nullptr);
+				runSystemCommand("systemd-run /emuelec/scripts/emuelec-utils clearconfig EMUS", "", nullptr);
 				}, _("NO"), nullptr));
 	});
 	row.addElement(std::make_shared<TextComponent>(window, _("RESET EMUELEC SCRIPTS AND BINARIES TO DEFAULT"), Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
@@ -418,8 +437,7 @@ void GuiMenu::openEmuELECSettings()
 	row.makeAcceptInputHandler([window] {
 		window->pushGui(new GuiMsgBox(window, _("WARNING: RETROARCH CONFIG WILL RESET TO DEFAULT\n\nPER-CORE CONFIGURATIONS WILL NOT BE AFFECTED BUT NO BACKUP WILL BE CREATED!\n\nRESET RETROARCH CONFIG TO DEFAULT?"), _("YES"),
 				[] { 
-				runSystemCommand("rm -f /storage/.config/retroarch/retroarch.cfg", "", nullptr);
-				runSystemCommand("cp -rf /usr/config/retroarch/retroarch.cfg /storage/.config/retroarch/retroarch.cfg", "", nullptr);
+				runSystemCommand("systemd-run /emuelec/scripts/emuelec-utils clearconfig retroarch", "", nullptr);
 				}, _("NO"), nullptr));
 	});
 	row.addElement(std::make_shared<TextComponent>(window, _("RESET RETROARCH CONFIG TO DEFAULT"), Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
@@ -429,7 +447,7 @@ void GuiMenu::openEmuELECSettings()
 	row.makeAcceptInputHandler([window] {
 		window->pushGui(new GuiMsgBox(window, _("WARNING: ALL CONFIGURATIONS WILL BE RESET AND NO BACKUP WILL BE CREATED!\n\nIF YOU WANT TO KEEP YOUR SETTINGS MAKE A BACKUP AND SAVE IT ON AN EXTERNAL DRIVE BEFORE RUNING THIS OPTION!\n\nRESET SYSTEM TO DEFAULT CONFIG AND RESTART?"), _("YES"),
 				[] { 
-				runSystemCommand("systemd-run /emuelec/scripts/clearconfig.sh ALL", "", nullptr);
+				runSystemCommand("systemd-run /emuelec/scripts/emuelec-utils clearconfig ALL", "", nullptr);
 				}, _("NO"), nullptr));
 	});
 	row.addElement(std::make_shared<TextComponent>(window, _("RESET SYSTEM TO DEFAULT CONFIG"), Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
@@ -659,7 +677,7 @@ void GuiMenu::addVersionInfo()
 		else
 #endif
 #ifdef _ENABLEEMUELEC	
-		mVersion.setText("EMUELEC ES V" + ApiSystem::getInstance()->getVersion() + buildDate + " IP:" + getShOutput(R"(/storage/.emulationstation/scripts/ip.sh)"));
+		mVersion.setText("EMUELEC ES V" + ApiSystem::getInstance()->getVersion() + buildDate + " IP:" + getShOutput(R"(/emuelec/scripts/emuelec-utils getip)"));
 #else
 		mVersion.setText("BATOCERA.LINUX ES V" + ApiSystem::getInstance()->getVersion() + buildDate);
 #endif
@@ -975,6 +993,18 @@ void GuiMenu::openDeveloperSettings()
 			SystemConf::getInstance()->set("global.retroarch.menu_driver", retroarchRgui->getState() ? "rgui" : "");
 		});
 
+		auto invertJoy = std::make_shared<SwitchComponent>(mWindow);
+		invertJoy->setState(Settings::getInstance()->getBool("InvertButtons"));
+		s->addWithLabel(_("SWITCH A/B BUTTONS IN EMULATIONSTATION"), invertJoy);
+		s->addSaveFunc([this, invertJoy]
+		{
+			if (Settings::getInstance()->setBool("InvertButtons", invertJoy->getState()))
+			{
+				InputConfig::AssignActionButtons();
+				ViewController::get()->reloadAll(mWindow);
+			}
+		});
+
 #if defined(WIN32)
 		auto autoControllers = std::make_shared<SwitchComponent>(mWindow);
 		autoControllers->setState(SystemConf::getInstance()->get("global.disableautocontrollers") != "1");
@@ -1123,6 +1153,23 @@ void GuiMenu::openSystemSettings_batocera()
 
 	// System informations
 	s->addEntry(_("INFORMATION"), true, [this] { openSystemInformations_batocera(); });
+
+	auto emuelec_timezones = std::make_shared<OptionListComponent<std::string> >(mWindow, _("TIMEZONE"), false);
+	std::string currentTimezone = SystemConf::getInstance()->get("system.timezone");
+	if (currentTimezone.empty())
+		currentTimezone = std::string(getShOutput(R"(/emuelec/scripts/emuelec-utils current_timezone)"));
+	std::string a;
+	for(std::stringstream ss(getShOutput(R"(/emuelec/scripts/emuelec-utils timezones)")); getline(ss, a, ','); ) {
+		emuelec_timezones->add(a, a, currentTimezone == a); // emuelec
+	}
+	s->addWithLabel(_("TIMEZONE"), emuelec_timezones);
+	s->addSaveFunc([emuelec_timezones] {
+		if (emuelec_timezones->changed()) {
+			std::string selectedTimezone = emuelec_timezones->getSelected();
+			runSystemCommand("ln -sf /usr/share/zoneinfo/" + selectedTimezone + " $(readlink /etc/localtime)", "", nullptr);
+		}
+		SystemConf::getInstance()->set("system.timezone", emuelec_timezones->getSelected());
+	});
 
 	// language choice
 	auto language_choice = std::make_shared<OptionListComponent<std::string> >(window, _("LANGUAGE"), false);
@@ -1534,7 +1581,7 @@ void GuiMenu::openLatencyReductionConfiguration(Window* mWindow, std::string con
 {
 	GuiSettings* guiLatency = new GuiSettings(mWindow, _("LATENCY REDUCTION").c_str());
 #ifdef _ENABLEEMUELEC
-	auto runaheadValue = getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".runahead'");
+	auto runaheadValue = getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".runahead'");
 #else
 	auto runaheadValue = SystemConf::getInstance()->get(configName + ".runahead");
 #endif
@@ -1555,7 +1602,7 @@ void GuiMenu::openLatencyReductionConfiguration(Window* mWindow, std::string con
 
 	// second instance
 #ifdef _ENABLEEMUELEC
-	auto secondinstanceValue = getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".secondinstance'");
+	auto secondinstanceValue = getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".secondinstance'");
 #else
 	auto secondinstanceValue = SystemConf::getInstance()->get(configName + ".secondinstance");
 #endif
@@ -1572,8 +1619,8 @@ void GuiMenu::openLatencyReductionConfiguration(Window* mWindow, std::string con
 	guiLatency->addSaveFunc([configName, runahead_enabled, secondinstance_enabled]
 	{
 #ifdef _ENABLEEMUELEC
-		getShOutput(R"(/emuelec/scripts/setemu.sh set ')" + configName + ".runahead' " + runahead_enabled->getSelected());
-		getShOutput(R"(/emuelec/scripts/setemu.sh set ')" + configName + ".secondinstance' " + secondinstance_enabled->getSelected());
+		getShOutput(R"(/emuelec/scripts/emuelec-utils setemu set ')" + configName + ".runahead' " + runahead_enabled->getSelected());
+		getShOutput(R"(/emuelec/scripts/emuelec-utils setemu set ')" + configName + ".secondinstance' " + secondinstance_enabled->getSelected());
 #else
 		SystemConf::getInstance()->set(configName + ".runahead", runahead_enabled->getSelected());
 		SystemConf::getInstance()->set(configName + ".secondinstance", secondinstance_enabled->getSelected());
@@ -1777,7 +1824,7 @@ void GuiMenu::openGamesSettings_batocera()
 		shaders_choices->add(_("NONE"), "none", currentShader == "none");
 #ifdef _ENABLEEMUELEC	
 	std::string a;
-	for(std::stringstream ss(getShOutput(R"(~/.emulationstation/scripts/getshaders.sh)")); getline(ss, a, ','); )
+	for(std::stringstream ss(getShOutput(R"(/emuelec/scripts/emuelec-utils getshaders)")); getline(ss, a, ','); )
 		shaders_choices->add(a, a, currentShader == a); // emuelec
 #else
 		shaders_choices->add(_("SCANLINES"), "scanlines", currentShader == "scanlines");
@@ -3516,29 +3563,28 @@ void GuiMenu::openQuitMenu_batocera()
   GuiMenu::openQuitMenu_batocera_static(mWindow);
 }
 
-void GuiMenu::openQuitMenu_batocera_static(Window *window, bool forceWin32Menu)
-{	
+void GuiMenu::openQuitMenu_batocera_static(Window *window, bool quickAccessMenu)
+{
 #ifdef WIN32
-	if (!forceWin32Menu && Settings::getInstance()->getBool("ShowOnlyExit"))
+	if (!quickAccessMenu && Settings::getInstance()->getBool("ShowOnlyExit"))
 	{
 		quitES(QuitMode::QUIT);
 		return;
 	}
 #endif
 
-	auto s = new GuiSettings(window, _("QUIT").c_str());
-	
-	// Don't like one of the songs? Press next
-	if (AudioManager::getInstance()->isSongPlaying())
-		s->addEntry(_("SKIP TO NEXT SONG"), false, [window] {
-			AudioManager::getInstance()->playRandomMusic(false);
-		});
+	auto s = new GuiSettings(window, (quickAccessMenu ? _("QUIT") : _("QUICK ACCESS")).c_str());
+	s->setCloseButton("select");
 
-	if (forceWin32Menu)
+	if (quickAccessMenu)
 	{
-		s->setCloseButton("select");
+		s->addGroup(_("QUICK ACCESS"));
 
-		s->addEntry(_("LAUNCH SCREENSAVER"), false, [s, window] 
+		// Don't like one of the songs? Press next
+		if (AudioManager::getInstance()->isSongPlaying())
+			s->addEntry(_("SKIP TO NEXT SONG"), false, [window] { AudioManager::getInstance()->playRandomMusic(false); }, "iconSound");
+
+		s->addEntry(_("LAUNCH SCREENSAVER"), false, [s, window]
 		{
 			window->postToUiThread([](Window* w)
 			{
@@ -3548,6 +3594,21 @@ void GuiMenu::openQuitMenu_batocera_static(Window *window, bool forceWin32Menu)
 			delete s;
 
 		}, "iconScraper", true);
+		
+#if WIN32	
+#define BATOCERA_MANUAL_FILE Utils::FileSystem::getEsConfigPath() + "/notice.pdf"
+#else
+#define BATOCERA_MANUAL_FILE "/usr/share/batocera/doc/notice.pdf"
+#endif
+
+		if (ApiSystem::getInstance()->isScriptingSupported(ApiSystem::ScriptId::PDFEXTRACTION) && Utils::FileSystem::exists(BATOCERA_MANUAL_FILE))
+		{
+			s->addEntry(_("VIEW BATOCERA MANUAL"), false, [s, window]
+			{
+				GuiImageViewer::showPdf(window, BATOCERA_MANUAL_FILE);
+				delete s;
+			}, "iconManual");
+		}
 	}
 	
 #ifdef _ENABLEEMUELEC
@@ -3584,6 +3645,9 @@ void GuiMenu::openQuitMenu_batocera_static(Window *window, bool forceWin32Menu)
 
 #endif
 
+	if (quickAccessMenu)
+		s->addGroup(_("QUIT"));
+
 	s->addEntry(_("RESTART SYSTEM"), false, [window] {
 		window->pushGui(new GuiMsgBox(window, _("REALLY RESTART?"), 
 			_("YES"), [] { quitES(QuitMode::REBOOT); }, 
@@ -3616,7 +3680,7 @@ void GuiMenu::openQuitMenu_batocera_static(Window *window, bool forceWin32Menu)
 	}
 #endif
 
-	if (forceWin32Menu)
+	if (quickAccessMenu)
 		s->getMenu().animateTo(Vector2f((Renderer::getScreenWidth() - s->getMenu().getSize().x()) / 2, (Renderer::getScreenHeight() - s->getMenu().getSize().y()) / 2));
 
 	window->pushGui(s);
@@ -4161,8 +4225,8 @@ void GuiMenu::popSpecificConfigurationGui(Window* mWindow, std::string title, st
 		if (fileData != nullptr)
 		systemConfiguration->setSubTitle(systemData->getFullName());
 
-		std::string currentEmulator = fileData != nullptr ? fileData->getEmulator(false) : getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".emulator' ");
-		std::string currentCore = fileData != nullptr ? fileData->getCore(false) : getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".core' ");
+		std::string currentEmulator = fileData != nullptr ? fileData->getEmulator(false) : getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".emulator' ");
+		std::string currentCore = fileData != nullptr ? fileData->getCore(false) : getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".core' ");
 
 	if (systemData->hasEmulatorSelection())
 	{
@@ -4213,8 +4277,8 @@ void GuiMenu::popSpecificConfigurationGui(Window* mWindow, std::string title, st
 			else
 			{
 
-				getShOutput(R"(/emuelec/scripts/setemu.sh set ')" + configName + ".emulator' " + newEmul);
-				getShOutput(R"(/emuelec/scripts/setemu.sh set ')" + configName + ".core' " + newCore);
+				getShOutput(R"(/emuelec/scripts/emuelec-utils setemu set ')" + configName + ".emulator' " + newEmul);
+				getShOutput(R"(/emuelec/scripts/emuelec-utils setemu set ')" + configName + ".core' " + newCore);
 				
 			}
 
@@ -4231,59 +4295,59 @@ void GuiMenu::popSpecificConfigurationGui(Window* mWindow, std::string title, st
 	{
 		auto ratio_choice = createRatioOptionList(mWindow, configName);
 		systemConfiguration->addWithLabel(_("GAME RATIO"), ratio_choice);
-		systemConfiguration->addSaveFunc([configName, ratio_choice] { getShOutput(R"(/emuelec/scripts/setemu.sh set ')" + configName + ".ratio' " + ratio_choice->getSelected()); });
+		systemConfiguration->addSaveFunc([configName, ratio_choice] { getShOutput(R"(/emuelec/scripts/emuelec-utils setemu set ')" + configName + ".ratio' " + ratio_choice->getSelected()); });
 	}
 
 	// bezel
 	if (systemData->isFeatureSupported(currentEmulator, currentCore, EmulatorFeatures::decoration))
 	{
 		auto bezel_enabled = std::make_shared<OptionListComponent<std::string>>(mWindow, _("BEZEL"));
-		bezel_enabled->add(_("AUTO"), "auto", getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".bezel'") != "0" && getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".bezel'") != "1");
-		bezel_enabled->add(_("YES"), "1", getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".bezel'") == "1");
-		bezel_enabled->add(_("NO"), "0", getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".bezel'") == "0");
+		bezel_enabled->add(_("AUTO"), "auto", getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".bezel'") != "0" && getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".bezel'") != "1");
+		bezel_enabled->add(_("YES"), "1", getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".bezel'") == "1");
+		bezel_enabled->add(_("NO"), "0", getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".bezel'") == "0");
 		systemConfiguration->addWithLabel(_("BEZEL"), bezel_enabled);
-		systemConfiguration->addSaveFunc([configName, bezel_enabled] { getShOutput(R"(/emuelec/scripts/setemu.sh set ')" + configName + ".bezel' " + bezel_enabled->getSelected()); });
+		systemConfiguration->addSaveFunc([configName, bezel_enabled] { getShOutput(R"(/emuelec/scripts/emuelec-utils setemu set ')" + configName + ".bezel' " + bezel_enabled->getSelected()); });
 	}
 	
 	// maxperf
 		auto maxperf_enabled = std::make_shared<OptionListComponent<std::string>>(mWindow, _("ENABLE MAX PERFORMANCE"));
-		maxperf_enabled->add(_("AUTO"), "auto", getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".maxperf'") != "0" && getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".maxperf'") != "1");
-		maxperf_enabled->add(_("YES"), "1", getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".maxperf'") == "1");
-		maxperf_enabled->add(_("NO"), "0", getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".maxperf'") == "0");
+		maxperf_enabled->add(_("AUTO"), "auto", getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".maxperf'") != "0" && getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".maxperf'") != "1");
+		maxperf_enabled->add(_("YES"), "1", getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".maxperf'") == "1");
+		maxperf_enabled->add(_("NO"), "0", getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".maxperf'") == "0");
 		systemConfiguration->addWithLabel(_("ENABLE MAX PERFORMANCE"), maxperf_enabled);
-		systemConfiguration->addSaveFunc([configName, maxperf_enabled] { getShOutput(R"(/emuelec/scripts/setemu.sh set ')" + configName + ".maxperf' " + maxperf_enabled->getSelected()); });
+		systemConfiguration->addSaveFunc([configName, maxperf_enabled] { getShOutput(R"(/emuelec/scripts/emuelec-utils setemu set ')" + configName + ".maxperf' " + maxperf_enabled->getSelected()); });
 	
 	// smoothing
 	if (systemData->isFeatureSupported(currentEmulator, currentCore, EmulatorFeatures::smooth))
 	{
 		auto smoothing_enabled = std::make_shared<OptionListComponent<std::string>>(mWindow, _("SMOOTH GAMES"));
-		smoothing_enabled->add(_("AUTO"), "auto", getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".smooth'") != "0" && getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".smooth'") != "1");
-		smoothing_enabled->add(_("ON"), "1", getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".smooth'") == "1");
-		smoothing_enabled->add(_("OFF"), "0", getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".smooth'") == "0");
+		smoothing_enabled->add(_("AUTO"), "auto", getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".smooth'") != "0" && getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".smooth'") != "1");
+		smoothing_enabled->add(_("ON"), "1", getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".smooth'") == "1");
+		smoothing_enabled->add(_("OFF"), "0", getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".smooth'") == "0");
 		systemConfiguration->addWithLabel(_("SMOOTH GAMES"), smoothing_enabled);
-		systemConfiguration->addSaveFunc([configName, smoothing_enabled] { getShOutput(R"(/emuelec/scripts/setemu.sh set ')" + configName + ".smooth' " + smoothing_enabled->getSelected()); });
+		systemConfiguration->addSaveFunc([configName, smoothing_enabled] { getShOutput(R"(/emuelec/scripts/emuelec-utils setemu set ')" + configName + ".smooth' " + smoothing_enabled->getSelected()); });
 	}
 
 	// rewind
 	if (systemData->isFeatureSupported(currentEmulator, currentCore, EmulatorFeatures::rewind))
 	{
 		auto rewind_enabled = std::make_shared<OptionListComponent<std::string>>(mWindow, _("REWIND"));
-		rewind_enabled->add(_("AUTO"), "auto", getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".rewind'") != "0" && getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".rewind'") != "1");
-		rewind_enabled->add(_("ON"), "1", getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".rewind'") == "1");
-		rewind_enabled->add(_("OFF"), "0", getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".rewind'") == "0");
+		rewind_enabled->add(_("AUTO"), "auto", getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".rewind'") != "0" && getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".rewind'") != "1");
+		rewind_enabled->add(_("ON"), "1", getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".rewind'") == "1");
+		rewind_enabled->add(_("OFF"), "0", getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".rewind'") == "0");
 		systemConfiguration->addWithLabel(_("REWIND"), rewind_enabled);
-		systemConfiguration->addSaveFunc([configName, rewind_enabled] { getShOutput(R"(/emuelec/scripts/setemu.sh set ')" + configName + ".rewind' " + rewind_enabled->getSelected());	});
+		systemConfiguration->addSaveFunc([configName, rewind_enabled] { getShOutput(R"(/emuelec/scripts/emuelec-utils setemu set ')" + configName + ".rewind' " + rewind_enabled->getSelected());	});
 	}
 
 	// autosave
 	if (systemData->isFeatureSupported(currentEmulator, currentCore, EmulatorFeatures::autosave))
 	{
 		auto autosave_enabled = std::make_shared<OptionListComponent<std::string>>(mWindow, _("AUTO SAVE/LOAD"));
-		autosave_enabled->add(_("AUTO"), "auto", getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".autosave'") != "0" && getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".autosave'") != "1");
-		autosave_enabled->add(_("ON"), "1", getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".autosave'") == "1");
-		autosave_enabled->add(_("OFF"), "0", getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".autosave'") == "0");
+		autosave_enabled->add(_("AUTO"), "auto", getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".autosave'") != "0" && getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".autosave'") != "1");
+		autosave_enabled->add(_("ON"), "1", getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".autosave'") == "1");
+		autosave_enabled->add(_("OFF"), "0", getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".autosave'") == "0");
 		systemConfiguration->addWithLabel(_("AUTO SAVE/LOAD"), autosave_enabled);
-		systemConfiguration->addSaveFunc([configName, autosave_enabled] { getShOutput(R"(/emuelec/scripts/setemu.sh set ')" + configName + ".autosave' " + autosave_enabled->getSelected()); });
+		systemConfiguration->addSaveFunc([configName, autosave_enabled] { getShOutput(R"(/emuelec/scripts/emuelec-utils setemu set ')" + configName + ".autosave' " + autosave_enabled->getSelected()); });
 	}
 
 	// Shaders preset
@@ -4291,28 +4355,38 @@ void GuiMenu::popSpecificConfigurationGui(Window* mWindow, std::string title, st
 		systemData->isFeatureSupported(currentEmulator, currentCore, EmulatorFeatures::shaders))
 	{
 		auto shaders_choices = std::make_shared<OptionListComponent<std::string> >(mWindow, _("SHADERS SET"),false);
-		std::string currentShader = getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".shaderset'");
+		std::string currentShader = getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".shaderset'");
 		if (currentShader.empty()) {
 			currentShader = std::string("auto");
 		}
 
 		shaders_choices->add(_("AUTO"), "auto", currentShader == "auto");
 		shaders_choices->add(_("NONE"), "none", currentShader == "none");
-		for(std::stringstream ss(getShOutput(R"(~/.emulationstation/scripts/getshaders.sh)")); getline(ss, a, ','); )
+		for(std::stringstream ss(getShOutput(R"(/emuelec/scripts/emuelec-utils getshaders)")); getline(ss, a, ','); )
 		shaders_choices->add(a, a, currentShader == a); // emuelec
 		systemConfiguration->addWithLabel(_("SHADERS SET"), shaders_choices);
-		systemConfiguration->addSaveFunc([configName, shaders_choices] { getShOutput(R"(/emuelec/scripts/setemu.sh set ')" + configName + ".shaderset' " + shaders_choices->getSelected()); });
+		systemConfiguration->addSaveFunc([configName, shaders_choices] { getShOutput(R"(/emuelec/scripts/emuelec-utils setemu set ')" + configName + ".shaderset' " + shaders_choices->getSelected()); });
 	}
 
 	// Integer scale
 	if (systemData->isFeatureSupported(currentEmulator, currentCore, EmulatorFeatures::pixel_perfect))
 	{
 		auto integerscale_enabled = std::make_shared<OptionListComponent<std::string>>(mWindow, _("INTEGER SCALE (PIXEL PERFECT)"));
-		integerscale_enabled->add(_("AUTO"), "auto", getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".integerscale'") != "0" && getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".integerscale'") != "1");
-		integerscale_enabled->add(_("ON"), "1", getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".integerscale'") == "1");
-		integerscale_enabled->add(_("OFF"), "0", getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + ".integerscale'") == "0");
+		integerscale_enabled->add(_("AUTO"), "auto", getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".integerscale'") != "0" && getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".integerscale'") != "1");
+		integerscale_enabled->add(_("ON"), "1", getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".integerscale'") == "1");
+		integerscale_enabled->add(_("OFF"), "0", getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".integerscale'") == "0");
 		systemConfiguration->addWithLabel(_("INTEGER SCALE (PIXEL PERFECT)"), integerscale_enabled);
-		systemConfiguration->addSaveFunc([integerscale_enabled, configName] { getShOutput(R"(/emuelec/scripts/setemu.sh set ')" + configName + ".integerscale' " + integerscale_enabled->getSelected()); });
+		systemConfiguration->addSaveFunc([integerscale_enabled, configName] { getShOutput(R"(/emuelec/scripts/emuelec-utils setemu set ')" + configName + ".integerscale' " + integerscale_enabled->getSelected()); });
+	}
+
+	// Vertical Game
+	if (systemData->isFeatureSupported(currentEmulator, currentCore, EmulatorFeatures::vertical))
+	{
+		auto vertical_enabled = std::make_shared<OptionListComponent<std::string>>(mWindow, _("ENABLE VERTICAL"));
+		vertical_enabled->add(_("OFF"), "auto", getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".vertical'") != "1");
+		vertical_enabled->add(_("ON"), "1", getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + ".vertical'") == "1");
+		systemConfiguration->addWithLabel(_("ENABLE VERTICAL"), vertical_enabled);
+		systemConfiguration->addSaveFunc([vertical_enabled, configName] { getShOutput(R"(/emuelec/scripts/emuelec-utils setemu set ')" + configName + ".vertical' " + vertical_enabled->getSelected()); });
 	}
 
 	if (systemData->isFeatureSupported(currentEmulator, currentCore, EmulatorFeatures::latency_reduction))	
@@ -4322,7 +4396,7 @@ void GuiMenu::popSpecificConfigurationGui(Window* mWindow, std::string title, st
 	{
 		// gameboy colorize
 		auto colorizations_choices = std::make_shared<OptionListComponent<std::string> >(mWindow, _("COLORIZATION"), false);
-		std::string currentColorization = getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configName + "-renderer.colorization'");
+		std::string currentColorization = getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configName + "-renderer.colorization'");
 		if (currentColorization.empty()) {
 			currentColorization = std::string("auto");
 		}
@@ -4463,7 +4537,7 @@ void GuiMenu::popSpecificConfigurationGui(Window* mWindow, std::string title, st
 	if (systemData->getName() == "gb" || systemData->getName() == "gbc" || systemData->getName() == "gb2players" || systemData->getName() == "gbc2players" || systemData->getName() == "gbh" || systemData->getName() == "gbch") // only for gb, gbc and gb2players
 		{
 			systemConfiguration->addWithLabel(_("COLORIZATION"), colorizations_choices);
-			systemConfiguration->addSaveFunc([colorizations_choices, configName] { getShOutput(R"(/emuelec/scripts/setemu.sh set ')" + configName + "-renderer.colorization' " + colorizations_choices->getSelected()); });
+			systemConfiguration->addSaveFunc([colorizations_choices, configName] { getShOutput(R"(/emuelec/scripts/emuelec-utils setemu set ')" + configName + "-renderer.colorization' " + colorizations_choices->getSelected()); });
 		}		
 	}
 #endif 
@@ -4500,7 +4574,7 @@ std::shared_ptr<OptionListComponent<std::string>> GuiMenu::createRatioOptionList
 	if (configname == "global") {
 	currentRatio = SystemConf::getInstance()->get(configname + ".ratio");
 	} else {
-   currentRatio = getShOutput(R"(/emuelec/scripts/setemu.sh get ')" + configname + ".ratio'");
+   currentRatio = getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + configname + ".ratio'");
 	}	
 #else
 	std::string currentRatio = SystemConf::getInstance()->get(configname + ".ratio");

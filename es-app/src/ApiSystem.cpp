@@ -337,16 +337,22 @@ void ApiSystem::launchExternalWindow_before(Window *window)
 
 	AudioManager::getInstance()->deinit();
 	VolumeControl::getInstance()->deinit();
+#ifdef _ENABLEEMUELEC	
+	window->deinit(false);
+#else
 	window->deinit();
-
+#endif
 	LOG(LogDebug) << "ApiSystem::launchExternalWindow_before OK";
 }
 
 void ApiSystem::launchExternalWindow_after(Window *window) 
 {
 	LOG(LogDebug) << "ApiSystem::launchExternalWindow_after";
-
+#ifdef _ENABLEEMUELEC
+	window->init(false);
+#else
 	window->init();
+#endif
 	VolumeControl::getInstance()->init();
 	AudioManager::getInstance()->init();
 	window->normalizeNextUpdate();
@@ -394,7 +400,7 @@ bool ApiSystem::launchFileManager(Window *window)
 {
 	LOG(LogDebug) << "ApiSystem::launchFileManager";
 
-	std::string command = "filemanagerlauncher";
+	std::string command = "/emuelec/scripts/emuelec-utils filemanager";
 
 	ApiSystem::launchExternalWindow_before(window);
 
@@ -411,7 +417,7 @@ bool ApiSystem::launchErrorWindow(Window *window)
 {
 	LOG(LogDebug) << "ApiSystem::launchErrorWindow";
 
-	std::string command = "errormessagelauncher";
+	std::string command = "/emuelec/scripts/emuelec-utils error";
 
 	ApiSystem::launchExternalWindow_before(window);
 
