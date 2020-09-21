@@ -139,15 +139,8 @@ msgstr "Emulationstation将要重启"
 msgid "EMUELEC SETTINGS"
 msgstr "EMUELEC设置"
 
-msgid "UPDATING BATOCERA"
-msgstr "更新 BATOCERA"
-
-msgid "Loading..."
-msgstr "载入中..."
-
 msgid "UPDATE AVAILABLE"
 msgstr "发现可用更新"
-
 
 msgid "Name"
 msgstr "游戏名"
