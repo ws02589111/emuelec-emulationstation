@@ -368,11 +368,11 @@ namespace Utils
 
 		std::string trim(const std::string& _string)
 		{
-			const size_t strBegin = _string.find_first_not_of(" \t");
+			const size_t strBegin = _string.find_first_not_of(" \t\r\n");
 			if(strBegin == std::string::npos)
 				return "";
 
-			const size_t strEnd = _string.find_last_not_of(" \t");
+			const size_t strEnd = _string.find_last_not_of(" \t\r\n");			
 			return _string.substr(strBegin, strEnd - strBegin + 1);
 
 		} // trim
@@ -396,8 +396,7 @@ namespace Utils
 
 		bool startsWith(const std::string& _string, const std::string& _start)
 		{
-			return (_string.find(_start) == 0);
-
+			return (strncmp(_string.c_str(), _start.c_str(), _start.size()) == 0);
 		} // startsWith
 
 		bool endsWith(const std::string& _string, const std::string& _end)
@@ -589,6 +588,78 @@ namespace Utils
 			}
 
 			return ret;
+		}
+
+		int compareIgnoreCase(const std::string& name1, const std::string& name2)
+		{
+			auto makeUp = [](unsigned int c)
+			{
+				if ((c & 0x80) == 0) return toupper(c);
+				return (int)toupperUnicode(c);
+			};
+
+			size_t p1 = 0;
+			size_t p2 = 0;
+
+			while (true)
+			{
+				int u1 = makeUp(chars2Unicode(name1, p1));
+				int u2 = makeUp(chars2Unicode(name2, p2));
+
+				if (u1 == 0 && u2 != 0)
+					return -1;
+				else if (u1 != 0 && u2 == 0)
+					return 1;
+				else if (u1 == 0 || u2 == 0)
+					return 0;
+
+				u1 -= u2;
+				if (u1)
+					return u1;
+			}
+		}
+
+		bool containsIgnoreCase(const std::string & _string, const std::string & _what)
+		{
+			auto it = std::search(
+				_string.begin(), _string.end(),
+				_what.begin(), _what.end(),
+				[](char ch1, char ch2) { return toupper(ch1) == toupper(ch2); }
+			);
+
+			return (it != _string.end());
+		}
+
+		std::string proper(const std::string& _string)
+		{
+			if (_string.length() <= 1)
+				return Utils::String::toUpper(_string);
+
+			return Utils::String::toUpper(_string.substr(0, 1)) + _string.substr(1);
+		}
+
+		std::string removeHtmlTags(const std::string& html)
+		{
+			if (html.empty())
+				return html;
+			
+			std::string text = html;
+
+			size_t start = 0, ss = 0;
+			while ((start = text.find("<", (ss = start))) != std::string::npos)
+			{
+				int end = text.find(">", start);
+				if (end != std::string::npos && end >= start)
+					text = text.erase(start, end - start + 1);
+				else
+				{
+					start++;
+					if (start >= text.size())
+						break;
+				}
+			}
+			
+			return trim(text);
 		}
 
 #if defined(_WIN32)

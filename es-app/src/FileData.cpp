@@ -24,6 +24,7 @@
 #include <time.h>
 #include <algorithm>
 #include "LangParser.h"
+#include "resources/ResourceManager.h"
 
 FileData::FileData(FileType type, const std::string& path, SystemData* system)
 	: mType(type), mSystem(system), mParent(NULL), mMetadata(type == GAME ? GAME_METADATA : FOLDER_METADATA) // metadata is REALLY set in the constructor!
@@ -50,16 +51,22 @@ const std::string FileData::getBreadCrumbPath()
 {
 	std::vector<std::string> paths;
 
+	FileData* root = getSystem()->getParentGroupSystem() != nullptr ? getSystem()->getParentGroupSystem()->getRootFolder() : getSystem()->getRootFolder();
+
 	FileData* parent = (getType() == GAME ? getParent() : this);
+	parent = (getType() == GAME ? getParent() : this);
 	while (parent != nullptr)
 	{
-		if (parent == parent->getSystem()->getRootFolder() && !parent->getSystem()->isCollection())
+		if (parent == root->getSystem()->getRootFolder() && !parent->getSystem()->isCollection())
 			break;
 		
 		if (parent->getSystem()->getName() == CollectionSystemManager::get()->getCustomCollectionsBundle()->getName())
 			break;
 
-		if (parent->getSystem()->isGroupChildSystem() && parent->getSystem()->getParentGroupSystem() != nullptr && parent->getParent() == parent->getSystem()->getParentGroupSystem()->getRootFolder())
+		if (parent->getSystem()->isGroupChildSystem() && 
+			parent->getSystem()->getParentGroupSystem() != nullptr && 
+			parent->getParent() == parent->getSystem()->getParentGroupSystem()->getRootFolder() && 			
+			parent->getSystem()->getName() != "windows_installers")
 			break;
 
 		paths.push_back(parent->getName());
@@ -306,17 +313,17 @@ FileData* FileData::getSourceFileData()
 }
 
 
-void FileData::launchGame(Window* window, LaunchGameOptions options)
+bool FileData::launchGame(Window* window, LaunchGameOptions options)
 {
 	LOG(LogInfo) << "Attempting to launch game...";
 
 	FileData* gameToUpdate = getSourceFileData();
 	if (gameToUpdate == nullptr)
-		return;
+		return false;
 
 	SystemData* system = gameToUpdate->getSystem();
 	if (system == nullptr)
-		return;
+		return false;
 
 	AudioManager::getInstance()->deinit(); // batocera
 	VolumeControl::getInstance()->deinit();
@@ -383,8 +390,14 @@ void FileData::launchGame(Window* window, LaunchGameOptions options)
 	if (options.netPlayMode != DISABLED && (forceCore || gameToUpdate->isNetplaySupported()) && command.find("%NETPLAY%") == std::string::npos)
 		command = command + " %NETPLAY%"; // Add command line parameter if the netplay option is defined at <core netplay="true"> level
 
-	if (options.netPlayMode == CLIENT)
+	if (options.netPlayMode == CLIENT || options.netPlayMode == SPECTATOR)
 	{
+		std::string mode = (options.netPlayMode == SPECTATOR ? "spectator" : "client");
+		std::string pass;
+		
+		if (!options.netplayClientPassword.empty())
+			pass = " -netplaypass " + options.netplayClientPassword;
+
 #if WIN32
 		if (Utils::String::toLower(command).find("retroarch.exe") != std::string::npos)
 			command = Utils::String::replace(command, "%NETPLAY%", "--connect " + options.ip + " --port " + std::to_string(options.port) + " --nick " + SystemConf::getInstance()->get("global.netplay.nickname"));
@@ -393,7 +406,7 @@ void FileData::launchGame(Window* window, LaunchGameOptions options)
 #ifdef _ENABLEEMUELEC
 		command = Utils::String::replace(command, "%NETPLAY%", "--connect " + options.ip + " --port " + std::to_string(options.port) + " --nick " + SystemConf::getInstance()->get("global.netplay.nickname"));
 #else
-		command = Utils::String::replace(command, "%NETPLAY%", "-netplaymode client -netplayport " + std::to_string(options.port) + " -netplayip " + options.ip);
+		command = Utils::String::replace(command, "%NETPLAY%", "-netplaymode " + mode + " -netplayport " + std::to_string(options.port) + " -netplayip " + options.ip + pass);
 #endif
 	}
 	else if (options.netPlayMode == SERVER)
@@ -427,8 +440,17 @@ void FileData::launchGame(Window* window, LaunchGameOptions options)
 		LOG(LogWarning) << "...launch terminated with nonzero exit code " << exitCode << "!";
 
 	Scripting::fireEvent("game-end");
+	
+	if (!hideWindow && Settings::getInstance()->getBool("HideWindowFullReinit"))
+	{
+		ResourceManager::getInstance()->reloadAll();
+		window->deinit();
+		window->init();
+		window->setCustomSplashScreen(gameToUpdate->getImagePath(), gameToUpdate->getName());
+	}
+	else
+		window->init(hideWindow);
 
-	window->init(hideWindow);
 	VolumeControl::getInstance()->init();
 
 	// mSystem can be NULL
@@ -466,6 +488,8 @@ void FileData::launchGame(Window* window, LaunchGameOptions options)
 		AudioManager::getInstance()->changePlaylist(system->getTheme(), true);
 	else
 		AudioManager::getInstance()->playRandomMusic();
+
+	return exitCode == 0;
 }
 
 void FileData::deleteGameFiles()
@@ -554,6 +578,9 @@ const std::vector<FileData*> FolderData::getChildrenListToDisplay()
 	auto fvm = Settings::getInstance()->getString(getSystem()->getName() + ".FolderViewMode");
 	if (!fvm.empty() && fvm != "auto") showFoldersMode = fvm;
 	
+	if (getSystem()->getName() == "windows_installers")
+		showFoldersMode = "always";
+
 	bool showHiddenFiles = Settings::getInstance()->getBool("ShowHiddenFiles");
 
 	auto shv = Settings::getInstance()->getString(getSystem()->getName() + ".ShowHiddenFiles");
@@ -614,6 +641,15 @@ const std::vector<FileData*> FolderData::getChildrenListToDisplay()
 		if ((*it)->getType() == FOLDER && refactorUniqueGameFolders)
 		{
 			FolderData* pFolder = (FolderData*)(*it);
+			if (pFolder->getChildren().size() == 0)
+				continue;
+
+			if (pFolder->isVirtualStorage() && pFolder->getSourceFileData()->getSystem()->isGroupChildSystem() && pFolder->getSourceFileData()->getSystem()->getName() == "windows_installers")
+			{
+				ret.push_back(*it);
+				continue;
+			}
+
 			auto fd = pFolder->findUniqueGameForFolder();
 			if (fd != nullptr)
 			{
@@ -676,9 +712,16 @@ std::vector<FileData*> FolderData::getFilesRecursive(unsigned int typeMask, bool
 	if (shv == "1") showHiddenFiles = true;
 	else if (shv == "0") showHiddenFiles = false;
 
+	SystemData* pSystem = (system != nullptr ? system : mSystem);
+
+	std::vector<std::string> hiddenExts;
+	if (!pSystem->isGroupSystem() && !pSystem->isCollection())
+		for (auto ext : Utils::String::split(Settings::getInstance()->getString(pSystem->getName() + ".HiddenExt"), ';'))
+			hiddenExts.push_back("." + Utils::String::toLower(ext));
+
 	bool filterKidGame = UIModeController::getInstance()->isUIModeKid();
 
-	FileFilterIndex* idx = (system != nullptr ? system : mSystem)->getIndex(false);
+	FileFilterIndex* idx = pSystem->getIndex(false);
 
 	for (auto it : mChildren)
 	{
@@ -693,6 +736,13 @@ std::vector<FileData*> FolderData::getFilesRecursive(unsigned int typeMask, bool
 
 					if (filterKidGame && it->getKidGame())
 						continue;
+
+					if (hiddenExts.size() > 0 && it->getType() == GAME)
+					{
+						std::string extlow = Utils::String::toLower(Utils::FileSystem::getExtension(it->getFileName()));
+						if (std::find(hiddenExts.cbegin(), hiddenExts.cend(), extlow) != hiddenExts.cend())
+							continue;
+					}
 				}
 
 				out.push_back(it);
@@ -701,12 +751,17 @@ std::vector<FileData*> FolderData::getFilesRecursive(unsigned int typeMask, bool
 
 		if (it->getType() != FOLDER)
 			continue;
-
-		FolderData* folder = (FolderData*) it;
+				
+		FolderData* folder = (FolderData*)it;		
 		if (folder->getChildren().size() > 0)
 		{
-			std::vector<FileData*> subchildren = folder->getFilesRecursive(typeMask, displayedOnly, system);
-			out.insert(out.cend(), subchildren.cbegin(), subchildren.cend());
+			if (folder->isVirtualStorage() && folder->getSourceFileData()->getSystem()->isGroupChildSystem() && folder->getSourceFileData()->getSystem()->getName() == "windows_installers")
+				out.push_back(it);
+			else
+			{
+				std::vector<FileData*> subchildren = folder->getFilesRecursive(typeMask, displayedOnly, system);
+				out.insert(out.cend(), subchildren.cbegin(), subchildren.cend());
+			}
 		}
 	}
 
@@ -957,5 +1012,35 @@ void FolderData::removeVirtualFolders()
 
 		removeChild(file);
 		delete file;
+	}
+}
+
+void FileData::checkCrc32(bool force)
+{
+	if (getSourceFileData() != this)
+	{
+		getSourceFileData()->checkCrc32(force);
+		return;
+	}
+
+	if (!force && !getMetadata(MetaDataId::Crc32).empty())
+		return;
+
+	SystemData* system = getSystem();
+
+	bool unpackZip =
+		!system->hasPlatformId(PlatformIds::ARCADE) &&
+		!system->hasPlatformId(PlatformIds::NEOGEO) &&
+		!system->hasPlatformId(PlatformIds::DAPHNE) &&
+		!system->hasPlatformId(PlatformIds::LUTRO) &&
+		!system->hasPlatformId(PlatformIds::SEGA_DREAMCAST) &&
+		!system->hasPlatformId(PlatformIds::ATOMISWAVE) &&
+		!system->hasPlatformId(PlatformIds::NAOMI);
+
+	auto crc = ApiSystem::getInstance()->getCRC32(getPath(), unpackZip);
+	if (!crc.empty())
+	{
+		getMetadata().set(MetaDataId::Crc32, Utils::String::toUpper(crc));
+		saveToGamelistRecovery(this);
 	}
 }

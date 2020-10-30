@@ -103,7 +103,8 @@ public:
 		return MaxSizeInfo(mTargetSize, mTargetIsMax);
 	};
 
-	void setPadding(const Vector4f padding) { mPadding = padding; updateVertices(); }
+	Vector4f getPadding() { return mPadding; }
+	void setPadding(const Vector4f padding);
 
 	void setHorizontalAlignment(Alignment align) { mHorizontalAlignment = align; }
 	void setVerticalAlignment(Alignment align) { mVerticalAlignment = align; }
@@ -122,6 +123,9 @@ public:
 
 	bool isLinear() { return mLinear; }
 	void setIsLinear(bool value) { mLinear = value; }
+
+	ThemeData::ThemeElement::Property getProperty(const std::string name) override;
+	void setProperty(const std::string name, const ThemeData::ThemeElement::Property& value) override;
 
 private:
 	Vector2f mTargetSize;
@@ -168,7 +172,7 @@ private:
 	Alignment mVerticalAlignment;
 
 	float			mRoundCorners;
-	bool			mShowing;
+	
 	std::shared_ptr<IPlaylist> mPlaylist;
 	float mPlaylistTimer;
 

@@ -30,6 +30,7 @@ enum NetPlayMode
 	DISABLED,
 	CLIENT,
 	SERVER,	
+	SPECTATOR
 };
 
 struct LaunchGameOptions
@@ -41,6 +42,7 @@ struct LaunchGameOptions
 	int port;
 
 	std::string core;
+	std::string netplayClientPassword;
 };
 
 class FolderData;
@@ -102,7 +104,7 @@ public:
 	// As above, but also remove parenthesis
 	std::string getCleanName() const;
 
-	void launchGame(Window* window, LaunchGameOptions options = LaunchGameOptions());
+	bool launchGame(Window* window, LaunchGameOptions options = LaunchGameOptions());
 
 	static void resetSettings();
 	
@@ -118,6 +120,7 @@ public:
 	void detectLanguageAndRegion(bool overWrite);
 
 	void deleteGameFiles();
+	void checkCrc32(bool force = false);
 
 private:
 	MetaDataList mMetadata;

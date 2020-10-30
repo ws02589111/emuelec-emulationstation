@@ -12,6 +12,7 @@
 #include <comutil.h> // #include for _bstr_t
 #include <thread>
 #include <direct.h>
+#include <algorithm>
 #include "LocaleES.h"
 
 #pragma comment(lib, "shell32.lib")
@@ -20,6 +21,9 @@
 
 #define VERSIONURL "https://github.com/fabricecaruso/batocera-emulationstation/releases/download/continuous-stable/version.info"
 #define UPDATEURL  "https://github.com/fabricecaruso/batocera-emulationstation/releases/download/continuous-stable/EmulationStation-Win32.zip"
+
+#define LAUNCHERURL "https://github.com/fabricecaruso/batocera-ports/releases/download/continuous/batocera-ports.zip"
+
 
 std::string getUrlFromUpdateType(std::string url)
 {
@@ -125,11 +129,13 @@ int executeCMD(LPSTR lpCommandLine, std::string& output)
 	int ret = -1;
 	output = "";
 
+#define BUFSIZE		32768
+
 	STARTUPINFO si;
 	SECURITY_ATTRIBUTES sa;
 	PROCESS_INFORMATION pi;
 	HANDLE g_hChildStd_IN_Rd, g_hChildStd_OUT_Wr, g_hChildStd_OUT_Rd, g_hChildStd_IN_Wr;  //pipe handles
-	char buf[1024];           //i/o buffer
+	char buf[BUFSIZE];           //i/o buffer
 
 	sa.nLength = sizeof(SECURITY_ATTRIBUTES);
 	sa.bInheritHandle = TRUE;
@@ -161,12 +167,12 @@ int executeCMD(LPSTR lpCommandLine, std::string& output)
 
 				for (;;)
 				{
-					if (!PeekNamedPipe(g_hChildStd_OUT_Rd, buf, 1023, &bread, &avail, NULL))
+					if (!PeekNamedPipe(g_hChildStd_OUT_Rd, buf, BUFSIZE-1, &bread, &avail, NULL))
 						break;
 
 					if (bread > 0)
 					{
-						if (!ReadFile(g_hChildStd_OUT_Rd, buf, 1023, &bread, NULL))
+						if (!ReadFile(g_hChildStd_OUT_Rd, buf, BUFSIZE - 1, &bread, NULL))
 							break;
 
 						buf[bread] = 0;
@@ -175,7 +181,7 @@ int executeCMD(LPSTR lpCommandLine, std::string& output)
 
 					if (WaitForSingleObject(pi.hProcess, 10) == WAIT_OBJECT_0)
 					{
-						if (!PeekNamedPipe(g_hChildStd_OUT_Rd, buf, 1023, &bread, &avail, NULL))
+						if (!PeekNamedPipe(g_hChildStd_OUT_Rd, buf, BUFSIZE - 1, &bread, &avail, NULL))
 							break;
 
 						if (bread == 0)
@@ -563,7 +569,7 @@ std::vector<BatoceraTheme> Win32ApiSystem::getBatoceraThemesList()
 
 	std::vector<BatoceraTheme> res;
 
-	HttpReq httpreq("https://batocera.org/upgrades/themes.txt");
+	HttpReq httpreq(getUpdateUrl() + "/themes.txt");
 	if (httpreq.wait())
 	{
 		auto lines = Utils::String::split(httpreq.getContent(), '\n');
@@ -614,6 +620,8 @@ std::vector<BatoceraTheme> Win32ApiSystem::getBatoceraThemesList()
 			}
 		}
 	}
+
+	getBatoceraThemesImages(res);
 
 	return res;
 }
@@ -670,7 +678,7 @@ std::vector<BatoceraBezel> Win32ApiSystem::getBatoceraBezelsList()
 
 	std::vector<BatoceraBezel> res;
 
-	HttpReq request("https://batocera.org/upgrades/bezels.txt");
+	HttpReq request(getUpdateUrl()+"/bezels.txt");
 	if (request.wait())
 	{
 		auto lines = Utils::String::split(request.getContent(), '\n');
@@ -890,10 +898,83 @@ std::pair<std::string, int> Win32ApiSystem::updateSystem(const std::function<voi
 
 		Utils::FileSystem::deleteDirectoryFiles(path);
 
+		updateEmulatorLauncher(func);
+
 		return std::pair<std::string, int>("done.", 0);
 	}
 
 	return std::pair<std::string, int>("done.", 0);
+}
+
+void Win32ApiSystem::updateEmulatorLauncher(const std::function<void(const std::string)>& func)
+{
+	std::string updatesType = Settings::getInstance()->getString("updates.type");
+	if (updatesType != "beta")
+		return;
+
+	// Check emulatorLauncher exists
+	std::string emulatorLauncherPath = Utils::FileSystem::getExePath() + "/emulatorLauncher.exe";
+	if (!Utils::FileSystem::exists(emulatorLauncherPath))
+		emulatorLauncherPath = Utils::FileSystem::getEsConfigPath() + "/emulatorLauncher.exe";
+	if (!Utils::FileSystem::exists(emulatorLauncherPath))
+		emulatorLauncherPath = Utils::FileSystem::getParent(Utils::FileSystem::getEsConfigPath()) + "/emulatorLauncher.exe";
+	
+	if (!Utils::FileSystem::exists(emulatorLauncherPath))
+		return;
+
+	emulatorLauncherPath = Utils::FileSystem::getParent(emulatorLauncherPath);
+
+	std::string url = LAUNCHERURL;
+	std::string fileName = Utils::FileSystem::getFileName(url);
+	std::string path = Utils::FileSystem::getHomePath() + "/.emulationstation/update";
+
+	if (Utils::FileSystem::exists(path))
+		Utils::FileSystem::deleteDirectoryFiles(path);
+
+	Utils::FileSystem::createDirectory(path);
+
+	std::string zipFile = path + "/" + fileName;
+
+	if (downloadFile(url, zipFile, "batocera-ports", func))
+	{
+		if (func != nullptr)
+			func(std::string("Extracting batocera-ports"));
+
+		unzipFile(Utils::FileSystem::getPreferredPath(zipFile), Utils::FileSystem::getPreferredPath(path));
+		Utils::FileSystem::removeFile(zipFile);
+
+		auto files = Utils::FileSystem::getDirContent(path, true, true);
+		for (auto file : files)
+		{
+			std::string relative = Utils::FileSystem::createRelativePath(file, path, false);
+			if (Utils::String::startsWith(relative, "./"))
+				relative = relative.substr(2);
+
+			std::string localPath = emulatorLauncherPath + "/" + relative;
+
+			if (Utils::FileSystem::isDirectory(file))
+			{
+				if (!Utils::FileSystem::exists(localPath))
+					Utils::FileSystem::createDirectory(localPath);
+			}
+			else
+			{
+				if (Utils::FileSystem::exists(localPath))
+				{
+					Utils::FileSystem::removeFile(localPath + ".old");
+					rename(localPath.c_str(), (localPath + ".old").c_str());
+				}
+
+				if (Utils::FileSystem::copyFile(file, localPath))
+				{
+					Utils::FileSystem::removeFile(localPath + ".old");
+					Utils::FileSystem::removeFile(file);
+				}
+			}
+		}
+
+		Utils::FileSystem::deleteDirectoryFiles(path);
+	}
 }
 
 bool Win32ApiSystem::canUpdate(std::vector<std::string>& output)
@@ -951,34 +1032,6 @@ bool Win32ApiSystem::launchKodi(Window *window)
 	ApiSystem::launchExternalWindow_after(window);
 
 	return ret;
-}
-
-std::string Win32ApiSystem::getIpAdress()
-{	
-	// Init WinSock
-	WSADATA wsa_Data;
-	int wsa_ReturnCode = WSAStartup(0x101, &wsa_Data);
-	if (wsa_ReturnCode != 0)
-		return "NOT CONNECTED";
-
-	char* szLocalIP = nullptr;
-
-	// Get the local hostname
-	char szHostName[255];
-	if (gethostname(szHostName, 255) == 0)
-	{
-		struct hostent *host_entry;
-		host_entry = gethostbyname(szHostName);
-		if (host_entry != nullptr)
-			szLocalIP = inet_ntoa(*(struct in_addr *)*host_entry->h_addr_list);
-	}
-
-	WSACleanup();
-
-	if (szLocalIP == nullptr)
-		return "NOT CONNECTED";
-
-	return std::string(szLocalIP); // "127.0.0.1"
 }
 
 std::string Win32ApiSystem::getEmulatorLauncherPath(const std::string variable)
@@ -1079,6 +1132,41 @@ std::vector<std::string> Win32ApiSystem::getVideoModes()
 		i++;
 	}
 
+	return ret;
+}
+
+
+std::vector<std::string> Win32ApiSystem::getShaderList()
+{
+	Utils::FileSystem::FileSystemCacheActivator fsc;
+
+	std::vector<std::string> ret;
+
+	std::vector<std::string> folderList;
+
+	if (Utils::FileSystem::exists(getEmulatorLauncherPath("shaders")))
+		folderList.push_back(getEmulatorLauncherPath("shaders") + "/configs");
+
+	if (Utils::FileSystem::exists(getEmulatorLauncherPath("system.shaders")))
+		folderList.push_back(getEmulatorLauncherPath("system.shaders") + "/configs");
+
+	for (auto folder : folderList)
+	{
+		for (auto file : Utils::FileSystem::getDirContent(folder, true))
+		{
+			if (Utils::FileSystem::getFileName(file) == "rendering-defaults.yml")
+			{
+				auto parent = Utils::FileSystem::getFileName(Utils::FileSystem::getParent(file));
+				if (parent == "configs")
+					continue;
+
+				if (std::find(ret.cbegin(), ret.cend(), parent) == ret.cend())
+					ret.push_back(parent);
+			}
+		}
+	}
+
+	std::sort(ret.begin(), ret.end());
 	return ret;
 }
 

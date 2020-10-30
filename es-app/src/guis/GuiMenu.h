@@ -78,8 +78,7 @@ private:
 	void openRetroachievementsSettings();
 	void openMissingBiosSettings();
 	void openFormatDriveSettings();
-
-	static void reloadAllGames(Window* window, bool deleteCurrentGui = false);
+	void exitKidMode();
 
 	// windows
 	void openEmulatorSettings();
@@ -100,6 +99,11 @@ private:
 	std::vector<StrInputConfig*> mLoadedInput; // used to keep information about loaded devices in case there are unpluged between device window load and save
 	void clearLoadedInput();
 	static void createDecorationItemTemplate(Window* window, std::vector<DecorationSetInfo> sets, std::string data, ComponentListRow& row);
+
+	bool checkNetwork();
+
+	static void saveSubsetSettings();
+	static void loadSubsetSettings(const std::string themeName);
 
 public:
 	static std::vector<DecorationSetInfo> getDecorationsSets(SystemData* system = nullptr);

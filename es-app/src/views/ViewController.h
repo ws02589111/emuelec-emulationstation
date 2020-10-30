@@ -35,15 +35,17 @@ public:
 
 	// If a basic view detected a metadata change, it can request to recreate
 	// the current gamelist view (as it may change to be detailed).
-	void reloadGameListView(IGameListView* gamelist, bool reloadTheme = false);
-	inline void reloadGameListView(SystemData* system, bool reloadTheme = false) { reloadGameListView(getGameListView(system).get(), reloadTheme); }
+	void reloadGameListView(IGameListView* gamelist);
+	inline void reloadGameListView(SystemData* system) { reloadGameListView(getGameListView(system).get()); }
+	void reloadSystemListViewTheme(SystemData* system);
+
 	void reloadAll(Window* window = nullptr, bool reloadTheme = true); // Reload everything with a theme.  Used when the "ThemeSet" setting changes.
 
 	// Navigation.
 	void goToNextGameList();
 	void goToPrevGameList();
 	void goToGameList(SystemData* system, bool forceImmediate = false);
-	bool goToGameList(std::string& systemName, bool forceImmediate = false);
+	bool goToGameList(const std::string& systemName, bool forceImmediate = false);
 	void goToSystemView(SystemData* system, bool forceImmediate = false);
 	void goToSystemView(std::string& systemName, bool forceImmediate = false, ViewMode mode = SYSTEM_SELECT);
 	void goToStart(bool forceImmediate = false);
@@ -98,11 +100,14 @@ public:
 	SystemData* getSelectedSystem();
 	ViewMode getViewMode();
 
+	static void reloadAllGames(Window* window, bool deleteCurrentGui = false);
+
 private:
 	ViewController(Window* window);
 	static ViewController* sInstance;
 
 	void playViewTransition(bool forceImmediate);
+	bool doLaunchGame(FileData* game, LaunchGameOptions options);
 	int getSystemId(SystemData* system);
 	
 	std::shared_ptr<GuiComponent> mCurrentView;
@@ -112,7 +117,7 @@ private:
 	Transform4x4f mCamera;
 	float mFadeOpacity;
 	bool mLockInput;
-	bool	mDeferPlayViewTransition;
+	std::shared_ptr<GuiComponent>	mDeferPlayViewTransitionTo;
 	State mState;
 };
 

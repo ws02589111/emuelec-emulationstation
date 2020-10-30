@@ -109,10 +109,16 @@ void Settings::setDefaults()
 	mBoolMap["ScrapeRatings"] = true;
 	mBoolMap["IgnoreGamelist"] = false;
 	mBoolMap["HideConsole"] = true;
-	//mBoolMap["QuickSystemSelect"] = true;
+	mBoolMap["QuickSystemSelect"] = true;
 	mBoolMap["MoveCarousel"] = true;
 	mBoolMap["SaveGamelistsOnExit"] = true;
 	mBoolMap["ShowBatteryIndicator"] = true;	
+
+#if WIN32
+	mBoolMap["ShowNetworkIndicator"] = false;
+#else
+	mBoolMap["ShowNetworkIndicator"] = true;
+#endif
 
 	mBoolMap["Debug"] = false;
 	mBoolMap["DebugGrid"] = false;
@@ -159,6 +165,8 @@ void Settings::setDefaults()
 	mStringMap["ScreenSaverGameInfo"] = "never";
 	mBoolMap["StretchVideoOnScreenSaver"] = false;
 	mStringMap["PowerSaverMode"] = "default"; // batocera
+
+	mBoolMap["StopMusicOnScreenSaver"] = true;
 
 	mBoolMap["RetroachievementsMenuitem"] = true;
 	mIntMap["ScreenSaverSwapImageTimeout"] = 10000;
@@ -255,6 +263,8 @@ void Settings::setDefaults()
 #else
 	mBoolMap["HideWindow"] = true;
 #endif
+
+	mBoolMap["HideWindowFullReinit"] = false;
 
 	mIntMap["WindowWidth"]   = 0;
 	mIntMap["WindowHeight"]  = 0;
