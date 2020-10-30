@@ -10,33 +10,11 @@ msgstr ""
 "X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-
-msgid "AUDIO DEVICE"
-msgstr "音频设备"
-
-msgid "ENABLE SSH"
-msgstr "启用SSH"
-
-msgid "START AT BOOT"
-msgstr "开机启动"
-
-msgid "ENABLE RA BEZELS"
-msgstr "启用游戏边框"
-
-msgid "ENABLE RA SPLASH"
-msgstr "启用游戏闪图"
-
-msgid "ALWAYS SHOW BOOT VIDEO"
-msgstr "启用开机视频"
-
 msgid "DEFAULT YOUTUBE SEARCH WORD"
 msgstr "默认YouTube搜索关键字"
 
 msgid "AUTO CONFIG ADVANCEMAME GAMEPAD"
 msgstr "自动配置ADVANCEMAME游戏手柄"
-
-msgid "DANGER ZONE!"
-msgstr "危险区域！"
 
 msgid ""
 "WARNING THIS WILL RESTART EMULATIONSTATION!\n"
@@ -59,22 +37,6 @@ msgid "BACKUP EMUELEC CONFIGS"
 msgstr "备份EMUELEC配置"
 
 msgid ""
-"WARNING: SYSTEM WILL RESET SCRIPTS AND BINARIES !\n"
-"UPDATE, DOWNLOADS, THEMES, BLUETOOTH PAIRINGS AND ROMS FOLDER WILL NOT BE "
-"AFFECTED.\n"
-"\n"
-"RESET SCRIPTS AND BINARIES TO DEFAULT AND RESTART?"
-msgstr ""
-"警告: 系统会重置所有的脚本和可执行程序 !\n"
-"UPDATE, DOWNLOADS, THEMES, BLUETOOTH PAIRINGS AND ROMS 文件夹不会受到影响。\n "
-"\n"
-"确定要重置所有的脚本和可执行程序并重启?"
-
-msgid "RESET EMUELEC SCRIPTS AND BINARIES TO DEFAULT"
-msgstr "重置EMUELEC脚本和可执行程序到默认"
-
-
-msgid ""
 "WARNING: RETROARCH CONFIG WILL RESET TO DEFAULT\n"
 "\n"
 "PER-CORE CONFIGURATIONS WILL NOT BE AFFECTED BUT NO BACKUP WILL BE CREATED!\n"
@@ -88,53 +50,14 @@ msgstr ""
 msgid "RESET RETROARCH CONFIG TO DEFAULT"
 msgstr "重置RETROARCH的配置到默认"
 
-msgid ""
-"WARNING: ALL CONFIGURATIONS WILL BE RESET AND NO BACKUP WILL BE CREATED!\n"
-"\n"
-"IF YOU WANT TO KEEP YOUR SETTINGS MAKE A BACKUP AND SAVE IT ON AN EXTERNAL "
-"DRIVE BEFORE RUNING THIS OPTION!\n"
-"\n"
-"RESET SYSTEM TO DEFAULT CONFIG AND RESTART?"
-msgstr ""
-"警告: 所有的配置都将会被重制到默认，并且不会创建任何备份!\n"
-"如果你想保持当前的配置，请在运行该功能之前将当前的配置备份到外部存储设备\n"
-"确定要重置系统配置到默认吗?"
-
-msgid "RESET SYSTEM TO DEFAULT CONFIG"
-msgstr "重置系统配置到默认"
-
-msgid "You are about to set EmuELEC Language to:"
-msgstr "你将要把EmuELEC的语言设置为:"
-
 msgid "ENABLE MAX PERFORMANCE"
 msgstr "启用最大性能"
-
-msgid "RESTART EMULATIONSTATION"
-msgstr "重启EMULATIONSTATION"
-
-msgid "REALLY RESTART EMULATIONSTATION?"
-msgstr "真的要重启EMULATIONSTATION吗?"
-
-msgid "START RETROARCH"
-msgstr "启动到RETROARCH"
-
-msgid "REALLY START RETROARCH?"
-msgstr "真的要启动到RETROARCH吗?"
-
-msgid "REBOOT FROM NAND"
-msgstr "重启至NAND"
-
-msgid "REALLY REBOOT FROM NAND?"
-msgstr "真的要重启至NAND?"
 
 msgid "BEZEL"
 msgstr "边框"
 
 msgid "You are about to set EmuELEC resolution to:"
 msgstr "你将要把EmuELEC的分辨率设置为:"
-
-msgid "Emulationstation will restart"
-msgstr "Emulationstation将要重启"
 
 msgid "EMUELEC SETTINGS"
 msgstr "EMUELEC设置"
@@ -1662,11 +1585,6 @@ msgstr "仅播放指定游戏平台中的音乐"
 msgid "PLAY THEME MUSICS"
 msgstr "播放主题音乐"
 
-msgid "Mix"
-msgstr "滤镜"
-
-msgid "enter path to mix"
-msgstr "输入滤镜路径"
 msgid "LOWER MUSIC WHEN PLAYING VIDEO"
 msgstr "播放视频时降低音乐音量"
 
@@ -2124,12 +2042,6 @@ msgstr "右侧摇杆中键"
 msgid "LEFT ANALOG UP"
 msgstr "左侧摇杆 上"
 
-msgid "LEFT ANALOG RIGHT"
-msgstr "左侧类比摇杆 右"
-
-msgid "LEFT ANALOG DOWN"
-msgstr "左侧类比摇杆 下"
-
 msgid "LEFT ANALOG LEFT"
 msgstr "左侧摇杆 左"
 
@@ -2147,12 +2059,6 @@ msgstr "右侧摇杆 下"
 
 msgid "RIGHT ANALOG RIGHT"
 msgstr "右侧摇杆 右"
-
-msgid "RIGHT ANALOG DOWN"
-msgstr "右侧类比摇杆 下"
-
-msgid "RIGHT ANALOG RIGHT"
-msgstr "右侧类比摇杆 右"
 
 msgid "RIGHT ANALOG LEFT"
 msgstr "右侧摇杆 左"
@@ -2306,13 +2212,13 @@ msgid "START AT BOOT"
 msgstr "开机自动启动"
 
 msgid "ENABLE RA BEZELS"
-msgstr "启用 RA 边框"
+msgstr "启用游戏边框"
 
 msgid "ENABLE RA SPLASH"
-msgstr "启用 RA 启动画面"
+msgstr "启用游戏闪图"
 
 msgid "ALWAYS SHOW BOOT VIDEO"
-msgstr "总是显示开机视频"
+msgstr "启用开机视频"
 
 msgid ""
 "WARNING THIS WILL RESTART EMULATIONSTATION!\n\n"
@@ -2328,6 +2234,10 @@ msgid ""
 "UPDATE, DOWNLOADS, THEMES, BLUETOOTH PAIRINGS AND ROMS FOLDER WILL NOT BE AFFECTED.\n\n"
 "RESET SCRIPTS AND BINARIES TO DEFAULT AND RESTART?"
 msgstr ""
+"警告: 系统会重置所有的脚本和可执行程序 !\n"
+"UPDATE, DOWNLOADS, THEMES, BLUETOOTH 配对 AND ROMS 文件夹不会受到影响。\n "
+"\n"
+"确定要重置所有的脚本和可执行程序并重启?"
 
 msgid "RESET EMUELEC SCRIPTS AND BINARIES TO DEFAULT"
 msgstr "重置 EmuELEC 脚本和系统文件到初始状态"
@@ -2337,6 +2247,9 @@ msgid ""
 "IF YOU WANT TO KEEP YOUR SETTINGS MAKE A BACKUP AND SAVE IT ON AN EXTERNAL DRIVE BEFORE RUNING THIS OPTION!\n\n"
 "RESET SYSTEM TO DEFAULT CONFIG AND RESTART?"
 msgstr ""
+"警告: 所有的配置都将会被重制到默认，并且不会创建任何备份!\n"
+"如果你想保持当前的配置，请在运行该功能之前将当前的配置备份到外部存储设备\n"
+"确定要重置系统配置到默认状态吗?"
 
 msgid "RESET SYSTEM TO DEFAULT CONFIG"
 msgstr "重置系统到默认设置"
@@ -2351,10 +2264,10 @@ msgid "REALLY RESTART EMULATIONSTATION?"
 msgstr "确定重启 Emulationstation 吗？"
 
 msgid "REALLY START RETROARCH?"
-msgstr "确定重启 RetroArch 吗？"
+msgstr "确定启动到 RetroArch 吗？"
 
 msgid "START RETROARCH"
-msgstr "重启 RetroArch"
+msgstr "启动到 RetroArch"
 
 msgid "REALLY REBOOT FROM NAND?"
 msgstr "确定重启到 NAND 吗？"
