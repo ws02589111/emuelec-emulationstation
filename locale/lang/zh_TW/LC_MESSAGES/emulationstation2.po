@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: emulationstation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-28 22:24+0100\n"
+"POT-Creation-Date: 2020-12-02 08:20+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -392,6 +392,9 @@ msgstr "啟動到系統"
 msgid "NONE"
 msgstr "沒有"
 
+msgid "RESTORE LAST SELECTED"
+msgstr ""
+
 msgid "START ON GAMELIST"
 msgstr "啟動到遊戲目錄"
 
@@ -400,6 +403,9 @@ msgstr "對沒有主題的自定合輯進行分組"
 
 msgid "SHOW SYSTEM NAME IN COLLECTIONS"
 msgstr "在合輯中顯示系統名稱"
+
+msgid "SHOW GAMES OF HIDDEN SYSTEMS IN COLLECTIONS"
+msgstr ""
 
 msgid "UPDATE GAMES LISTS"
 msgstr "更新遊戲目錄"
@@ -458,6 +464,9 @@ msgstr "遊戲排列方式"
 msgid "OTHER FILTERS"
 msgstr "過濾器進階設定"
 
+msgid "FIND SIMILAR GAMES..."
+msgstr ""
+
 msgid "GAME MEDIAS"
 msgstr "遊戲資料庫"
 
@@ -500,11 +509,20 @@ msgstr "系統設定"
 msgid "ADVANCED GAME OPTIONS"
 msgstr "高級遊戲設定"
 
+msgid "EDIT PAD TO KEYBOARD CONFIGURATION"
+msgstr ""
+
+msgid "CREATE PAD TO KEYBOARD CONFIGURATION"
+msgstr ""
+
 msgid "EDIT FOLDER METADATA"
 msgstr "編輯文件夾資料"
 
 msgid "EDIT THIS GAME'S METADATA"
 msgstr "編輯此遊戲的簡介資料"
+
+msgid "VIEW PAD TO KEYBOARD INFORMATION"
+msgstr ""
 
 msgid "RESET FILTERS"
 msgstr "重置過濾器"
@@ -518,8 +536,8 @@ msgstr "這項功能在搜尋中被禁止使用"
 msgid "CLOSE"
 msgstr "關閉"
 
-msgid "ARE YOU SURE ?"
-msgstr "您確定嘛？"
+msgid "ARE YOU SURE YOU WANT TO DELETE THIS ITEM ?"
+msgstr ""
 
 msgid "INPUT"
 msgstr "輸入名稱"
@@ -626,17 +644,26 @@ msgstr "沒有發現藍牙裝置"
 msgid "CONTROLLERS LINKS HAVE BEEN DELETED."
 msgstr "遊戲控制器已經刪除."
 
+msgid "RESET"
+msgstr "重置"
+
+msgid "ADD COMBINATION KEY"
+msgstr ""
+
 msgid "CONTENT DOWNLOADER"
 msgstr "內容下載器"
 
 msgid "SELECT CONTENT TO INSTALL / REMOVE"
 msgstr "選擇要安裝的內容或刪除"
 
-msgid "MISC"
-msgstr "雜項"
+msgid "UPDATE INSTALLED CONTENT"
+msgstr ""
 
 msgid "There are no items in this view"
 msgstr ""
+
+msgid "MISC"
+msgstr "雜項"
 
 msgid "UNINSTALL ADDED TO QUEUE"
 msgstr "移除下載順序中"
@@ -754,6 +781,54 @@ msgstr "退回自定圖片的目錄"
 
 msgid "CUSTOM IMAGE FILTER"
 msgstr "自定圖片選擇"
+
+msgid "PAD TO KEYBOARD CONFIGURATION"
+msgstr ""
+
+msgid "SELECT ACTIONS TO CHANGE"
+msgstr ""
+
+msgid "SAVE"
+msgstr "儲存"
+
+msgid "DELETE"
+msgstr "刪除"
+
+msgid "PLAYER 1"
+msgstr ""
+
+msgid "PLAYER 2"
+msgstr ""
+
+msgid "COMBINATIONS"
+msgstr ""
+
+msgid "MOUSE CURSOR"
+msgstr ""
+
+msgid "EMULATE MOUSE CURSOR"
+msgstr ""
+
+msgid "LEFT ANALOG STICK"
+msgstr ""
+
+msgid "RIGHT ANALOG STICK"
+msgstr ""
+
+msgid "EDIT DESCRIPTION"
+msgstr ""
+
+msgid "DELETE MAPPING"
+msgstr ""
+
+msgid "SAVE CHANGES?"
+msgstr "儲存本次修改嗎？"
+
+msgid "ARE YOU SURE ?"
+msgstr "您確定嘛？"
+
+msgid "UPDATING EMULATIONSTATION"
+msgstr ""
 
 msgid "UPDATING BATOCERA"
 msgstr "更新 BATOCERA"
@@ -1028,6 +1103,9 @@ msgstr "搜刮粉絲圖片"
 msgid "SCRAPE MANUAL"
 msgstr "搜刮使用者手冊"
 
+msgid "SCRAPE PADTOKEY SETTINGS"
+msgstr ""
+
 msgid "USERNAME"
 msgstr "使用者名稱"
 
@@ -1076,6 +1154,9 @@ msgstr "垂直同步"
 msgid "OVERSCAN"
 msgstr "過掃描填滿效果"
 
+msgid "USE OMX PLAYER (HW ACCELERATED)"
+msgstr ""
+
 msgid "TOOLS"
 msgstr "工具"
 
@@ -1097,6 +1178,21 @@ msgstr "新增文件檔案失敗"
 msgid "FORMAT A DISK"
 msgstr "格式化硬碟"
 
+msgid "CLEAN GAMELISTS & REMOVE UNUSED MEDIAS"
+msgstr ""
+
+msgid "Cleaning "
+msgstr ""
+
+msgid "CLEAR CACHES"
+msgstr ""
+
+msgid "RESET FILE EXTENSIONS"
+msgstr "重新修改文件名稱"
+
+msgid "REDETECT GAMES LANG/REGION"
+msgstr "發現新的遊戲 語言＆地區"
+
 msgid "DATA MANAGEMENT"
 msgstr ""
 
@@ -1111,12 +1207,6 @@ msgstr "分析遊戲檔案"
 
 msgid "SEARCH FOR LOCAL ART"
 msgstr "在硬碟中尋找圖片"
-
-msgid "RESET FILE EXTENSIONS"
-msgstr "重新修改文件名稱"
-
-msgid "REDETECT GAMES LANG/REGION"
-msgstr "發現新的遊戲 語言＆地區"
 
 msgid "UI"
 msgstr ""
@@ -1220,9 +1310,6 @@ msgstr "啟用 KODI 媒體播放中心"
 msgid "KODI AT START"
 msgstr "開機自動啟動 KODI"
 
-msgid "START KODI WITH X"
-msgstr "按 X 鍵啟動 KODI"
-
 msgid "HARDWARE"
 msgstr "硬體"
 
@@ -1243,6 +1330,9 @@ msgstr "RetroArch 成就設定"
 
 msgid "NETPLAY SETTINGS"
 msgstr "網路遊戲設定"
+
+msgid "CHECK BIOSES BEFORE RUNNING A GAME"
+msgstr ""
 
 msgid "MULTIMEDIA KEYS"
 msgstr "多媒體按鍵"
@@ -1498,6 +1588,12 @@ msgstr "顯示幫助"
 msgid "SHOW BATTERY STATUS"
 msgstr "顯示電池狀態"
 
+msgid "ICON"
+msgstr ""
+
+msgid "ICON AND TEXT"
+msgstr ""
+
 msgid "SHOW FILENAMES IN LISTS"
 msgstr "在目錄中顯示文件名稱"
 
@@ -1588,8 +1684,14 @@ msgstr "快速訪問"
 msgid "SKIP TO NEXT SONG"
 msgstr "跳到下一首歌"
 
+msgid "LISTENING NOW"
+msgstr ""
+
 msgid "LAUNCH SCREENSAVER"
 msgstr "啟動螢幕保護程式"
+
+msgid "VIEW USER'S MANUAL"
+msgstr ""
 
 msgid "VIEW BATOCERA MANUAL"
 msgstr "觀看Batocera使用者手冊"
@@ -1660,9 +1762,6 @@ msgstr "您確定要格式化此裝置嗎？"
 msgid "EDIT METADATA"
 msgstr "編輯簡介"
 
-msgid "SAVE"
-msgstr "儲存"
-
 msgid ""
 "THIS WILL DELETE THE ACTUAL GAME FILE(S)!\n"
 "ARE YOU SURE?"
@@ -1670,23 +1769,17 @@ msgstr ""
 "即將刪除遊戲檔案！\n"
 "確定？"
 
-msgid "DELETE"
-msgstr "刪除"
-
-msgid "SAVE CHANGES?"
-msgstr "儲存本次修改嗎？"
-
 msgid "NO DEVICE FOUND"
 msgstr "沒有找到設備"
+
+msgid "SYSTEM INFO"
+msgstr ""
 
 msgid "ERROR: EVERY SYSTEM IS HIDDEN, RE-DISPLAYING ALL OF THEM NOW"
 msgstr "錯誤：每個系統都被隱藏，現在重新顯示所有系統"
 
 msgid "QUICK SEARCH"
 msgstr ""
-
-msgid "DO YOU WANT TO START KODI MEDIA CENTER ?"
-msgstr "你想啟動 KODI 媒體播放中心嗎?"
 
 msgid "GO TO LETTER"
 msgstr ""
@@ -1701,6 +1794,9 @@ msgid "GO TO HARDWARE"
 msgstr ""
 
 msgid "GO TO DECADE"
+msgstr ""
+
+msgid "CONFIGURATION"
 msgstr ""
 
 #, c-format
@@ -1718,9 +1814,6 @@ msgid "%i GAME"
 msgid_plural "%i GAMES"
 msgstr[0] "%i 遊戲"
 
-msgid "KODI"
-msgstr "KODI"
-
 msgid "NETPLAY"
 msgstr "網路遊戲"
 
@@ -1730,8 +1823,24 @@ msgstr "隨機選擇"
 msgid "FILES"
 msgstr "檔案"
 
+msgid ""
+"WARNING : THIS GAME'S FORMAT IS NOT SUPPORTED BY THE CURRENT EMULATOR/CORE.\n"
+"DO YOU WANT TO LAUNCH IT ANYWAY ?"
+msgstr ""
+
+msgid ""
+"WARNING : THE SYSTEM HAS MISSING BIOS AND THE GAME MAY NOT WORK CORRECTLY.\n"
+"DO YOU WANT TO LAUNCH IT ANYWAY ?"
+msgstr ""
+
 msgid "Preloading UI"
 msgstr "預設用戶介面"
+
+msgid "Loading theme"
+msgstr ""
+
+msgid "Loading gamelists"
+msgstr ""
 
 msgid "MENU"
 msgstr "選單"
@@ -1767,6 +1876,9 @@ msgid "SET PLAYER PASSWORD"
 msgstr ""
 
 msgid "SET VIEWER PASSWORD"
+msgstr ""
+
+msgid "Games similar to"
 msgstr ""
 
 msgid "Searching"
@@ -1919,9 +2031,6 @@ msgstr "SHIFT鍵可切換大小寫或特殊符號"
 msgid "ALT GR"
 msgstr ""
 
-msgid "RESET"
-msgstr "重置"
-
 msgid "SHIFT"
 msgstr ""
 
@@ -1943,14 +2052,26 @@ msgstr "右"
 msgid "LEFT ANALOG UP"
 msgstr "左側類比搖桿 上"
 
+msgid "LEFT ANALOG DOWN"
+msgstr ""
+
 msgid "LEFT ANALOG LEFT"
 msgstr "左側類比搖桿 左"
+
+msgid "LEFT ANALOG RIGHT"
+msgstr ""
 
 msgid "RIGHT ANALOG UP"
 msgstr "右側類比搖桿 上"
 
+msgid "RIGHT ANALOG DOWN"
+msgstr ""
+
 msgid "RIGHT ANALOG LEFT"
 msgstr "右側類比搖桿 左"
+
+msgid "RIGHT ANALOG RIGHT"
+msgstr ""
 
 msgid "HOTKEY"
 msgstr "熱鍵"
@@ -2078,6 +2199,15 @@ msgstr ""
 #, c-format
 msgid "%d s"
 msgstr ""
+
+#~ msgid "START KODI WITH X"
+#~ msgstr "按 X 鍵啟動 KODI"
+
+#~ msgid "DO YOU WANT TO START KODI MEDIA CENTER ?"
+#~ msgstr "你想啟動 KODI 媒體播放中心嗎?"
+
+#~ msgid "KODI"
+#~ msgstr "KODI"
 
 #~ msgid "STATUS"
 #~ msgstr "目前狀態"

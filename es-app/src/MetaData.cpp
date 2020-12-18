@@ -69,7 +69,10 @@ void MetaDataList::initMetadata()
 		{ GameTime,         "gametime",    MD_INT,                 "0",                true,       _("Game time"),            _("how long the game has been played in total (seconds)"), false },
 
 		{ Language,         "lang",        MD_STRING,              "",                 false,       _("Languages"),            _("Languages"),				false },
-		{ Region,           "region",      MD_STRING,              "",                 false,       _("Region"),               _("Region"),					false }
+		{ Region,           "region",      MD_STRING,              "",                 false,       _("Region"),               _("Region"),					false },
+#ifdef _ENABLEEMUELEC
+		{ Cheevos,          "cheevos",     MD_BOOL,                "false",                 false,       _("Has Achievements"),     _("Has Achievements"),		false }
+#endif
 	};
 	
 	mMetaDataDecls = std::vector<MetaDataDecl>(gameDecls, gameDecls + sizeof(gameDecls) / sizeof(gameDecls[0]));
@@ -293,6 +296,15 @@ void MetaDataList::importScrappedMetadata(const MetaDataList& source)
 	for (auto mdd : getMDD())
 	{
 		if (mdd.isStatistic)
+			continue;
+
+		if (mdd.id == MetaDataId::KidGame) // Not scrapped yet
+			continue;
+
+		if (mdd.id == MetaDataId::Region || mdd.id == MetaDataId::Language) // Not scrapped
+			continue;
+
+		if (mdd.id == MetaDataId::Favorite || mdd.id == MetaDataId::Hidden || mdd.id == MetaDataId::Emulator || mdd.id == MetaDataId::Core)
 			continue;
 
 		if (mdd.id == MetaDataId::Image && (type & MetaDataImportType::Types::IMAGE) != MetaDataImportType::Types::IMAGE)

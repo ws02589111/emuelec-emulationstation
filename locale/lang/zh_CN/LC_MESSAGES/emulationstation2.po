@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: emulationstation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-28 22:24+0100\n"
+"POT-Creation-Date: 2020-12-02 08:20+0100\n"
 "Language: zh-CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -404,13 +404,13 @@ msgid "ALPHABETICALLY"
 msgstr "按字母排序"
 
 msgid "BY MANUFACTURER"
-msgstr "由生产商提供"
+msgstr "按制造商"
 
 msgid "BY HARDWARE TYPE"
-msgstr ""
+msgstr "按硬件类型"
 
 msgid "BY RELEASE YEAR"
-msgstr ""
+msgstr "按发布年"
 
 msgid "SORT SYSTEMS"
 msgstr "系统分类"
@@ -421,6 +421,9 @@ msgstr "启动到系统"
 msgid "NONE"
 msgstr "无"
 
+msgid "RESTORE LAST SELECTED"
+msgstr "恢复上次的选择"
+
 msgid "START ON GAMELIST"
 msgstr "启动到游戏列表"
 
@@ -429,6 +432,9 @@ msgstr "对无主题的自定合辑进行分组"
 
 msgid "SHOW SYSTEM NAME IN COLLECTIONS"
 msgstr "在合辑中显示系统名称"
+
+msgid "SHOW GAMES OF HIDDEN SYSTEMS IN COLLECTIONS"
+msgstr ""
 
 msgid "UPDATE GAMES LISTS"
 msgstr "更新游戏列表"
@@ -443,7 +449,7 @@ msgid "SELECT COLLECTIONS"
 msgstr "选择合辑"
 
 msgid "AUTOMATIC COLLECTIONS"
-msgstr ""
+msgstr "自动合辑"
 
 msgid "ARCADE SYSTEMS"
 msgstr "游戏系统"
@@ -487,6 +493,9 @@ msgstr "游戏排序方式"
 msgid "OTHER FILTERS"
 msgstr "其他筛选器"
 
+msgid "FIND SIMILAR GAMES..."
+msgstr ""
+
 msgid "GAME MEDIAS"
 msgstr "游戏媒体"
 
@@ -529,11 +538,20 @@ msgstr "高级系统选项"
 msgid "ADVANCED GAME OPTIONS"
 msgstr "高级游戏选项"
 
+msgid "EDIT PAD TO KEYBOARD CONFIGURATION"
+msgstr "编辑pad到键盘自定义"
+
+msgid "CREATE PAD TO KEYBOARD CONFIGURATION"
+msgstr "创建pad到键盘自定义"
+
 msgid "EDIT FOLDER METADATA"
 msgstr "编辑文件夹的信息"
 
 msgid "EDIT THIS GAME'S METADATA"
 msgstr "编辑此游戏的信息"
+
+msgid "VIEW PAD TO KEYBOARD INFORMATION"
+msgstr ""
 
 msgid "RESET FILTERS"
 msgstr "重置筛选器"
@@ -547,8 +565,8 @@ msgstr "这项功能在抓取进行时禁用"
 msgid "CLOSE"
 msgstr "关闭"
 
-msgid "ARE YOU SURE ?"
-msgstr "确定吗？"
+msgid "ARE YOU SURE YOU WANT TO DELETE THIS ITEM ?"
+msgstr "确定是否删除？"
 
 msgid "INPUT"
 msgstr "名称编辑"
@@ -578,7 +596,7 @@ msgid "Cpu max frequence"
 msgstr "CPU 最大频率"
 
 msgid "UNKNOWN ROM VERSION"
-msgstr "未知的ROM版本"
+msgstr "未知ROM版本"
 
 msgid "DIFFERENT ROM"
 msgstr "不同的ROM"
@@ -661,17 +679,26 @@ msgstr "未发现蓝牙设备"
 msgid "CONTROLLERS LINKS HAVE BEEN DELETED."
 msgstr "控制器链接已被删除。"
 
+msgid "RESET"
+msgstr "重置"
+
+msgid "ADD COMBINATION KEY"
+msgstr "增加组合键"
+
 msgid "CONTENT DOWNLOADER"
 msgstr "下载内容"
 
 msgid "SELECT CONTENT TO INSTALL / REMOVE"
 msgstr "选择内容以便安装 / 卸载"
 
-msgid "MISC"
-msgstr "杂项"
+msgid "UPDATE INSTALLED CONTENT"
+msgstr ""
 
 msgid "There are no items in this view"
-msgstr ""
+msgstr "在此视角下没东西"
+
+msgid "MISC"
+msgstr "杂项"
 
 msgid "UNINSTALL ADDED TO QUEUE"
 msgstr "添加卸载到队伍"
@@ -683,31 +710,31 @@ msgid "MISSING BIOS"
 msgstr "缺失的BIOS"
 
 msgid "dim"
-msgstr "变暗"
+msgstr "暗灰"
 
 msgid "black"
-msgstr "黑屏"
+msgstr "黑"
 
 msgid "random video"
 msgstr "随机视频"
 
 msgid "slideshow"
-msgstr "幻灯片"
+msgstr "片段展示"
 
 msgid "always"
 msgstr "总是"
 
 msgid "start & end"
-msgstr ""
+msgstr "开始和结束"
 
 msgid "never"
 msgstr "从未"
 
 msgid "none"
-msgstr ""
+msgstr "无"
 
 msgid "systems"
-msgstr ""
+msgstr "系统"
 
 msgid "random"
 msgstr "随机"
@@ -725,7 +752,7 @@ msgid "SCREENSAVER BEHAVIOR"
 msgstr "屏保样式"
 
 msgid "STOP MUSIC ON SCREENSAVER"
-msgstr ""
+msgstr "录屏时停止音乐"
 
 msgid "RANDOM VIDEO SCREENSAVER SETTINGS"
 msgstr "屏保-随机视频设置"
@@ -789,6 +816,54 @@ msgstr "递归自定图像目录"
 
 msgid "CUSTOM IMAGE FILTER"
 msgstr "自定图像筛选"
+
+msgid "PAD TO KEYBOARD CONFIGURATION"
+msgstr "pad到键盘自动以"
+
+msgid "SELECT ACTIONS TO CHANGE"
+msgstr "选择行动来改变"
+
+msgid "SAVE"
+msgstr "保存"
+
+msgid "DELETE"
+msgstr "删除"
+
+msgid "PLAYER 1"
+msgstr "玩家一"
+
+msgid "PLAYER 2"
+msgstr "玩家二"
+
+msgid "COMBINATIONS"
+msgstr "组合键"
+
+msgid "MOUSE CURSOR"
+msgstr "鼠标光标"
+
+msgid "EMULATE MOUSE CURSOR"
+msgstr "仿真鼠标光标"
+
+msgid "LEFT ANALOG STICK"
+msgstr "左摇杆"
+
+msgid "RIGHT ANALOG STICK"
+msgstr "右摇杆"
+
+msgid "EDIT DESCRIPTION"
+msgstr "编辑描述"
+
+msgid "DELETE MAPPING"
+msgstr "删除标记"
+
+msgid "SAVE CHANGES?"
+msgstr "是否保存更改?"
+
+msgid "ARE YOU SURE ?"
+msgstr "确定吗？"
+
+msgid "UPDATING EMULATIONSTATION"
+msgstr "更新模拟器"
 
 msgid "UPDATING BATOCERA"
 msgstr "更新 BATOCERA"
@@ -1002,7 +1077,7 @@ msgid "INFORMATIONS"
 msgstr "信息"
 
 msgid "UNLOCK UI MODE"
-msgstr ""
+msgstr "界面不锁定"
 
 msgid "QUIT"
 msgstr "退出"
@@ -1061,6 +1136,9 @@ msgstr "抓取同人作品"
 msgid "SCRAPE MANUAL"
 msgstr "抓取手册"
 
+msgid "SCRAPE PADTOKEY SETTINGS"
+msgstr "抓取pad按键设置"
+
 msgid "USERNAME"
 msgstr "用户名"
 
@@ -1074,10 +1152,10 @@ msgid "CHOOSE"
 msgstr "浏览"
 
 msgid "UI MODE IS NOW UNLOCKED"
-msgstr ""
+msgstr "界面现在未锁定"
 
 msgid "PLEASE ENTER THE CODE TO UNLOCK THE CURRENT UI MODE"
-msgstr ""
+msgstr "请输入代码来解锁当前界面模式"
 
 msgid "INFORMATION"
 msgstr "系统信息"
@@ -1109,6 +1187,9 @@ msgstr "垂直同步"
 msgid "OVERSCAN"
 msgstr "过扫描"
 
+msgid "USE OMX PLAYER (HW ACCELERATED)"
+msgstr ""
+
 msgid "TOOLS"
 msgstr "工具"
 
@@ -1130,6 +1211,21 @@ msgstr "文件生成失败"
 msgid "FORMAT A DISK"
 msgstr "格式化磁盘"
 
+msgid "CLEAN GAMELISTS & REMOVE UNUSED MEDIAS"
+msgstr "清除游戏列表并删除未使用的媒体"
+
+msgid "Cleaning "
+msgstr "清理中"
+
+msgid "CLEAR CACHES"
+msgstr ""
+
+msgid "RESET FILE EXTENSIONS"
+msgstr "重置文件扩展"
+
+msgid "REDETECT GAMES LANG/REGION"
+msgstr "重新查询游戏的 语言/区域"
+
 msgid "DATA MANAGEMENT"
 msgstr "数据管理"
 
@@ -1144,12 +1240,6 @@ msgstr "仅分析游戏列表"
 
 msgid "SEARCH FOR LOCAL ART"
 msgstr "在磁盘上查找图形"
-
-msgid "RESET FILE EXTENSIONS"
-msgstr "重置文件扩展"
-
-msgid "REDETECT GAMES LANG/REGION"
-msgstr "重新查询游戏的 语言/区域"
 
 msgid "UI"
 msgstr "用户界面"
@@ -1176,7 +1266,7 @@ msgid "AUTOCONFIGURE EMULATORS CONTROLLERS"
 msgstr "自动配置模拟的控制设备"
 
 msgid "SHOW NETWORK INDICATOR"
-msgstr ""
+msgstr "显示网络标识"
 
 msgid "OPTIMIZATIONS"
 msgstr "优化"
@@ -1221,7 +1311,7 @@ msgid "UPDATE IS ALREADY RUNNING"
 msgstr "正在更新中"
 
 msgid "YOU ARE NOT CONNECTED TO A NETWORK"
-msgstr ""
+msgstr "你没联网"
 
 msgid "LANGUAGE"
 msgstr "语言"
@@ -1253,9 +1343,6 @@ msgstr "启用 KODI"
 msgid "KODI AT START"
 msgstr "开机时进入KODI"
 
-msgid "START KODI WITH X"
-msgstr "按 X 键启动 KODI"
-
 msgid "HARDWARE"
 msgstr "硬件"
 
@@ -1276,6 +1363,9 @@ msgstr "RetroArch成就设置"
 
 msgid "NETPLAY SETTINGS"
 msgstr "联网游戏设置"
+
+msgid "CHECK BIOSES BEFORE RUNNING A GAME"
+msgstr "在启动游戏前检查BIOS"
 
 msgid "MULTIMEDIA KEYS"
 msgstr "多媒体功能键"
@@ -1395,7 +1485,7 @@ msgid "DECORATION"
 msgstr "装饰框"
 
 msgid "STRETCH BEZELS (4K & ULTRAWIDE)"
-msgstr ""
+msgstr "弹性挡板（4K和超宽）"
 
 msgid "AI GAME TRANSLATION"
 msgstr "AI游戏翻译"
@@ -1458,7 +1548,7 @@ msgid "THEME CONFIGURATION"
 msgstr "主题配置"
 
 msgid "GAMELIST STYLE"
-msgstr ""
+msgstr "游戏风格"
 
 msgid "basic"
 msgstr "基本列表"
@@ -1532,6 +1622,12 @@ msgstr "显示帮助"
 msgid "SHOW BATTERY STATUS"
 msgstr "显示电池状态"
 
+msgid "ICON"
+msgstr ""
+
+msgid "ICON AND TEXT"
+msgstr ""
+
 msgid "SHOW FILENAMES IN LISTS"
 msgstr "在列表中显示文件名"
 
@@ -1587,7 +1683,7 @@ msgid "NOT CONNECTED"
 msgstr "未连接"
 
 msgid "INTERNET STATUS"
-msgstr ""
+msgstr "网络状态"
 
 msgid "HOSTNAME"
 msgstr "主机名"
@@ -1622,8 +1718,14 @@ msgstr "快速进入"
 msgid "SKIP TO NEXT SONG"
 msgstr "切换到下一首"
 
+msgid "LISTENING NOW"
+msgstr "开始聆听"
+
 msgid "LAUNCH SCREENSAVER"
 msgstr "启动屏保"
+
+msgid "VIEW USER'S MANUAL"
+msgstr ""
 
 msgid "VIEW BATOCERA MANUAL"
 msgstr "查看BATOCERA手册"
@@ -1694,9 +1796,6 @@ msgstr "您确定要格式化此驱动器吗？"
 msgid "EDIT METADATA"
 msgstr "编辑元数据"
 
-msgid "SAVE"
-msgstr "保存"
-
 msgid ""
 "THIS WILL DELETE THE ACTUAL GAME FILE(S)!\n"
 "ARE YOU SURE?"
@@ -1704,23 +1803,17 @@ msgstr ""
 "这将删除实际的游戏文件!\n"
 "确定执行吗?"
 
-msgid "DELETE"
-msgstr "删除"
-
-msgid "SAVE CHANGES?"
-msgstr "是否保存更改?"
-
 msgid "NO DEVICE FOUND"
 msgstr "未找到设备"
+
+msgid "SYSTEM INFO"
+msgstr "系统信息"
 
 msgid "ERROR: EVERY SYSTEM IS HIDDEN, RE-DISPLAYING ALL OF THEM NOW"
 msgstr "错误：每个系统都被隐藏，现在重新显示"
 
 msgid "QUICK SEARCH"
-msgstr ""
-
-msgid "DO YOU WANT TO START KODI MEDIA CENTER ?"
-msgstr "是否启动 KODI 媒体中心?"
+msgstr "迅速搜"
 
 msgid "GO TO LETTER"
 msgstr ""
@@ -1735,6 +1828,9 @@ msgid "GO TO HARDWARE"
 msgstr ""
 
 msgid "GO TO DECADE"
+msgstr ""
+
+msgid "CONFIGURATION"
 msgstr ""
 
 #, c-format
@@ -1752,9 +1848,6 @@ msgid "%i GAME"
 msgid_plural "%i GAMES"
 msgstr[0] "%i 游戏"
 
-msgid "KODI"
-msgstr "KODI"
-
 msgid "NETPLAY"
 msgstr "联网游戏"
 
@@ -1764,8 +1857,24 @@ msgstr "随机"
 msgid "FILES"
 msgstr "文件"
 
+msgid ""
+"WARNING : THIS GAME'S FORMAT IS NOT SUPPORTED BY THE CURRENT EMULATOR/CORE.\n"
+"DO YOU WANT TO LAUNCH IT ANYWAY ?"
+msgstr ""
+
+msgid ""
+"WARNING : THE SYSTEM HAS MISSING BIOS AND THE GAME MAY NOT WORK CORRECTLY.\n"
+"DO YOU WANT TO LAUNCH IT ANYWAY ?"
+msgstr ""
+
 msgid "Preloading UI"
 msgstr "预加载 UI"
+
+msgid "Loading theme"
+msgstr ""
+
+msgid "Loading gamelists"
+msgstr ""
 
 msgid "MENU"
 msgstr "菜单"
@@ -1805,6 +1914,9 @@ msgstr "设置玩家密码"
 
 msgid "SET VIEWER PASSWORD"
 msgstr "设置观看者密码"
+
+msgid "Games similar to"
+msgstr ""
 
 msgid "Searching"
 msgstr "搜索中"
@@ -1956,9 +2068,6 @@ msgstr "SHIFT键可切换大小写或特殊字符"
 msgid "ALT GR"
 msgstr ""
 
-msgid "RESET"
-msgstr "重置"
-
 msgid "SHIFT"
 msgstr "SHIFT"
 
@@ -2030,6 +2139,9 @@ msgstr "左侧摇杆 下"
 
 msgid "LEFT ANALOG RIGHT"
 msgstr "左侧摇杆 右"
+
+msgid "LEFT ANALOG RIGHT"
+msgstr ""
 
 msgid "RIGHT ANALOG UP"
 msgstr "右侧摇杆 上"
@@ -2163,22 +2275,31 @@ msgstr "进行中..."
 
 #, c-format
 msgid "%d h"
-msgstr "%d 时"
+msgstr ""
 
 #, c-format
 msgid "%d m"
-msgstr "%d 分"
+msgstr ""
 
 #, c-format
 msgid "%d s"
-msgstr "%d 秒"
+msgstr ""
 
+#~ msgid "START KODI WITH X"
+#~ msgstr "按 X 键启动 KODI"
+
+#~ msgid "DO YOU WANT TO START KODI MEDIA CENTER ?"
+#~ msgstr "是否启动 KODI 媒体中心?"
+
+#~ msgid "KODI"
+#~ msgstr "KODI"
+
+#~ msgid "STATUS"
+#~ msgstr "状态"
 msgid "DANGER ZONE!"
 msgstr "危险设置区域！"
-
 msgid "You are about to set EmuELEC resolution to"
 msgstr "你即将设置 EmuELEC 分辨率为"
-
 msgid "Emulationstation will restart"
 msgstr "Emulationstation 即将重启"
 

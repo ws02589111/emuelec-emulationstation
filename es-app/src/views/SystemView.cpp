@@ -28,13 +28,12 @@ const int logoBuffersRight[] = { 1, 2, 5 };
 
 SystemView::SystemView(Window* window) : IList<SystemViewData, SystemData*>(window, LIST_SCROLL_STYLE_SLOW, LIST_ALWAYS_LOOP),
 										 mViewNeedsReload(true),
-										 mSystemInfo(window, "SYSTEM INFO", Font::get(FONT_SIZE_SMALL), 0x33333300, ALIGN_CENTER)
+										 mSystemInfo(window, _("SYSTEM INFO"), Font::get(FONT_SIZE_SMALL), 0x33333300, ALIGN_CENTER)
 {
 	mCamOffset = 0;
 	mExtrasCamOffset = 0;
 	mExtrasFadeOpacity = 0.0f;
-	mExtrasFadeMove = 0.0f;
-	launchKodi = false; // batocera
+	mExtrasFadeMove = 0.0f;	
 	mScreensaverActive = false;
 	mDisable = false;		
 	mLastCursor = 0;
@@ -126,6 +125,10 @@ void SystemView::loadExtras(SystemData* system, IList<SystemViewData, SystemData
 					type = SystemRandomPlaylist::THUMBNAIL;
 				else if (src == "{random:marquee}")
 					type = SystemRandomPlaylist::MARQUEE;
+				else if (src == "{random:fanart}")
+					type = SystemRandomPlaylist::FANART;
+				else if (src == "{random:titleshot}")
+					type = SystemRandomPlaylist::TITLESHOT;
 
 				((ImageComponent*)extra)->setPlaylist(std::make_shared<SystemRandomPlaylist>(system, type));
 			}
@@ -203,6 +206,7 @@ void SystemView::populate()
 					0x000000FF,
 					ALIGN_CENTER);
 								
+				text->setScaleOrigin(0.0f);
 				text->setSize(mCarousel.logoSize * mCarousel.logoScale);
 				text->applyTheme((*it)->getTheme(), "system", "logoText", ThemeFlags::FONT_PATH | ThemeFlags::FONT_SIZE | ThemeFlags::COLOR | ThemeFlags::FORCE_UPPERCASE | ThemeFlags::LINE_SPACING | ThemeFlags::TEXT);
 				e.data.logo = std::shared_ptr<GuiComponent>(text);
@@ -340,15 +344,9 @@ int SystemView::moveCursorFast(bool forward)
 bool SystemView::input(InputConfig* config, Input input)
 {
 	if(input.value != 0)
-	{
-		bool kodi = false;
+	{	
 		bool netPlay = SystemData::isNetplayActivated() && SystemConf::getInstance()->getBool("global.netplay");
-
-#ifdef _ENABLE_KODI_
-		kodi = SystemConf::getInstance()->getBool("kodi.enabled", true) && SystemConf::getInstance()->getBool("kodi.xbutton") && !UIModeController::getInstance()->isUIModeKid();
-#endif
-		
-		if (netPlay && config->isMappedTo(kodi ? "y" : "x", input))
+		if (netPlay && config->isMappedTo("x", input))
 		{
 			if (ApiSystem::getInstance()->getIpAdress() == "NOT CONNECTED")
 				mWindow->pushGui(new GuiMsgBox(mWindow, _("YOU ARE NOT CONNECTED TO A NETWORK"), _("OK"), nullptr));
@@ -358,7 +356,7 @@ bool SystemView::input(InputConfig* config, Input input)
 			return true;
 		}
 
-		if (!kodi && config->isMappedTo("y", input))
+		if (config->isMappedTo("y", input))
 		{	
 			SystemData* all = SystemData::getSystem("all");
 			if (all != nullptr)
@@ -371,7 +369,7 @@ bool SystemView::input(InputConfig* config, Input input)
 					index->setTextFilter(newVal);
 
 					ViewController::get()->reloadGameListView(all);
-					ViewController::get()->goToGameList(all, true);
+					ViewController::get()->goToGameList(all, false);
 				};
 
 				if (Settings::getInstance()->getBool("UseOSK"))
@@ -400,23 +398,7 @@ bool SystemView::input(InputConfig* config, Input input)
 		    }
 		}
 #endif
-// batocera
-#ifdef _ENABLE_KODI_
-            if(config->isMappedTo("x", input) && input.value && !launchKodi && SystemConf::getInstance()->getBool("kodi.enabled", true) && SystemConf::getInstance()->getBool("kodi.xbutton") && !UIModeController::getInstance()->isUIModeKid())
-			{
-                Window* window = mWindow;
-                mWindow->pushGui(new GuiMsgBox(window, _("DO YOU WANT TO START KODI MEDIA CENTER ?"), _("YES"),
-			       [window,this] { 
-                                    if( ! ApiSystem::getInstance()->launchKodi(window)) {
-                                        LOG(LogWarning) << "Shutdown terminated with non-zero result!";
-                                    }
-                                    this->launchKodi = false;
-					       }, _("NO"), [window,this] {
-                                    this->launchKodi = false;
-                                }));
-		return true;
-            }
-#endif
+
 		switch (mCarousel.type)
 		{
 		case VERTICAL:
@@ -643,6 +625,70 @@ void SystemView::update(int deltaTime)
 	GuiComponent::update(deltaTime);
 }
 
+
+void SystemView::updateExtraTextBinding()
+{
+	if (mCursor < 0 || mCursor >= mEntries.size())
+		return;
+
+	GameCountInfo* info = getSelected()->getGameCountInfo();
+
+	for (auto extra : mEntries[mCursor].data.backgroundExtras)
+	{
+		TextComponent* text = dynamic_cast<TextComponent*>(extra);
+		if (text == nullptr)
+			continue;
+
+		auto src = text->getOriginalThemeText();
+		if (src.find("{binding:") == std::string::npos)
+			continue;
+
+		src = Utils::String::replace(src, "{binding:total}", std::to_string(info->totalGames));
+
+		if (info->playCount == 0)
+			src = Utils::String::replace(src, "{binding:played}", _("None"));
+		else
+			src = Utils::String::replace(src, "{binding:played}", std::to_string(info->playCount));
+
+		if (info->favoriteCount == 0)
+			src = Utils::String::replace(src, "{binding:favorites}", _("None"));
+		else
+			src = Utils::String::replace(src, "{binding:favorites}", std::to_string(info->favoriteCount));
+
+		if (info->hiddenCount == 0)
+			src = Utils::String::replace(src, "{binding:hidden}", _("None"));
+		else
+			src = Utils::String::replace(src, "{binding:hidden}", std::to_string(info->hiddenCount));
+		
+		if (info->gamesPlayed == 0)
+			src = Utils::String::replace(src, "{binding:gamesPlayed}", _("None"));
+		else
+			src = Utils::String::replace(src, "{binding:gamesPlayed}", std::to_string(info->gamesPlayed));
+
+		if (info->mostPlayed.empty())
+			src = Utils::String::replace(src, "{binding:mostPlayed}", _("Unknown"));
+		else
+			src = Utils::String::replace(src, "{binding:mostPlayed}", info->mostPlayed);
+
+		Utils::Time::DateTime dt = info->lastPlayedDate;
+
+		if (dt.getTime() == 0)
+			src = Utils::String::replace(src, "{binding:lastPlayedDate}", _("Unknown"));
+		else
+		{
+			time_t     clockNow = dt.getTime();
+			struct tm  clockTstruct = *localtime(&clockNow);
+
+			char       clockBuf[256];
+			strftime(clockBuf, sizeof(clockBuf), "%Ex", &clockTstruct);
+
+			src = Utils::String::replace(src, "{binding:lastPlayedDate}", clockBuf);
+		}
+		
+		text->setText(src);
+	}
+}
+
 void SystemView::onCursorChanged(const CursorState& /*state*/)
 {
 	if (AudioManager::isInitialized())
@@ -693,28 +739,36 @@ void SystemView::onCursorChanged(const CursorState& /*state*/)
 		mSystemInfo.setOpacity((unsigned char)(Math::lerp(infoStartOpacity, 0.f, t) * 255));
 	}, (int)(infoStartOpacity * (goFast ? 10 : 150)));
 
-	unsigned int gameCount = getSelected()->getDisplayedGameCount();
+	unsigned int gameCount = getSelected()->getGameCountInfo()->totalGames;
+
+	updateExtraTextBinding();
 
 	// also change the text after we've fully faded out
-	setAnimation(infoFadeOut, 0, [this, gameCount] {
-		std::stringstream ss;
-		char strbuf[256];
- 
+	setAnimation(infoFadeOut, 0, [this, gameCount] 
+	{
 		if (!getSelected()->isGameSystem() && !getSelected()->isGroupSystem())
-			ss << "CONFIGURATION";
-		else 
+			mSystemInfo.setText(_("CONFIGURATION"));
+		else if (mCarousel.systemInfoCountOnly)
+			mSystemInfo.setText(std::to_string(gameCount));
+		else
 		{
+			std::stringstream ss;
+			char strbuf[256];
+			
 			if (getSelected() == CollectionSystemManager::get()->getCustomCollectionsBundle())
-				snprintf(strbuf, 256, ngettext("%i COLLECTION", "%i COLLECTIONS", gameCount), gameCount);
+			{
+				int collectionCount = getSelected()->getRootFolder()->getChildren().size();
+				snprintf(strbuf, 256, ngettext("%i COLLECTION", "%i COLLECTIONS", collectionCount), collectionCount);
+			}
 			else if (getSelected()->hasPlatformId(PlatformIds::PLATFORM_IGNORE) && !getSelected()->isCollection())
 				snprintf(strbuf, 256, ngettext("%i ITEM", "%i ITEMS", gameCount), gameCount);
 			else
 				snprintf(strbuf, 256, ngettext("%i GAME", "%i GAMES", gameCount), gameCount);
 
 			ss << strbuf;
-		}
-
-		mSystemInfo.setText(ss.str());
+			mSystemInfo.setText(ss.str());
+		}			
+		
 		mSystemInfo.onShow();
 	}, false, 1);
 
@@ -885,29 +939,19 @@ std::vector<HelpPrompt> SystemView::getHelpPrompts()
 	std::vector<HelpPrompt> prompts;
 
 	if (mCarousel.type == VERTICAL || mCarousel.type == VERTICAL_WHEEL)
-		prompts.push_back(HelpPrompt("up/down", _("CHOOSE"))); // batocera
+		prompts.push_back(HelpPrompt("up/down", _("CHOOSE")));
 	else
-		prompts.push_back(HelpPrompt("left/right", _("CHOOSE"))); // batocera
+		prompts.push_back(HelpPrompt("left/right", _("CHOOSE")));
 
 	prompts.push_back(HelpPrompt(BUTTON_OK, _("SELECT")));
 
-	bool kodi = false;
-
-#ifdef _ENABLE_KODI_
-	if (SystemConf::getInstance()->getBool("kodi.enabled", true) && SystemConf::getInstance()->getBool("kodi.xbutton") && !UIModeController::getInstance()->isUIModeKid())
-	{
-		kodi = true;
-		prompts.push_back(HelpPrompt("x", _("KODI"))); // batocera
-	}	
-#endif
-
 	if (SystemData::isNetplayActivated() && SystemConf::getInstance()->getBool("global.netplay"))
-		prompts.push_back(HelpPrompt(kodi ? "y" : "x", _("NETPLAY")));
+		prompts.push_back(HelpPrompt("x", _("NETPLAY")));
 	else
-		prompts.push_back(HelpPrompt("x", _("RANDOM"))); // batocera
+		prompts.push_back(HelpPrompt("x", _("RANDOM")));
 
-	if (!kodi && SystemData::getSystem("all") != nullptr)
-		prompts.push_back(HelpPrompt("y", _("QUICK SEARCH"))); // batocera
+	if (SystemData::getSystem("all") != nullptr)
+		prompts.push_back(HelpPrompt("y", _("QUICK SEARCH")));
 
 	// batocera
 #ifdef _ENABLE_FILEMANAGER_
@@ -1090,13 +1134,13 @@ void SystemView::renderCarousel(const Transform4x4f& trans)
 			comp->setRotationDegrees(mCarousel.logoRotation * distance);
 			comp->setRotationOrigin(mCarousel.logoRotationOrigin);
 		}
-
+		
 		if (!comp->hasStoryBoard())
 		{
 			comp->setScale(scale);
 			comp->setOpacity((unsigned char)opacity);
 		}
-
+		
 		comp->render(logoTrans);
 	};
 
@@ -1456,6 +1500,7 @@ void  SystemView::getDefaultElements(void)
 	mCarousel.maxLogoCount = 3;
 	mCarousel.zIndex = 40;
 	mCarousel.systemInfoDelay = 2000;
+	mCarousel.systemInfoCountOnly = false;
 	mCarousel.scrollSound = "";
 	mCarousel.defaultTransition = "";
 
@@ -1534,6 +1579,9 @@ void SystemView::getCarouselFromTheme(const ThemeData::ThemeElement* elem)
 
 	if (elem->has("systemInfoDelay"))
 		mCarousel.systemInfoDelay = elem->get<float>("systemInfoDelay");
+
+	if (elem->has("systemInfoCountOnly"))
+		mCarousel.systemInfoCountOnly = elem->get<bool>("systemInfoCountOnly");
 
 	if (elem->has("scrollSound"))
 		mCarousel.scrollSound = elem->get<std::string>("scrollSound");
@@ -1641,4 +1689,12 @@ void SystemView::activateExtras(int cursor, bool activate)
 
 	if (activate)
 		preloadExtraNeighbours(cursor);
+}
+
+SystemData* SystemView::getActiveSystem()
+{
+	if (mCursor < 0 || mCursor >= mEntries.size())
+		return nullptr;
+
+	return mEntries[mCursor].object;
 }

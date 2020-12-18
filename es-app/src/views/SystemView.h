@@ -45,6 +45,7 @@ struct SystemViewCarousel
 	Vector2f logoPos;
 	float zIndex;
 	float systemInfoDelay;
+	bool  systemInfoCountOnly;
 
 	std::string		defaultTransition;
 	std::string		scrollSound;
@@ -72,11 +73,14 @@ public:
 
 	void reloadTheme(SystemData* system);
 
+	SystemData* getActiveSystem();
+
 protected:
 	void onCursorChanged(const CursorState& state) override;
 
 private:
-	void	loadExtras(SystemData* system, IList<SystemViewData, SystemData*>::Entry& e);
+	void	 loadExtras(SystemData* system, IList<SystemViewData, SystemData*>::Entry& e);
+	void	 updateExtraTextBinding();
 
 	void	 preloadExtraNeighbours(int cursor);
 	void	 setExtraRequired(int cursor, bool required);
@@ -113,8 +117,7 @@ private:
 	float mExtrasFadeMove;
 	int	  mExtrasFadeOldCursor;
 
-	bool mViewNeedsReload;	
-	bool launchKodi;
+	bool mViewNeedsReload;		
 
 	bool mDisable;
 	bool mScreensaverActive;

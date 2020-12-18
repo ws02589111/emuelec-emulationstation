@@ -63,7 +63,10 @@ enum MetaDataId
 	Manual = 30,
 	BoxArt = 31,
 	Wheel = 32,
-	Mix = 33
+	Mix = 33,
+#ifdef _ENABLEEMUELEC
+    Cheevos = 34
+#endif
 };
 
 namespace MetaDataImportType
@@ -143,7 +146,7 @@ public:
 	}
 
 	inline MetaDataListType getType() const { return mType; }
-	inline const std::vector<MetaDataDecl>& getMDD() const { return mMetaDataDecls; }
+	static const std::vector<MetaDataDecl>& getMDD() { return mMetaDataDecls; }
 
 	const std::string& getName() const;
 	

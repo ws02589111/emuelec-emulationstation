@@ -105,6 +105,9 @@ bool Win32ApiSystem::isScriptingSupported(ScriptId script)
 	case ApiSystem::BATOCERASTORE:
 		executables.push_back("batocera-store");
 		break;
+	case ApiSystem::EVMAPY:
+		executables.push_back("emulatorLauncher");
+		break;
 	}
 
 	if (executables.size() == 0)
@@ -867,6 +870,44 @@ std::pair<std::string, int> Win32ApiSystem::updateSystem(const std::function<voi
 		Utils::FileSystem::removeFile(zipFile);
 
 		auto files = Utils::FileSystem::getDirContent(path, true, true);
+
+		auto pluginFolder = Utils::FileSystem::getExePath() + "/plugins";
+		for (auto pluginFile : Utils::FileSystem::getDirContent(pluginFolder, true))
+		{
+			if (Utils::FileSystem::isDirectory(pluginFile))
+				continue;
+
+			Utils::FileSystem::removeFile(pluginFile + ".old");
+
+			std::string pluginRelativeFile = Utils::FileSystem::createRelativePath(pluginFile, pluginFolder, false);
+			if (Utils::String::startsWith(pluginRelativeFile, "./"))
+				pluginRelativeFile = pluginRelativeFile.substr(2);
+
+			bool existsInArchive = false;
+
+			for (auto installedFile : files)
+			{
+				if (Utils::FileSystem::isDirectory(installedFile))
+					continue;
+
+				std::string relative = Utils::FileSystem::createRelativePath(installedFile, path, false);
+				if (Utils::String::startsWith(relative, "./"))
+					relative = relative.substr(2);
+
+				if (relative == pluginRelativeFile)
+				{
+					existsInArchive = true;
+					break;
+				}
+			}
+
+			if (!existsInArchive)
+			{
+				Utils::FileSystem::removeFile(pluginFile);			
+				rename(pluginFile.c_str(), (pluginFile + ".old").c_str());
+			}
+		}
+		
 		for (auto file : files)
 		{
 			std::string relative = Utils::FileSystem::createRelativePath(file, path, false);
@@ -882,6 +923,11 @@ std::pair<std::string, int> Win32ApiSystem::updateSystem(const std::function<voi
 			}
 			else
 			{
+				// Avoid replacing development exe/lib
+				if ((Utils::String::containsIgnoreCase(localPath, "/RelWithDebInfo/") || Utils::String::containsIgnoreCase(localPath, "/Debug/")) && 
+					(Utils::FileSystem::getExtension(localPath) == ".exe" || Utils::FileSystem::getExtension(localPath) == ".lib"))
+					continue;
+
 				if (Utils::FileSystem::exists(localPath))
 				{
 					Utils::FileSystem::removeFile(localPath + ".old");
@@ -1065,6 +1111,21 @@ std::string Win32ApiSystem::getEmulatorLauncherPath(const std::string variable)
 			}
 		}
 		systemConf.close();
+	}
+
+	if (Utils::String::startsWith(variable, "system."))
+	{
+		auto name = variable.substr(7);
+
+		auto dir = Utils::FileSystem::getCanonicalPath(Utils::FileSystem::getParent(path) + "/../system/" + name);
+		if (Utils::FileSystem::isDirectory(dir))
+			return dir;
+	}
+	else
+	{
+		auto dir = Utils::FileSystem::getCanonicalPath(Utils::FileSystem::getParent(path) + "/../" + variable);
+		if (Utils::FileSystem::isDirectory(dir))
+			return dir;
 	}
 
 	return "";

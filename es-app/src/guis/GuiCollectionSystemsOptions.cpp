@@ -77,7 +77,7 @@ void GuiCollectionSystemsOptions::initializeMenu()
 		if (Settings::getInstance()->setString("HiddenSystems", hiddenSystems))
 		{
 			Settings::getInstance()->saveFile();
-			setVariable("reloadAll", true);
+			setVariable("reloadSystems", true);
 		}
 	});
 
@@ -203,6 +203,7 @@ void GuiCollectionSystemsOptions::initializeMenu()
 
 	auto systemfocus_list = std::make_shared< OptionListComponent<std::string> >(mWindow, _("START ON SYSTEM"), false);
 	systemfocus_list->add(_("NONE"), "", startupSystem == "");
+	systemfocus_list->add(_("RESTORE LAST SELECTED"), "lastsystem", startupSystem == "lastsystem");
 
 	if (SystemData::isManufacturerSupported() && Settings::getInstance()->getString("SortSystems") == "manufacturer")
 	{
@@ -229,7 +230,11 @@ void GuiCollectionSystemsOptions::initializeMenu()
 	}
 
 	addWithLabel(_("START ON SYSTEM"), systemfocus_list);
-	addSaveFunc([systemfocus_list] { Settings::getInstance()->setString("StartupSystem", systemfocus_list->getSelected()); });
+	addSaveFunc([systemfocus_list] 
+	{ 
+		Settings::getInstance()->setString("StartupSystem", systemfocus_list->getSelected()); 
+		Settings::getInstance()->setString("LastSystem", "");
+	});
 
 	// START ON GAMELIST
 	auto startOnGamelist = std::make_shared<SwitchComponent>(mWindow);
@@ -276,6 +281,18 @@ void GuiCollectionSystemsOptions::initializeMenu()
 		}
 	});
 
+	std::shared_ptr<SwitchComponent> alsoHideGames = std::make_shared<SwitchComponent>(mWindow);
+	alsoHideGames->setState(Settings::getInstance()->getBool("HiddenSystemsShowGames"));
+	addWithLabel(_("SHOW GAMES OF HIDDEN SYSTEMS IN COLLECTIONS"), alsoHideGames);
+	addSaveFunc([this, alsoHideGames]
+	{
+		if (Settings::getInstance()->setBool("HiddenSystemsShowGames", alsoHideGames->getState()))
+		{
+			FileData::resetSettings();
+			setVariable("reloadAll", true);
+		}
+	});
+	
 #if defined(WIN32) && !defined(_DEBUG)		
 	if (!ApiSystem::getInstance()->isScriptingSupported(ApiSystem::GAMESETTINGS))
 		addEntry(_("UPDATE GAMES LISTS"), false, [this] { GuiMenu::updateGameLists(mWindow); }); // Game List Update

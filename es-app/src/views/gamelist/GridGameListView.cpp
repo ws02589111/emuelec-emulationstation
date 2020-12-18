@@ -115,7 +115,7 @@ bool GridGameListView::input(InputConfig* config, Input input)
 	if (!UIModeController::getInstance()->isUIModeKid() && config->isMappedTo("select", input) && input.value)
 	{
 		Sound::getFromTheme(mTheme, getName(), "menuOpen")->play();
-		mWindow->pushGui(new GuiGamelistOptions(mWindow, this->mRoot->getSystem(), true));
+		mWindow->pushGui(new GuiGamelistOptions(mWindow, this, this->mRoot->getSystem(), true));
 		return true;
 
 		// Ctrl-R to reload a view when debugging
@@ -321,7 +321,9 @@ void GridGameListView::remove(FileData *game)
 	if(mGrid.size() == 0)
 		addPlaceholder();
 
+	mRoot->removeFromVirtualFolders(game);
 	delete game;                                 // remove before repopulating (removes from parent)
+
 	onFileChanged(parent, FILE_REMOVED);           // update the view, with game removed
 }
 

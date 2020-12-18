@@ -6,8 +6,10 @@
 #include "FileData.h"
 #include "GuiComponent.h"
 #include <vector>
+#include <functional>
 
 class IGameListView;
+class ISimpleGameListView;
 class SystemData;
 class SystemView;
 class Window;
@@ -25,6 +27,8 @@ public:
 	};
 
 	static void init(Window* window);
+	static void saveState();
+
 	static ViewController* get();
 
 	virtual ~ViewController();
@@ -55,7 +59,7 @@ public:
 
 	// Plays a nice launch effect and launches the game at the end of it.
 	// Once the game terminates, plays a return effect.
-	void launch(FileData* game, LaunchGameOptions options, Vector3f centerCameraOn = Vector3f(Renderer::getScreenWidth() / 2.0f, Renderer::getScreenHeight() / 2.0f, 0));
+	void launch(FileData* game, LaunchGameOptions options, Vector3f centerCameraOn = Vector3f(Renderer::getScreenWidth() / 2.0f, Renderer::getScreenHeight() / 2.0f, 0), bool allowCheckLaunchOptions = true);
 	void launch(FileData* game, Vector3f centerCameraOn = Vector3f(Renderer::getScreenWidth() / 2.0f, Renderer::getScreenHeight() / 2.0f, 0)) { launch(game, LaunchGameOptions(), centerCameraOn); }
 
 	bool input(InputConfig* config, Input input) override;
@@ -87,7 +91,7 @@ public:
 	virtual std::vector<HelpPrompt> getHelpPrompts() override;
 	virtual HelpStyle getHelpStyle() override;
 
-	std::shared_ptr<IGameListView> getGameListView(SystemData* system, bool loadIfnull = true);
+	std::shared_ptr<IGameListView> getGameListView(SystemData* system, bool loadIfnull = true, const std::function<void()>& createAsPopupAndSetExitFunction = nullptr);
 	std::shared_ptr<SystemView> getSystemListView();
 	void removeGameListView(SystemData* system);
 
@@ -102,12 +106,15 @@ public:
 
 	static void reloadAllGames(Window* window, bool deleteCurrentGui = false);
 
+	void setActiveView(std::shared_ptr<GuiComponent> view);
+
 private:
 	ViewController(Window* window);
 	static ViewController* sInstance;
 
 	void playViewTransition(bool forceImmediate);
 	bool doLaunchGame(FileData* game, LaunchGameOptions options);
+	bool checkLaunchOptions(FileData* game, LaunchGameOptions options, Vector3f center);
 	int getSystemId(SystemData* system);
 	
 	std::shared_ptr<GuiComponent> mCurrentView;

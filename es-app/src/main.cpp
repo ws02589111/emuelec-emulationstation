@@ -320,6 +320,8 @@ int setLocale(char * argv1)
 		EsLocale::init("", "/usr/share/locale");	
 #endif
 
+	setlocale(LC_TIME, "");
+
 	return 0;
 }
 
@@ -430,8 +432,6 @@ int main(int argc, char* argv[])
 	if(!parseArgs(argc, argv))
 		return 0;
 
-	// auto vec = ApiSystem::getInstance()->extractPdfImages("h://Addams Family, The-manual.pdf");
-
 	// only show the console on Windows if HideConsole is false
 #ifdef WIN32
 	// MSVC has a "SubSystem" option, with two primary options: "WINDOWS" and "CONSOLE".
@@ -489,7 +489,7 @@ int main(int argc, char* argv[])
 	atexit(&onExit);
 
 	// Set locale
-	setLocale(argv[0]); // batocera
+	setLocale(argv[0]); // batocera	
 
 	// metadata init    // batocera
 	MetaDataList::initMetadata();     // require locale
@@ -680,6 +680,7 @@ int main(int argc, char* argv[])
 
 	ImageIO::saveImageCache();
 	MameNames::deinit();
+	ViewController::saveState();
 	CollectionSystemManager::deinit();
 	SystemData::deleteSystems();
 

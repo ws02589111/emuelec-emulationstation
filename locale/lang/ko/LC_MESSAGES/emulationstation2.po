@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: emulationstation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-28 22:24+0100\n"
+"POT-Creation-Date: 2020-12-02 08:20+0100\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -389,6 +389,9 @@ msgstr "시스템에서 시작하기"
 msgid "NONE"
 msgstr "없음 "
 
+msgid "RESTORE LAST SELECTED"
+msgstr ""
+
 msgid "START ON GAMELIST"
 msgstr "게임리스트로 시작하기"
 
@@ -397,6 +400,9 @@ msgstr "테마가 없는 커스텀 컬렉션을 그룹"
 
 msgid "SHOW SYSTEM NAME IN COLLECTIONS"
 msgstr "컬렉션에서 시스템 이름 표시"
+
+msgid "SHOW GAMES OF HIDDEN SYSTEMS IN COLLECTIONS"
+msgstr ""
 
 msgid "UPDATE GAMES LISTS"
 msgstr "게임 목록 업데이트"
@@ -455,6 +461,9 @@ msgstr "다음으로 게임 정렬"
 msgid "OTHER FILTERS"
 msgstr "다른 필터"
 
+msgid "FIND SIMILAR GAMES..."
+msgstr ""
+
 msgid "GAME MEDIAS"
 msgstr "게임 미디어"
 
@@ -497,11 +506,20 @@ msgstr "고급 시스템 옵션"
 msgid "ADVANCED GAME OPTIONS"
 msgstr "고급 게임 옵션"
 
+msgid "EDIT PAD TO KEYBOARD CONFIGURATION"
+msgstr ""
+
+msgid "CREATE PAD TO KEYBOARD CONFIGURATION"
+msgstr ""
+
 msgid "EDIT FOLDER METADATA"
 msgstr "폴더 메타데이터 편집"
 
 msgid "EDIT THIS GAME'S METADATA"
 msgstr "게임 정보 편집"
+
+msgid "VIEW PAD TO KEYBOARD INFORMATION"
+msgstr ""
 
 msgid "RESET FILTERS"
 msgstr "필터 초기화"
@@ -515,8 +533,8 @@ msgstr "게임 아트워크 수집 중에는 이 기능은 비활성화됩니다
 msgid "CLOSE"
 msgstr "닫기"
 
-msgid "ARE YOU SURE ?"
-msgstr "확실합니까?"
+msgid "ARE YOU SURE YOU WANT TO DELETE THIS ITEM ?"
+msgstr ""
 
 msgid "INPUT"
 msgstr "입력"
@@ -623,17 +641,26 @@ msgstr "발견된 블루투스 장치가 없습니다"
 msgid "CONTROLLERS LINKS HAVE BEEN DELETED."
 msgstr "컨트롤러와의 연결이 삭제되었습니다."
 
+msgid "RESET"
+msgstr "리셋"
+
+msgid "ADD COMBINATION KEY"
+msgstr ""
+
 msgid "CONTENT DOWNLOADER"
 msgstr "컨텐츠 다운로더"
 
 msgid "SELECT CONTENT TO INSTALL / REMOVE"
 msgstr "설치/제거할 컨텐츠을 선택하세요"
 
-msgid "MISC"
-msgstr "기타"
+msgid "UPDATE INSTALLED CONTENT"
+msgstr ""
 
 msgid "There are no items in this view"
 msgstr ""
+
+msgid "MISC"
+msgstr "기타"
 
 msgid "UNINSTALL ADDED TO QUEUE"
 msgstr "제거 작업이 대기열에 추가됨"
@@ -751,6 +778,54 @@ msgstr "커스텀 이미지 되부름의 디렉터리"
 
 msgid "CUSTOM IMAGE FILTER"
 msgstr "커스텀 이미지 필터"
+
+msgid "PAD TO KEYBOARD CONFIGURATION"
+msgstr ""
+
+msgid "SELECT ACTIONS TO CHANGE"
+msgstr ""
+
+msgid "SAVE"
+msgstr "저장"
+
+msgid "DELETE"
+msgstr "삭제"
+
+msgid "PLAYER 1"
+msgstr ""
+
+msgid "PLAYER 2"
+msgstr ""
+
+msgid "COMBINATIONS"
+msgstr ""
+
+msgid "MOUSE CURSOR"
+msgstr ""
+
+msgid "EMULATE MOUSE CURSOR"
+msgstr ""
+
+msgid "LEFT ANALOG STICK"
+msgstr ""
+
+msgid "RIGHT ANALOG STICK"
+msgstr ""
+
+msgid "EDIT DESCRIPTION"
+msgstr ""
+
+msgid "DELETE MAPPING"
+msgstr ""
+
+msgid "SAVE CHANGES?"
+msgstr "변경 사항을 저장 하시겠습니까?"
+
+msgid "ARE YOU SURE ?"
+msgstr "확실합니까?"
+
+msgid "UPDATING EMULATIONSTATION"
+msgstr ""
 
 msgid "UPDATING BATOCERA"
 msgstr "바토세라 업데이트 중"
@@ -1027,6 +1102,9 @@ msgstr "팬아트 스크랩"
 msgid "SCRAPE MANUAL"
 msgstr "매뉴얼 스크랩"
 
+msgid "SCRAPE PADTOKEY SETTINGS"
+msgstr ""
+
 msgid "USERNAME"
 msgstr "사용자 이름"
 
@@ -1075,6 +1153,9 @@ msgstr "수직 동기화"
 msgid "OVERSCAN"
 msgstr "오버스캔"
 
+msgid "USE OMX PLAYER (HW ACCELERATED)"
+msgstr ""
+
 msgid "TOOLS"
 msgstr "도구"
 
@@ -1096,6 +1177,21 @@ msgstr "파일 생성 실패"
 msgid "FORMAT A DISK"
 msgstr "디스크를 포맷합니다"
 
+msgid "CLEAN GAMELISTS & REMOVE UNUSED MEDIAS"
+msgstr ""
+
+msgid "Cleaning "
+msgstr ""
+
+msgid "CLEAR CACHES"
+msgstr ""
+
+msgid "RESET FILE EXTENSIONS"
+msgstr "파일 확장자 초기화"
+
+msgid "REDETECT GAMES LANG/REGION"
+msgstr "게임 언어/지역 재감지"
+
 msgid "DATA MANAGEMENT"
 msgstr ""
 
@@ -1110,12 +1206,6 @@ msgstr "오직 게임리스트만 분석"
 
 msgid "SEARCH FOR LOCAL ART"
 msgstr "로컬 아트 검색"
-
-msgid "RESET FILE EXTENSIONS"
-msgstr "파일 확장자 초기화"
-
-msgid "REDETECT GAMES LANG/REGION"
-msgstr "게임 언어/지역 재감지"
 
 msgid "UI"
 msgstr ""
@@ -1219,9 +1309,6 @@ msgstr "KODI 활성화"
 msgid "KODI AT START"
 msgstr "시작 시 KODI 실행"
 
-msgid "START KODI WITH X"
-msgstr "X 버튼으로 KODI 실행"
-
 msgid "HARDWARE"
 msgstr "하드웨어"
 
@@ -1242,6 +1329,9 @@ msgstr "레트로 도전 과제 설정"
 
 msgid "NETPLAY SETTINGS"
 msgstr "넷플레이 설정"
+
+msgid "CHECK BIOSES BEFORE RUNNING A GAME"
+msgstr ""
 
 msgid "MULTIMEDIA KEYS"
 msgstr "멀티미디어 키"
@@ -1496,6 +1586,12 @@ msgstr "도움말 표시"
 msgid "SHOW BATTERY STATUS"
 msgstr "배터리 상태 보기"
 
+msgid "ICON"
+msgstr ""
+
+msgid "ICON AND TEXT"
+msgstr ""
+
 msgid "SHOW FILENAMES IN LISTS"
 msgstr "리스트에서 파일명 보여주기"
 
@@ -1586,8 +1682,14 @@ msgstr ""
 msgid "SKIP TO NEXT SONG"
 msgstr ""
 
+msgid "LISTENING NOW"
+msgstr ""
+
 msgid "LAUNCH SCREENSAVER"
 msgstr "화면보호기 실행"
+
+msgid "VIEW USER'S MANUAL"
+msgstr ""
 
 msgid "VIEW BATOCERA MANUAL"
 msgstr ""
@@ -1658,9 +1760,6 @@ msgstr "이 드라이브를 포맷하는 것을 정말로 원합니까?"
 msgid "EDIT METADATA"
 msgstr "게임 정보 편집"
 
-msgid "SAVE"
-msgstr "저장"
-
 msgid ""
 "THIS WILL DELETE THE ACTUAL GAME FILE(S)!\n"
 "ARE YOU SURE?"
@@ -1668,23 +1767,17 @@ msgstr ""
 "실제 게임 파일이 삭제됩니다!\n"
 "확실합니까?"
 
-msgid "DELETE"
-msgstr "삭제"
-
-msgid "SAVE CHANGES?"
-msgstr "변경 사항을 저장 하시겠습니까?"
-
 msgid "NO DEVICE FOUND"
 msgstr "장치 찾기 없음"
+
+msgid "SYSTEM INFO"
+msgstr ""
 
 msgid "ERROR: EVERY SYSTEM IS HIDDEN, RE-DISPLAYING ALL OF THEM NOW"
 msgstr "모든 시스템이 숨겨져 있어, 지금 모든 시스템을 다시 표시합니다."
 
 msgid "QUICK SEARCH"
 msgstr ""
-
-msgid "DO YOU WANT TO START KODI MEDIA CENTER ?"
-msgstr "KODI 미디어 센터를 실행하시겠습니까?"
 
 msgid "GO TO LETTER"
 msgstr ""
@@ -1699,6 +1792,9 @@ msgid "GO TO HARDWARE"
 msgstr ""
 
 msgid "GO TO DECADE"
+msgstr ""
+
+msgid "CONFIGURATION"
 msgstr ""
 
 #, c-format
@@ -1716,9 +1812,6 @@ msgid "%i GAME"
 msgid_plural "%i GAMES"
 msgstr[0] "%i 게임"
 
-msgid "KODI"
-msgstr "KODI"
-
 msgid "NETPLAY"
 msgstr "넷플레이"
 
@@ -1728,8 +1821,24 @@ msgstr "랜덤"
 msgid "FILES"
 msgstr "파일"
 
+msgid ""
+"WARNING : THIS GAME'S FORMAT IS NOT SUPPORTED BY THE CURRENT EMULATOR/CORE.\n"
+"DO YOU WANT TO LAUNCH IT ANYWAY ?"
+msgstr ""
+
+msgid ""
+"WARNING : THE SYSTEM HAS MISSING BIOS AND THE GAME MAY NOT WORK CORRECTLY.\n"
+"DO YOU WANT TO LAUNCH IT ANYWAY ?"
+msgstr ""
+
 msgid "Preloading UI"
 msgstr "UI 로딩중"
+
+msgid "Loading theme"
+msgstr ""
+
+msgid "Loading gamelists"
+msgstr ""
 
 msgid "MENU"
 msgstr "메뉴"
@@ -1765,6 +1874,9 @@ msgid "SET PLAYER PASSWORD"
 msgstr ""
 
 msgid "SET VIEWER PASSWORD"
+msgstr ""
+
+msgid "Games similar to"
 msgstr ""
 
 msgid "Searching"
@@ -1919,9 +2031,6 @@ msgstr "대문자, 소문자, 특수문자를 위한 쉬프트"
 msgid "ALT GR"
 msgstr ""
 
-msgid "RESET"
-msgstr "리셋"
-
 msgid "SHIFT"
 msgstr "쉬프트"
 
@@ -1943,14 +2052,26 @@ msgstr "오른쪽"
 msgid "LEFT ANALOG UP"
 msgstr "왼쪽 아날로그 위"
 
+msgid "LEFT ANALOG DOWN"
+msgstr ""
+
 msgid "LEFT ANALOG LEFT"
 msgstr "왼쪽 아날로그 왼쪽"
+
+msgid "LEFT ANALOG RIGHT"
+msgstr ""
 
 msgid "RIGHT ANALOG UP"
 msgstr "오른쪽 아날로그 위"
 
+msgid "RIGHT ANALOG DOWN"
+msgstr ""
+
 msgid "RIGHT ANALOG LEFT"
 msgstr "오른쪽 아날로그 왼쪽"
+
+msgid "RIGHT ANALOG RIGHT"
+msgstr ""
 
 msgid "HOTKEY"
 msgstr "단축키"
@@ -2077,6 +2198,15 @@ msgstr ""
 #, c-format
 msgid "%d s"
 msgstr ""
+
+#~ msgid "START KODI WITH X"
+#~ msgstr "X 버튼으로 KODI 실행"
+
+#~ msgid "DO YOU WANT TO START KODI MEDIA CENTER ?"
+#~ msgstr "KODI 미디어 센터를 실행하시겠습니까?"
+
+#~ msgid "KODI"
+#~ msgstr "KODI"
 
 #~ msgid "STATUS"
 #~ msgstr "상태"

@@ -516,13 +516,17 @@ std::vector<std::string> ApiSystem::getSystemInformations()
 	return executeEnumerationScript("batocera-info --full");
 }
 
-std::vector<BiosSystem> ApiSystem::getBiosInformations() 
+std::vector<BiosSystem> ApiSystem::getBiosInformations(const std::string system) 
 {
 	std::vector<BiosSystem> res;
 	BiosSystem current;
 	bool isCurrent = false;
 
-	auto systems = executeEnumerationScript("batocera-systems");
+	std::string cmd = "batocera-systems";
+	if (!system.empty())
+		cmd += " --filter " + system;
+
+	auto systems = executeEnumerationScript(cmd);
 	for (auto line : systems)
 	{
 		if (Utils::String::startsWith(line, "> ")) 
@@ -786,6 +790,15 @@ RetroAchievementInfo ApiSystem::getRetroAchievements()
 					Utils::FileSystem::createDirectory(localPath);
 
 				std::string localFile = localPath + "/" + Utils::FileSystem::getFileName(userpic);
+
+				if (Utils::FileSystem::exists(localFile))
+				{
+					auto date = Utils::FileSystem::getFileCreationDate(localFile);
+					auto duration = Utils::Time::DateTime::now().elapsedSecondsSince(date);
+					if (duration > 60 * 60) // 1 hour
+						Utils::FileSystem::removeFile(localFile);
+				}
+
 				if (!Utils::FileSystem::exists(localFile))
 				{
 					HttpReq httpreq(userpic, localFile);
@@ -825,6 +838,15 @@ RetroAchievementInfo ApiSystem::getRetroAchievements()
 							Utils::FileSystem::createDirectory(localPath);
 
 						std::string localFile = localPath + "/" + Utils::FileSystem::getFileName(badge);
+
+						if (Utils::FileSystem::exists(localFile))
+						{
+							auto date = Utils::FileSystem::getFileCreationDate(localFile);
+							auto duration = Utils::Time::DateTime::now().elapsedSecondsSince(date);
+							if (duration > 60 * 60) // 1 hour
+								Utils::FileSystem::removeFile(localFile);
+						}
+
 						if (!Utils::FileSystem::exists(localFile))
 						{
 							HttpReq httpreq(badge, localFile);
@@ -907,6 +929,15 @@ void ApiSystem::getBatoceraThemesImages(std::vector<BatoceraTheme>& items)
 			Utils::FileSystem::createDirectory(localPath);
 
 		std::string localFile = localPath + "/" + it->name + ".jpg";
+
+		if (Utils::FileSystem::exists(localFile))
+		{
+			auto date = Utils::FileSystem::getFileCreationDate(localFile);
+			auto duration = Utils::Time::DateTime::now().elapsedSecondsSince(date);
+			if (duration > 86400) // 1 day
+				Utils::FileSystem::removeFile(localFile);
+		}
+
 		if (Utils::FileSystem::exists(localFile))
 			it->image = localFile;
 		else
@@ -1260,6 +1291,9 @@ bool ApiSystem::isScriptingSupported(ScriptId script)
 	case ApiSystem::BATOCERASTORE:
 		executables.push_back("batocera-store");
 		break;
+	case ApiSystem::EVMAPY:
+		executables.push_back("evmapy");
+		break;		
 	}
 
 	if (executables.size() == 0)
@@ -1523,6 +1557,11 @@ std::pair<std::string, int> ApiSystem::installBatoceraStorePackage(std::string n
 std::pair<std::string, int> ApiSystem::uninstallBatoceraStorePackage(std::string name, const std::function<void(const std::string)>& func)
 {
 	return executeScript("batocera-store remove " + name, func);
+}
+
+void ApiSystem::refreshBatoceraStorePackageList()
+{
+	executeScript("batocera-store refresh");
 }
 
 void ApiSystem::updateBatoceraStorePackageList()

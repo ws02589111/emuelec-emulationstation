@@ -70,6 +70,9 @@ std::map<std::string, std::map<std::string, ThemeData::ElementPropertyType>> The
 
 		{ "margin", NORMALIZED_PAIR },
 		{ "padding", NORMALIZED_RECT },
+
+		{ "cellProportion", FLOAT },
+
 		{ "autoLayout", NORMALIZED_PAIR },
 		{ "autoLayoutSelectedZoom", FLOAT },
 		{ "animateSelection", BOOLEAN },
@@ -253,6 +256,7 @@ std::map<std::string, std::map<std::string, ThemeData::ElementPropertyType>> The
 		{ "unfilledColor", COLOR },
 		{ "filledPath", PATH },
 		{ "unfilledPath", PATH },
+		{ "horizontalAlignment", STRING },
 		{ "visible", BOOLEAN },
 		{ "zIndex", FLOAT } } },
 	{ "sound", {
@@ -357,6 +361,7 @@ std::map<std::string, std::map<std::string, ThemeData::ElementPropertyType>> The
 		{ "snapshotSource", STRING }, // image, thumbnail, marquee
 		{ "loops", FLOAT }, // Number of loops to do -1 (default) is infinite 
 		{ "audio", BOOLEAN },
+		{ "linearSmooth", BOOLEAN },
 		{ "showSnapshotNoVideo", BOOLEAN },
 		{ "showSnapshotDelay", BOOLEAN } } },
 	{ "carousel", {
@@ -375,6 +380,7 @@ std::map<std::string, std::map<std::string, ThemeData::ElementPropertyType>> The
 		{ "logoAlignment", STRING },
 		{ "maxLogoCount", FLOAT },
 		{ "systemInfoDelay", FLOAT },	
+		{ "systemInfoCountOnly", BOOLEAN },		
 		{ "defaultTransition", STRING },
 		{ "scrollSound", PATH },
 		{ "zIndex", FLOAT } } },
@@ -430,6 +436,7 @@ std::map<std::string, std::map<std::string, ThemeData::ElementPropertyType>> The
 	{ "menuSlider",{
 		{ "path", PATH } } },
 	{ "menuButton",{
+		{ "cornerSize", NORMALIZED_PAIR },
 		{ "path", PATH },
 		{ "filledPath", PATH } } },
 };
@@ -702,7 +709,7 @@ bool ThemeData::parseSubset(const pugi::xml_node& node)
 
 			std::string appliesToAttr = resolvePlaceholders(node.attribute("appliesTo").as_string());
 			if (!appliesToAttr.empty())
-				subSet.appliesTo = Utils::String::splitAny(appliesToAttr, ",");
+				subSet.appliesTo = Utils::String::splitAny(appliesToAttr, ", ", true);
 
 			mSubsets.push_back(subSet);
 		}
@@ -865,7 +872,7 @@ void ThemeData::parseVariable(const pugi::xml_node& node)
 	if (!parseFilterAttributes(node))
 		return;
 
-	std::string val = node.text().as_string();
+	std::string val = resolvePlaceholders(node.text().as_string());
 	//if (val.empty()) return;
 	
 	mVariables.erase(key);
@@ -938,6 +945,18 @@ bool ThemeData::parseFilterAttributes(const pugi::xml_node& node)
 		if (!Renderer::isSmallScreen() && tinyScreenAttr == "true")
 			return false;
 		else if (Renderer::isSmallScreen() && tinyScreenAttr == "false")
+			return false;
+	}
+
+	if (node.attribute("verticalScreen"))
+	{
+		const std::string tinyScreenAttr = node.attribute("verticalScreen").as_string();
+
+		bool verticalScreen = Renderer::getScreenHeight() > Renderer::getScreenWidth();
+
+		if (!verticalScreen && tinyScreenAttr == "true")
+			return false;
+		else if (verticalScreen && tinyScreenAttr == "false")
 			return false;
 	}
 
@@ -1404,7 +1423,7 @@ void ThemeData::parseElement(const pugi::xml_node& root, const std::map<std::str
 					LOG(LogWarning) << "random is only supported in systemview";
 				else if (element.type == "video" && path != "{random}")
 					LOG(LogWarning) << "video element only supports {random} element";
-				else if (element.type == "image" && path != "{random}" && path != "{random:thumbnail}" && path != "{random:marquee}" && path != "{random:image}")
+				else if (element.type == "image" && path != "{random}" && path != "{random:thumbnail}" && path != "{random:marquee}" && path != "{random:image}" && path != "{random:fanart}" && path != "{random:titleshot}")
 					LOG(LogWarning) << "unknow random element " << path;
 				else
 					element.properties[node.name()] = path;
@@ -1414,9 +1433,13 @@ void ThemeData::parseElement(const pugi::xml_node& root, const std::map<std::str
 
 			if (path[0] == '/')
 			{
-#if WIN32 || defined _ENABLEEMUELEC
+#if WIN32
 				path = Utils::String::replace(path,
 					"/recalbox/share_init/system/.emulationstation/themes",
+					Utils::FileSystem::getEsConfigPath() + "/themes");
+#elif _ENABLEEMUELEC
+				path = Utils::String::replace(path,
+					"/emuelec/themes",
 					Utils::FileSystem::getEsConfigPath() + "/themes");
 #else
 				path = Utils::String::replace(path,
@@ -1426,7 +1449,10 @@ void ThemeData::parseElement(const pugi::xml_node& root, const std::map<std::str
 			}
 
 			if (path == "none")
-				element.properties[node.name()] = "";
+			{
+				if (element.properties.find(node.name()) != element.properties.cend())
+					element.properties.erase(node.name());
+			}
 			else
 			{
 				if (!ResourceManager::getInstance()->fileExists(path))
@@ -1621,7 +1647,11 @@ std::map<std::string, ThemeSet> ThemeData::getThemeSets()
 	{ 
 		"/etc/emulationstation/themes",
 		Utils::FileSystem::getEsConfigPath() + "/themes",
+#ifdef _ENABLEEMUELEC
+        "/emuelec/themes" // emuelec
+#else
 		"/userdata/themes" // batocera
+#endif
 	};
 
 	for(size_t i = 0; i < pathCount; i++)
@@ -1816,9 +1846,11 @@ ThemeData::ThemeMenu::ThemeMenu(ThemeData* theme)
 	if (elem)
 	{
 		if (elem->has("path"))
-			Icons.button = elem->get<std::string>("path");
+			Button.path = elem->get<std::string>("path");
 		if (elem->has("filledPath"))
-			Icons.button_filled = elem->get<std::string>("filledPath");
+			Button.filledPath = elem->get<std::string>("filledPath");
+		if (elem->has("cornerSize"))
+			Button.cornerSize = elem->get<Vector2f>("cornerSize");
 	}
 
 	elem = theme->getElement("menu", "menutextedit", "menuTextEdit");

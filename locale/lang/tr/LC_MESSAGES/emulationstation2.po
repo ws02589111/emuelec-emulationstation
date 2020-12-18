@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: emulationstation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-28 22:24+0100\n"
+"POT-Creation-Date: 2020-12-02 08:20+0100\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -390,6 +390,9 @@ msgstr "SÝSTEMÝ BAÞLAT"
 msgid "NONE"
 msgstr "YOK"
 
+msgid "RESTORE LAST SELECTED"
+msgstr ""
+
 msgid "START ON GAMELIST"
 msgstr ""
 
@@ -397,6 +400,9 @@ msgid "GROUP UNTHEMED CUSTOM COLLECTIONS"
 msgstr ""
 
 msgid "SHOW SYSTEM NAME IN COLLECTIONS"
+msgstr ""
+
+msgid "SHOW GAMES OF HIDDEN SYSTEMS IN COLLECTIONS"
 msgstr ""
 
 msgid "UPDATE GAMES LISTS"
@@ -456,6 +462,9 @@ msgstr "OYUNA GÖRE SIRALA"
 msgid "OTHER FILTERS"
 msgstr ""
 
+msgid "FIND SIMILAR GAMES..."
+msgstr ""
+
 msgid "GAME MEDIAS"
 msgstr ""
 
@@ -498,11 +507,20 @@ msgstr ""
 msgid "ADVANCED GAME OPTIONS"
 msgstr ""
 
+msgid "EDIT PAD TO KEYBOARD CONFIGURATION"
+msgstr ""
+
+msgid "CREATE PAD TO KEYBOARD CONFIGURATION"
+msgstr ""
+
 msgid "EDIT FOLDER METADATA"
 msgstr ""
 
 msgid "EDIT THIS GAME'S METADATA"
 msgstr "OYUN BÝLGÝLERÝNÝ DÜZENLE"
+
+msgid "VIEW PAD TO KEYBOARD INFORMATION"
+msgstr ""
 
 msgid "RESET FILTERS"
 msgstr ""
@@ -516,7 +534,7 @@ msgstr ""
 msgid "CLOSE"
 msgstr "KAPAT"
 
-msgid "ARE YOU SURE ?"
+msgid "ARE YOU SURE YOU WANT TO DELETE THIS ITEM ?"
 msgstr ""
 
 msgid "INPUT"
@@ -624,16 +642,25 @@ msgstr ""
 msgid "CONTROLLERS LINKS HAVE BEEN DELETED."
 msgstr "KUMANDA BAÐLANTILARI SÝLÝNDÝ."
 
+msgid "RESET"
+msgstr ""
+
+msgid "ADD COMBINATION KEY"
+msgstr ""
+
 msgid "CONTENT DOWNLOADER"
 msgstr ""
 
 msgid "SELECT CONTENT TO INSTALL / REMOVE"
 msgstr ""
 
-msgid "MISC"
+msgid "UPDATE INSTALLED CONTENT"
 msgstr ""
 
 msgid "There are no items in this view"
+msgstr ""
+
+msgid "MISC"
 msgstr ""
 
 msgid "UNINSTALL ADDED TO QUEUE"
@@ -752,6 +779,54 @@ msgstr "ÖZEL GÖRÜNTÜ RESMÝ YOLU"
 
 msgid "CUSTOM IMAGE FILTER"
 msgstr "ÖZEL GÖRÜNTÜ FÝLTRE"
+
+msgid "PAD TO KEYBOARD CONFIGURATION"
+msgstr ""
+
+msgid "SELECT ACTIONS TO CHANGE"
+msgstr ""
+
+msgid "SAVE"
+msgstr "KAYDET"
+
+msgid "DELETE"
+msgstr "SÝL"
+
+msgid "PLAYER 1"
+msgstr ""
+
+msgid "PLAYER 2"
+msgstr ""
+
+msgid "COMBINATIONS"
+msgstr ""
+
+msgid "MOUSE CURSOR"
+msgstr ""
+
+msgid "EMULATE MOUSE CURSOR"
+msgstr ""
+
+msgid "LEFT ANALOG STICK"
+msgstr ""
+
+msgid "RIGHT ANALOG STICK"
+msgstr ""
+
+msgid "EDIT DESCRIPTION"
+msgstr ""
+
+msgid "DELETE MAPPING"
+msgstr ""
+
+msgid "SAVE CHANGES?"
+msgstr "DEÐÝÞÝKLÝKLERÝ KAYDET?"
+
+msgid "ARE YOU SURE ?"
+msgstr ""
+
+msgid "UPDATING EMULATIONSTATION"
+msgstr ""
 
 msgid "UPDATING BATOCERA"
 msgstr ""
@@ -1027,6 +1102,9 @@ msgstr ""
 msgid "SCRAPE MANUAL"
 msgstr ""
 
+msgid "SCRAPE PADTOKEY SETTINGS"
+msgstr ""
+
 msgid "USERNAME"
 msgstr "KULLANICI ADI"
 
@@ -1075,6 +1153,9 @@ msgstr ""
 msgid "OVERSCAN"
 msgstr "OVERSCAN"
 
+msgid "USE OMX PLAYER (HW ACCELERATED)"
+msgstr ""
+
 msgid "TOOLS"
 msgstr ""
 
@@ -1096,6 +1177,21 @@ msgstr "DOSYA OLUÞTURMA BAÞARISIZ"
 msgid "FORMAT A DISK"
 msgstr ""
 
+msgid "CLEAN GAMELISTS & REMOVE UNUSED MEDIAS"
+msgstr ""
+
+msgid "Cleaning "
+msgstr ""
+
+msgid "CLEAR CACHES"
+msgstr ""
+
+msgid "RESET FILE EXTENSIONS"
+msgstr ""
+
+msgid "REDETECT GAMES LANG/REGION"
+msgstr ""
+
 msgid "DATA MANAGEMENT"
 msgstr ""
 
@@ -1110,12 +1206,6 @@ msgstr "oyun listesini ayrýþtýr"
 
 msgid "SEARCH FOR LOCAL ART"
 msgstr "yerel resimleri ara"
-
-msgid "RESET FILE EXTENSIONS"
-msgstr ""
-
-msgid "REDETECT GAMES LANG/REGION"
-msgstr ""
 
 msgid "UI"
 msgstr ""
@@ -1216,9 +1306,6 @@ msgstr "ETKÝNLEÞTÝR"
 msgid "KODI AT START"
 msgstr "AÇILIÞTA BAÞLASIN"
 
-msgid "START KODI WITH X"
-msgstr "X ÝLE BAÞLASIN"
-
 msgid "HARDWARE"
 msgstr ""
 
@@ -1239,6 +1326,9 @@ msgid "RETROACHIEVEMENTS SETTINGS"
 msgstr "RETROACHIEVEMENT AYARLARI"
 
 msgid "NETPLAY SETTINGS"
+msgstr ""
+
+msgid "CHECK BIOSES BEFORE RUNNING A GAME"
 msgstr ""
 
 msgid "MULTIMEDIA KEYS"
@@ -1494,6 +1584,12 @@ msgstr "YARDIMI GÖSTER"
 msgid "SHOW BATTERY STATUS"
 msgstr ""
 
+msgid "ICON"
+msgstr ""
+
+msgid "ICON AND TEXT"
+msgstr ""
+
 msgid "SHOW FILENAMES IN LISTS"
 msgstr ""
 
@@ -1584,7 +1680,13 @@ msgstr ""
 msgid "SKIP TO NEXT SONG"
 msgstr ""
 
+msgid "LISTENING NOW"
+msgstr ""
+
 msgid "LAUNCH SCREENSAVER"
+msgstr ""
+
+msgid "VIEW USER'S MANUAL"
 msgstr ""
 
 msgid "VIEW BATOCERA MANUAL"
@@ -1656,21 +1758,15 @@ msgstr ""
 msgid "EDIT METADATA"
 msgstr "DÜZENLE"
 
-msgid "SAVE"
-msgstr "KAYDET"
-
 msgid ""
 "THIS WILL DELETE THE ACTUAL GAME FILE(S)!\n"
 "ARE YOU SURE?"
 msgstr ""
 
-msgid "DELETE"
-msgstr "SÝL"
-
-msgid "SAVE CHANGES?"
-msgstr "DEÐÝÞÝKLÝKLERÝ KAYDET?"
-
 msgid "NO DEVICE FOUND"
+msgstr ""
+
+msgid "SYSTEM INFO"
 msgstr ""
 
 msgid "ERROR: EVERY SYSTEM IS HIDDEN, RE-DISPLAYING ALL OF THEM NOW"
@@ -1678,9 +1774,6 @@ msgstr ""
 
 msgid "QUICK SEARCH"
 msgstr ""
-
-msgid "DO YOU WANT TO START KODI MEDIA CENTER ?"
-msgstr "KODI SUNUCUSU BAÞLATILSIN MI?"
 
 msgid "GO TO LETTER"
 msgstr ""
@@ -1695,6 +1788,9 @@ msgid "GO TO HARDWARE"
 msgstr ""
 
 msgid "GO TO DECADE"
+msgstr ""
+
+msgid "CONFIGURATION"
 msgstr ""
 
 #, c-format
@@ -1715,9 +1811,6 @@ msgid_plural "%i GAMES"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "KODI"
-msgstr "KODI"
-
 msgid "NETPLAY"
 msgstr ""
 
@@ -1727,7 +1820,23 @@ msgstr "RASGELE"
 msgid "FILES"
 msgstr "DOSYALAR"
 
+msgid ""
+"WARNING : THIS GAME'S FORMAT IS NOT SUPPORTED BY THE CURRENT EMULATOR/CORE.\n"
+"DO YOU WANT TO LAUNCH IT ANYWAY ?"
+msgstr ""
+
+msgid ""
+"WARNING : THE SYSTEM HAS MISSING BIOS AND THE GAME MAY NOT WORK CORRECTLY.\n"
+"DO YOU WANT TO LAUNCH IT ANYWAY ?"
+msgstr ""
+
 msgid "Preloading UI"
+msgstr ""
+
+msgid "Loading theme"
+msgstr ""
+
+msgid "Loading gamelists"
 msgstr ""
 
 msgid "MENU"
@@ -1764,6 +1873,9 @@ msgid "SET PLAYER PASSWORD"
 msgstr ""
 
 msgid "SET VIEWER PASSWORD"
+msgstr ""
+
+msgid "Games similar to"
 msgstr ""
 
 msgid "Searching"
@@ -1916,9 +2028,6 @@ msgstr ""
 msgid "ALT GR"
 msgstr ""
 
-msgid "RESET"
-msgstr ""
-
 msgid "SHIFT"
 msgstr "DEÐÝÞTÝR"
 
@@ -1940,14 +2049,26 @@ msgstr "SAÐ"
 msgid "LEFT ANALOG UP"
 msgstr "SOL ANALOG YUKARI"
 
+msgid "LEFT ANALOG DOWN"
+msgstr ""
+
 msgid "LEFT ANALOG LEFT"
 msgstr "SOL ANALOG SOL"
+
+msgid "LEFT ANALOG RIGHT"
+msgstr ""
 
 msgid "RIGHT ANALOG UP"
 msgstr "SAÐ ANALOG YUKARI"
 
+msgid "RIGHT ANALOG DOWN"
+msgstr ""
+
 msgid "RIGHT ANALOG LEFT"
 msgstr "SAÐ ANALOG SOL"
+
+msgid "RIGHT ANALOG RIGHT"
+msgstr ""
 
 msgid "HOTKEY"
 msgstr "HOTKEY"
@@ -2081,6 +2202,15 @@ msgstr ""
 #, c-format
 msgid "%d s"
 msgstr ""
+
+#~ msgid "START KODI WITH X"
+#~ msgstr "X ÝLE BAÞLASIN"
+
+#~ msgid "DO YOU WANT TO START KODI MEDIA CENTER ?"
+#~ msgstr "KODI SUNUCUSU BAÞLATILSIN MI?"
+
+#~ msgid "KODI"
+#~ msgstr "KODI"
 
 #~ msgid "STATUS"
 #~ msgstr "DURUM"

@@ -23,6 +23,9 @@
 #include "CollectionSystemManager.h"
 #include "guis/GuiImageViewer.h"
 #include "ApiSystem.h"
+#include "guis/GuiMsgBox.h"
+#include "utils/ThreadPool.h"
+#include <SDL_timer.h>
 
 #ifdef _ENABLEEMUELEC
 #include "ApiSystem.h"
@@ -43,6 +46,28 @@ void ViewController::init(Window* window)
 	sInstance = new ViewController(window);
 }
 
+void ViewController::saveState()
+{
+	if (sInstance == nullptr)
+		return;
+
+	if (Settings::getInstance()->getString("StartupSystem") != "lastsystem")
+		return;
+	
+	SystemData* activeSystem = nullptr;
+
+	if (sInstance->mState.viewing == GAME_LIST)
+		activeSystem = sInstance->mState.getSystem();
+	else if (sInstance->mState.viewing == SYSTEM_SELECT)
+		activeSystem = sInstance->mSystemListView->getActiveSystem();
+
+	if (activeSystem != nullptr)
+	{
+		if (Settings::getInstance()->setString("LastSystem", activeSystem->getName()))
+			Settings::getInstance()->saveFile();
+	}	
+}
+
 ViewController::ViewController(Window* window)
 	: GuiComponent(window), mCurrentView(nullptr), mCamera(Transform4x4f::Identity()), mFadeOpacity(0), mLockInput(false)
 {
@@ -51,7 +76,11 @@ ViewController::ViewController(Window* window)
 }
 
 ViewController::~ViewController()
-{
+{	
+	ISimpleGameListView* simpleView = dynamic_cast<ISimpleGameListView*>(mCurrentView.get());
+	if (simpleView != nullptr)
+		simpleView->closePopupContext();
+
 	sInstance = nullptr;
 }
 
@@ -61,6 +90,9 @@ void ViewController::goToStart(bool forceImmediate)
 
 	// If specific system is requested, go directly to the game list
 	auto requestedSystem = Settings::getInstance()->getString("StartupSystem");
+	if (requestedSystem == "lastsystem")
+		requestedSystem = Settings::getInstance()->getString("LastSystem");
+
 	if("" != requestedSystem && "retropie" != requestedSystem)
 	{
 		auto system = SystemData::getSystem(requestedSystem);
@@ -138,7 +170,7 @@ void ViewController::goToSystemView(SystemData* system, bool forceImmediate)
 
 	mState.viewing = SYSTEM_SELECT;
 	mState.system = dest;
-
+	
 	auto systemList = getSystemListView();
 	systemList->setPosition(getSystemId(dest) * (float)Renderer::getScreenWidth(), systemList->getPosition().y());
 	systemList->goToSystem(dest, false);
@@ -333,8 +365,49 @@ bool ViewController::doLaunchGame(FileData* game, LaunchGameOptions options)
 	return false;
 }
 
-void ViewController::launch(FileData* game, LaunchGameOptions options, Vector3f center)
+bool ViewController::checkLaunchOptions(FileData* game, LaunchGameOptions options, Vector3f center)
+{	
+	if (!game->isExtensionCompatible())
+	{
+		auto gui = new GuiMsgBox(mWindow, _("WARNING : THIS GAME'S FORMAT IS NOT SUPPORTED BY THE CURRENT EMULATOR/CORE.\nDO YOU WANT TO LAUNCH IT ANYWAY ?"),
+			_("YES"), [this, game, options, center] { launch(game, options, center, false); },
+			_("NO"), nullptr, ICON_ERROR);
+
+		mWindow->pushGui(gui);
+		return false;
+	}
+
+	if (Settings::getInstance()->getBool("CheckBiosesAtLaunch") && ApiSystem::getInstance()->isScriptingSupported(ApiSystem::ScriptId::BIOSINFORMATION))
+	{
+		auto bios = ApiSystem::getInstance()->getBiosInformations(game->getSourceFileData()->getSystem()->getName());
+		if (bios.size() != 0)
+		{
+			auto systemName = game->getSystem()->getName();
+			auto it = std::find_if(bios.cbegin(), bios.cend(), [&systemName](const BiosSystem& x) { return x.name == systemName; });
+			if (it != bios.cend() && it->bios.size() > 0)
+			{
+				bool hasMissing = std::find_if(it->bios.cbegin(), it->bios.cend(), [&systemName](const BiosFile& x) { return x.status == "MISSING"; }) != it->bios.cend();
+				if (hasMissing)
+				{
+					auto gui = new GuiMsgBox(mWindow, _("WARNING : THE SYSTEM HAS MISSING BIOS AND THE GAME MAY NOT WORK CORRECTLY.\nDO YOU WANT TO LAUNCH IT ANYWAY ?"),
+						_("YES"), [this, game, options, center] { launch(game, options, center, false); },
+						_("NO"), nullptr, ICON_ERROR);
+
+					mWindow->pushGui(gui);
+					return false;
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
+void ViewController::launch(FileData* game, LaunchGameOptions options, Vector3f center, bool allowCheckLaunchOptions)
 {
+	if (allowCheckLaunchOptions && !checkLaunchOptions(game, options, center))
+		return;
+
 	if(game->getType() != GAME)
 	{
 		LOG(LogError) << "tried to launch something that isn't a game";
@@ -343,17 +416,25 @@ void ViewController::launch(FileData* game, LaunchGameOptions options, Vector3f 
 
 	if (game->getSourceFileData()->getSystem()->getName() == "imageviewer")
 	{
-		auto gameImage = game->getImagePath();
-		if (Utils::FileSystem::exists(gameImage))
+		auto ext = Utils::String::toLower(Utils::FileSystem::getExtension(game->getPath()));
+
+		if (ext == ".mp4" || ext == ".avi" || ext == ".mkv")
+			GuiVideoViewer::playVideo(mWindow, game->getPath());
+		else if (ext == ".pdf")
+			GuiImageViewer::showPdf(mWindow, game->getPath());
+		else
 		{
-		//	GuiImageViewer::showPdf(mWindow, "H:/[Emulz]/roms/n64/manuals/V-Rally Edition 99 (USA)-manual.pdf");		
-			auto imgViewer = new GuiImageViewer(mWindow);			
+			auto gameImage = game->getImagePath();
+			if (Utils::FileSystem::exists(gameImage))
+			{
+				auto imgViewer = new GuiImageViewer(mWindow);
 
-			for (auto sibling : game->getParent()->getChildrenListToDisplay())
-				imgViewer->add(sibling->getImagePath());
+				for (auto sibling : game->getParent()->getChildrenListToDisplay())
+					imgViewer->add(sibling->getImagePath());
 
-			imgViewer->setCursor(gameImage);
-			mWindow->pushGui(imgViewer);	
+				imgViewer->setCursor(gameImage);
+				mWindow->pushGui(imgViewer);
+			}
 		}
 		return;
 	}
@@ -400,7 +481,7 @@ void ViewController::launch(FileData* game, LaunchGameOptions options, Vector3f 
 				mWindow->postToUiThread([](Window* w) { reloadAllGames(w, false); });
 			else
 			{
-				setAnimation(new LambdaAnimation(fadeFunc, 800), 0, [this] { mLockInput = false; mWindow->closeSplashScreen(); }, true);
+				setAnimation(new LambdaAnimation(fadeFunc, 800), 0, [this] { mLockInput = false; mWindow->closeSplashScreen(); }, true, 3);
 				this->onFileChanged(game, FILE_METADATA_CHANGED);
 			}
 		});
@@ -415,7 +496,7 @@ void ViewController::launch(FileData* game, LaunchGameOptions options, Vector3f 
 			else
 			{
 				mCamera = origCamera;
-				setAnimation(new LaunchAnimation(mCamera, mFadeOpacity, center, 600), 0, [this] { mLockInput = false; mWindow->closeSplashScreen(); }, true);
+				setAnimation(new LaunchAnimation(mCamera, mFadeOpacity, center, 600), 0, [this] { mLockInput = false; mWindow->closeSplashScreen(); }, true, 3);
 				this->onFileChanged(game, FILE_METADATA_CHANGED);
 			}
 		});
@@ -429,7 +510,7 @@ void ViewController::launch(FileData* game, LaunchGameOptions options, Vector3f 
 			else
 			{
 				mCamera = origCamera;
-				setAnimation(new LaunchAnimation(mCamera, mFadeOpacity, center, 10), 0, [this] { mLockInput = false; mWindow->closeSplashScreen(); }, true);
+				setAnimation(new LaunchAnimation(mCamera, mFadeOpacity, center, 10), 0, [this] { mLockInput = false; mWindow->closeSplashScreen(); }, true, 3);
 				this->onFileChanged(game, FILE_METADATA_CHANGED);
 			}
 		});
@@ -447,18 +528,21 @@ void ViewController::removeGameListView(SystemData* system)
 	}
 }
 
-std::shared_ptr<IGameListView> ViewController::getGameListView(SystemData* system, bool loadIfnull)
+std::shared_ptr<IGameListView> ViewController::getGameListView(SystemData* system, bool loadIfnull, const std::function<void()>& createAsPopupAndSetExitFunction)
 {
-	//if we already made one, return that one
-	auto exists = mGameListViews.find(system);
-	if(exists != mGameListViews.cend())
-		return exists->second;
+	if (createAsPopupAndSetExitFunction == nullptr)
+	{
+		//if we already made one, return that one
+		auto exists = mGameListViews.find(system);
+		if (exists != mGameListViews.cend())
+			return exists->second;
 
-	if (!loadIfnull)
-		return nullptr;
+		if (!loadIfnull)
+			return nullptr;
 
-	system->setUIModeFilters();
-	system->updateDisplayedGameCount();
+		system->setUIModeFilters();
+		system->updateDisplayedGameCount();
+	}
 
 	//if we didn't, make it, remember it, and return it
 	std::shared_ptr<IGameListView> view;
@@ -574,13 +658,32 @@ std::shared_ptr<IGameListView> ViewController::getGameListView(SystemData* syste
 		view->setTheme(system->getTheme());
 	}
 
-	std::vector<SystemData*>& sysVec = SystemData::sSystemVector;
-	int id = (int)(std::find(sysVec.cbegin(), sysVec.cend(), system) - sysVec.cbegin());
-	view->setPosition(id * (float)Renderer::getScreenWidth(), (float)Renderer::getScreenHeight() * 2);
+	ISimpleGameListView* simpleListView = dynamic_cast<ISimpleGameListView*>(view.get());
 
-	addChild(view.get());
+	if (createAsPopupAndSetExitFunction != nullptr && simpleListView != nullptr)
+	{
+		if (mCurrentView)
+		{
+			mCurrentView->onHide();
+			view->setPosition(mCurrentView->getPosition());
+		}
 
-	mGameListViews[system] = view;
+		simpleListView->setPopupContext(view, mCurrentView, system->getIndex(true)->getTextFilter(), createAsPopupAndSetExitFunction);
+
+		mCurrentView = view;
+		mCurrentView->onShow();
+		mCurrentView->topWindow(true);
+	}
+	else
+	{
+		std::vector<SystemData*>& sysVec = SystemData::sSystemVector;
+		int id = (int)(std::find(sysVec.cbegin(), sysVec.cend(), system) - sysVec.cbegin());
+		view->setPosition(id * (float)Renderer::getScreenWidth(), (float)Renderer::getScreenHeight() * 2);
+
+		addChild(view.get());
+		mGameListViews[system] = view;
+	}
+
 	return view;
 }
 
@@ -860,8 +963,14 @@ void ViewController::reloadAll(Window* window, bool reloadTheme)
 	Utils::FileSystem::FileSystemCacheActivator fsc;
 
 	if (mCurrentView != nullptr)
-		mCurrentView->onHide();
+	{
+		ISimpleGameListView* simpleView = dynamic_cast<ISimpleGameListView*>(mCurrentView.get());
+		if (simpleView != nullptr)
+			simpleView->closePopupContext();
 
+		mCurrentView->onHide();
+	}
+	
 	ThemeData::setDefaultTheme(nullptr);
 
 	SystemData* system = nullptr;
@@ -869,10 +978,14 @@ void ViewController::reloadAll(Window* window, bool reloadTheme)
 	if (mState.viewing == SYSTEM_SELECT)
 		system = getSelectedSystem();
 
+	int gameListCount = 0;
 	// clear all gamelistviews
 	std::map<SystemData*, FileData*> cursorMap;
-	for(auto it = mGameListViews.cbegin(); it != mGameListViews.cend(); it++)
+	for (auto it = mGameListViews.cbegin(); it != mGameListViews.cend(); it++)
+	{
+		gameListCount++;
 		cursorMap[it->first] = it->second->getCursor();
+	}
 
 	mGameListViews.clear();
 	
@@ -880,25 +993,67 @@ void ViewController::reloadAll(Window* window, bool reloadTheme)
 	for (auto it = SystemData::sSystemVector.cbegin(); it != SystemData::sSystemVector.cend(); it++)
 		if (cursorMap.find((*it)) == cursorMap.end())
 			cursorMap[(*it)] = NULL;
-
-	float idx = 0;
-	// load themes, create gamelistviews and reset filters
-	for(auto it = cursorMap.cbegin(); it != cursorMap.cend(); it++)
+	
+	if (reloadTheme && cursorMap.size() > 0)
 	{
-		if (reloadTheme)
+		int processedSystem = 0;
+		int systemCount = cursorMap.size();
+
+		Utils::ThreadPool pool;
+
+		for (auto it = cursorMap.cbegin(); it != cursorMap.cend(); it++)
 		{
-			it->first->loadTheme();
-			it->first->resetFilters();
+			SystemData* pooledSystem = it->first;
+
+			pool.queueWorkItem([pooledSystem, &processedSystem]
+			{ 
+				pooledSystem->loadTheme();
+				pooledSystem->resetFilters();
+				processedSystem++;
+			});
 		}
 
-		if (it->second != NULL)
-			getGameListView(it->first)->setCursor(it->second);
+		if (window)
+		{
+			pool.wait([window, &processedSystem, systemCount]
+			{
+				int px = processedSystem;
+				if (px >= 0 && px < systemCount)
+					window->renderSplashScreen(_("Loading theme"), (float)px / (float)systemCount);
+			}, 5);
+		}
+		else
+			pool.wait();
+	}
 
-		idx++;
+	if (gameListCount > 0)
+	{
+		int lastTime = SDL_GetTicks() - 50;
 
 		if (window)
-			window->renderSplashScreen(_("Loading..."), (float)idx / (float)cursorMap.size());
+			window->renderSplashScreen(_("Loading gamelists"), 0.0f);
+
+		float idx = 0;
+		// load themes, create gamelistviews and reset filters
+		for (auto it = cursorMap.cbegin(); it != cursorMap.cend(); it++)
+		{
+			if (it->second == nullptr)
+				continue;
+
+			getGameListView(it->first)->setCursor(it->second);
+			idx++;
+
+			int time = SDL_GetTicks();
+			if (window && time - lastTime >= 20)
+			{
+				lastTime = time;
+				window->renderSplashScreen(_("Loading gamelists"), (float)idx / (float)gameListCount);
+			}
+		}
 	}
+
+	if (window != nullptr)
+		window->renderSplashScreen(_("Loading..."));
 
 	if (SystemData::sSystemVector.size() > 0)
 		ViewController::get()->onThemeChanged(SystemData::sSystemVector.at(0)->getTheme());
@@ -1013,4 +1168,17 @@ void ViewController::reloadAllGames(Window* window, bool deleteCurrentGui)
 
 	window->closeSplashScreen();
 	window->pushGui(ViewController::get());
+}
+
+void ViewController::setActiveView(std::shared_ptr<GuiComponent> view)
+{
+	if (mCurrentView != nullptr)
+	{
+		mCurrentView->topWindow(false);
+		mCurrentView->onHide();
+	}
+
+	mCurrentView = view;
+	mCurrentView->onShow();
+	mCurrentView->topWindow(true);
 }

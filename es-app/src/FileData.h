@@ -5,8 +5,9 @@
 #include "utils/FileSystemUtil.h"
 #include "MetaData.h"
 #include <unordered_map>
+#include "KeyboardMapping.h"
+#include "SystemData.h"
 
-class SystemData;
 class Window;
 struct SystemEnvironmentData;
 
@@ -48,7 +49,7 @@ struct LaunchGameOptions
 class FolderData;
 
 // A tree node that holds information for a file.
-class FileData
+class FileData : public IKeyboardMapContainer
 {
 public:
 	FileData(FileType type, const std::string& path, SystemData* system);
@@ -122,7 +123,17 @@ public:
 	void deleteGameFiles();
 	void checkCrc32(bool force = false);
 
+	void importP2k(const std::string& p2k);
+	std::string convertP2kFile();
+	bool hasP2kFile();
+
+	bool hasKeyboardMapping();
+	KeyMappingFile getKeyboardMapping();
+	bool isFeatureSupported(EmulatorFeatures::Features feature);
+	bool isExtensionCompatible();
+
 private:
+	std::string getKeyboardMappingFilePath();
 	MetaDataList mMetadata;
 
 protected:	
@@ -185,7 +196,7 @@ public:
 
 	inline const std::vector<FileData*>& getChildren() const { return mChildren; }
 	const std::vector<FileData*> getChildrenListToDisplay();
-	std::vector<FileData*> getFilesRecursive(unsigned int typeMask, bool displayedOnly = false, SystemData* system = nullptr) const;
+	std::vector<FileData*> getFilesRecursive(unsigned int typeMask, bool displayedOnly = false, SystemData* system = nullptr, bool includeVirtualStorage = true) const;
 	std::vector<FileData*> getFlatGameList(bool displayedOnly, SystemData* system) const;
 
 	void addChild(FileData* file, bool assignParent = true); // Error if mType != FOLDER
@@ -207,6 +218,7 @@ public:
 	}	
 
 	void removeVirtualFolders();
+	void removeFromVirtualFolders(FileData* game);
 
 private:
 	std::vector<FileData*> mChildren;

@@ -531,7 +531,7 @@ namespace Utils
 			return output;
 		}
 
-		std::vector<std::string> splitAny(const std::string& s, const std::string& seperator)
+		std::vector<std::string> splitAny(const std::string& s, const std::string& seperator, bool removeEmptyEntries)
 		{
 			std::vector<std::string> output;
 
@@ -541,7 +541,9 @@ namespace Utils
 			char* pch = strtok(str, seperator.c_str());
 			while (pch != NULL)
 			{
-				output.push_back(pch);
+				if (!removeEmptyEntries || pch[0] != 0)
+					output.push_back(pch);
+
 				pch = strtok(NULL, seperator.c_str());
 			}
 
@@ -588,6 +590,30 @@ namespace Utils
 			}
 
 			return ret;
+		}
+
+		bool startsWithIgnoreCase(const std::string& name1, const std::string& name2)
+		{
+			auto makeUp = [](unsigned int c)
+			{
+				if ((c & 0x80) == 0) return toupper(c);
+				return (int)toupperUnicode(c);
+			};
+
+			size_t p1 = 0;
+			size_t p2 = 0;
+
+			while (true)
+			{
+				int u1 = makeUp(chars2Unicode(name1, p1));
+				int u2 = makeUp(chars2Unicode(name2, p2));
+
+				if (u1 != 0 && u2 == 0)
+					return true;
+				
+				if (u1 != u2)
+					return false;
+			}
 		}
 
 		int compareIgnoreCase(const std::string& name1, const std::string& name2)
@@ -661,6 +687,31 @@ namespace Utils
 			
 			return trim(text);
 		}
+
+		int	toInteger(const std::string& string)
+		{
+			return atoi(string.c_str());
+		}
+
+		float toFloat(const std::string& string)
+		{
+			return atof(string.c_str());
+		}
+
+		std::string decodeXmlString(const std::string& string)
+		{
+			std::string ret = string;
+
+			ret = replace(ret, "&amp;", "&");
+			ret = replace(ret, "&apos;", "'");
+			ret = replace(ret, "&lt;", "<");
+			ret = replace(ret, "&gt;", ">");
+			ret = replace(ret, "&quot;", "\"");
+			ret = replace(ret, "&nbsp;", " ");
+
+			return ret;
+		}
+
 
 #if defined(_WIN32)
 		const std::string convertFromWideString(const std::wstring wstring)

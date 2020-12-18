@@ -8,10 +8,12 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 #include <pugixml/src/pugixml.hpp>
 #include <unordered_map>
 #include <unordered_set>
 #include "FileFilterIndex.h"
+#include "KeyboardMapping.h"
 #include "math/Vector2f.h"
 
 class FileData;
@@ -30,6 +32,17 @@ struct CustomFeature
 	std::string name;
 	std::string value;
 	std::vector<CustomFeatureChoice> choices;
+};
+
+struct GameCountInfo
+{
+	int totalGames;
+	int playCount;
+	int favoriteCount;
+	int hiddenCount;
+	int gamesPlayed;
+	std::string mostPlayed;
+	std::string lastPlayedDate;
 };
 
 class EmulatorFeatures
@@ -54,7 +67,8 @@ public:
 		internal_resolution = 8192,
 		videomode = 16384,
 		colorization = 32768,
-        vertical = 65536,
+		padTokeyboard = 65536,
+        vertical = 131072,
 
 		all = 0x0FFFFFFF
 	};
@@ -74,9 +88,10 @@ struct CoreData
 	std::string name;
 	bool netplay;
 	bool isDefault;
-
+	
 	std::string customCommandLine;
 	std::vector<CustomFeature> customFeatures;
+	std::vector<std::string> incompatibleExtensions;
 
 	EmulatorFeatures::Features features;
 };
@@ -93,6 +108,7 @@ struct EmulatorData
 
 	std::string customCommandLine;
 	std::vector<CustomFeature> customFeatures;
+	std::vector<std::string> incompatibleExtensions;
 
 	EmulatorFeatures::Features features;
 };
@@ -121,10 +137,10 @@ struct SystemEnvironmentData
 	}
 };
 
-class SystemData
+class SystemData : public IKeyboardMapContainer
 {
 public:
-    SystemData(const SystemMetadata& type, SystemEnvironmentData* envData, std::vector<EmulatorData>* pEmulators, bool CollectionSystem = false, bool groupedSystem = false, bool withTheme = true); // batocera
+    SystemData(const SystemMetadata& type, SystemEnvironmentData* envData, std::vector<EmulatorData>* pEmulators, bool CollectionSystem = false, bool groupedSystem = false, bool withTheme = true, bool loadThemeOnlyIfElements = false); // batocera
 	~SystemData();
 
 	static SystemData* getSystem(const std::string name);
@@ -150,7 +166,7 @@ public:
 
 	unsigned int getGameCount() const;
 
-	int getDisplayedGameCount();
+	GameCountInfo* getGameCountInfo();
 	void updateDisplayedGameCount();
 
 	static bool isManufacturerSupported();
@@ -184,6 +200,8 @@ public:
 	void loadTheme();
 
 	FileFilterIndex* getIndex(bool createIndex);
+	void setIndex(FileFilterIndex* index) { mFilterIndex = index; }
+
 	void deleteIndex();
 
 	void removeFromIndex(FileData* game) {
@@ -227,8 +245,12 @@ public:
 	static std::unordered_set<std::string> getAllGroupNames();
 	static std::unordered_set<std::string> getGroupChildSystemNames(const std::string groupName);
 
+	std::string getEmulator(bool resolveDefault = true);
+	std::string getCore(bool resolveDefault = true);
+
 	std::string getDefaultEmulator();
-	std::string getDefaultCore(const std::string emulatorName);
+	std::string getDefaultCore(const std::string emulatorName = "");
+
 	std::string getLaunchCommand(const std::string emulatorName, const std::string coreName);
 	std::vector<std::string> getCoreNames(std::string emulatorName);
 
@@ -242,8 +264,13 @@ public:
 	FileFilterIndex* getFilterIndex() { return mFilterIndex; }
 
 	static SystemData* loadSystem(std::string systemName, bool fullMode = true);
+	static std::map<std::string, std::string> getKnownSystemNames();
+
+	bool hasKeyboardMapping();
+	KeyMappingFile getKeyboardMapping();
 
 private:
+	std::string getKeyboardMappingFilePath();
 	static void createGroupedSystems();
 
 	size_t mGameListHash;
@@ -271,7 +298,6 @@ private:
 	
 	static SystemData* loadSystem(pugi::xml_node system, bool fullMode = true);
 	
-
 	FileFilterIndex* mFilterIndex;
 
 	FolderData* mRootFolder;
@@ -282,7 +308,7 @@ private:
 	std::string mViewMode;
 	Vector2f    mGridSizeOverride;	
 
-	int			mGameCount;
+	GameCountInfo* mGameCountInfo;
 };
 
 #endif // ES_APP_SYSTEM_DATA_H

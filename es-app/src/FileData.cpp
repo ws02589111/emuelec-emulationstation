@@ -129,7 +129,7 @@ const std::string FileData::getThumbnailPath()
 
 	// no thumbnail, try image
 	if(thumbnail.empty())
-	{			
+	{
 		// no image, try to use local image
 		if(thumbnail.empty() && Settings::getInstance()->getBool("LocalArt"))
 		{
@@ -168,6 +168,18 @@ const std::string FileData::getThumbnailPath()
 				}
 			}
 		}
+
+		if (thumbnail.empty() && getSystemName() == "imageviewer")
+		{
+			auto ext = Utils::String::toLower(Utils::FileSystem::getExtension(getPath()));
+			if (ext == ".pdf" && ResourceManager::getInstance()->fileExists(":/pdf.jpg"))
+				return ":/pdf.jpg";
+			else if ((ext == ".mp4" || ext == ".avi" || ext == ".mkv") && ResourceManager::getInstance()->fileExists(":/vid.jpg"))
+				return ":/vid.jpg";
+
+			return getPath();
+		}
+
 	}
 
 	return thumbnail;
@@ -264,10 +276,7 @@ const std::string FileData::getImagePath()
 
 	// no image, try to use local image
 	if(image.empty())
-	{
-		if (getSystemName() == "imageviewer")
-			image = getPath();
-
+	{		
 		if (Settings::getInstance()->getBool("LocalArt"))
 		{
 			const char* extList[2] = { ".png", ".jpg" };
@@ -286,6 +295,17 @@ const std::string FileData::getImagePath()
 					}
 				}
 			}
+		}
+
+		if (image.empty() && getSystemName() == "imageviewer")
+		{
+			image = getPath();
+
+			auto ext = Utils::String::toLower(Utils::FileSystem::getExtension(image));
+			if (ext == ".pdf" && ResourceManager::getInstance()->fileExists(":/pdf.jpg"))
+				return ":/pdf.jpg";
+			else if ((ext == ".mp4" || ext == ".avi" || ext == ".mkv") && ResourceManager::getInstance()->fileExists(":/vid.jpg"))
+				return ":/vid.jpg";
 		}
 	}
 
@@ -435,9 +455,14 @@ bool FileData::launchGame(Window* window, LaunchGameOptions options)
 
 	LOG(LogInfo) << "	" << command;
 
+	auto p2kConv = convertP2kFile();
+
 	int exitCode = runSystemCommand(command, getDisplayName(), hideWindow ? NULL : window);
 	if (exitCode != 0)
 		LOG(LogWarning) << "...launch terminated with nonzero exit code " << exitCode << "!";
+
+	if (!p2kConv.empty()) // delete .keys file if it has been converted from p2k
+		Utils::FileSystem::removeFile(p2kConv);
 
 	Scripting::fireEvent("game-end");
 	
@@ -578,7 +603,9 @@ const std::vector<FileData*> FolderData::getChildrenListToDisplay()
 	auto fvm = Settings::getInstance()->getString(getSystem()->getName() + ".FolderViewMode");
 	if (!fvm.empty() && fvm != "auto") showFoldersMode = fvm;
 	
-	if (getSystem()->getName() == "windows_installers")
+	if ((fvm.empty() || fvm == "auto") && getSystem() == CollectionSystemManager::get()->getCustomCollectionsBundle())
+		showFoldersMode = "always";
+	else if (getSystem()->getName() == "windows_installers")
 		showFoldersMode = "always";
 
 	bool showHiddenFiles = Settings::getInstance()->getBool("ShowHiddenFiles");
@@ -618,24 +645,32 @@ const std::vector<FileData*> FolderData::getChildrenListToDisplay()
 		items = &flatGameList;		
 	}
 
+	std::map<FileData*, int> scoringBoard;
+
 	bool refactorUniqueGameFolders = (showFoldersMode == "having multiple games");
 
 	for (auto it = items->cbegin(); it != items->cend(); it++)
 	{
-		if (idx != nullptr && !idx->showFile((*it)))
-			continue;
-
 		if (!showHiddenFiles && (*it)->getHidden())
 			continue;
 
 		if (filterKidGame && !(*it)->getKidGame())
 			continue;
-		
+
 		if (hiddenExts.size() > 0 && (*it)->getType() == GAME)
 		{
 			std::string extlow = Utils::String::toLower(Utils::FileSystem::getExtension((*it)->getFileName()));
 			if (std::find(hiddenExts.cbegin(), hiddenExts.cend(), extlow) != hiddenExts.cend())
 				continue;
+		}
+
+		if (idx != nullptr)
+		{
+			int score = idx->showFile(*it);
+			if (score == 0)
+				continue;
+
+			scoringBoard[*it] = score;
 		}
 
 		if ((*it)->getType() == FOLDER && refactorUniqueGameFolders)
@@ -676,10 +711,29 @@ const std::vector<FileData*> FolderData::getChildrenListToDisplay()
 		currentSortId = 0;
 
 	const FileSorts::SortType& sort = FileSorts::getSortTypes().at(currentSortId);
-	std::sort(ret.begin(), ret.end(), sort.comparisonFunction);
 
-	if (!sort.ascending)
-		std::reverse(ret.begin(), ret.end());
+	if (idx != nullptr && idx->hasRelevency())
+	{
+		auto compf = sort.comparisonFunction;
+
+		std::sort(ret.begin(), ret.end(), [scoringBoard, compf](const FileData* file1, const FileData* file2) -> bool
+		{ 
+			auto s1 = scoringBoard.find((FileData*) file1);
+			auto s2 = scoringBoard.find((FileData*) file2);		
+
+			if (s1 != scoringBoard.cend() && s2 != scoringBoard.cend() && s1->second != s2->second)
+				return s1->second < s2->second;
+			
+			return compf(file1, file2);
+		});
+	}
+	else
+	{
+		std::sort(ret.begin(), ret.end(), sort.comparisonFunction);
+
+		if (!sort.ascending)
+			std::reverse(ret.begin(), ret.end());
+	}
 
 	return ret;
 }
@@ -687,13 +741,38 @@ const std::vector<FileData*> FolderData::getChildrenListToDisplay()
 FileData* FolderData::findUniqueGameForFolder()
 {
 	auto games = this->getFilesRecursive(GAME);
-	if (games.size() == 1)
+
+	FileData* found = nullptr;
+
+	int count = 0;
+	for (auto game : games)
 	{
+		if (game->getHidden())
+		{
+			bool showHiddenFiles = Settings::getInstance()->getBool("ShowHiddenFiles") && !UIModeController::getInstance()->isUIModeKiosk();
+
+			auto shv = Settings::getInstance()->getString(getSystem()->getName() + ".ShowHiddenFiles");
+			if (shv == "1") showHiddenFiles = true;
+			else if (shv == "0") showHiddenFiles = false;
+
+			if (!showHiddenFiles)
+				continue;
+		}
+
+		found = game;
+		count++;
+		if (count > 1)
+			break;
+	}
+	
+	if (count == 1)
+		return found;
+	/*{
 		auto it = games.cbegin();
 		if ((*it)->getType() == GAME)
 			return (*it);
 	}
-
+	*/
 	return nullptr;
 }
 
@@ -702,9 +781,18 @@ std::vector<FileData*> FolderData::getFlatGameList(bool displayedOnly, SystemDat
 	return getFilesRecursive(GAME, displayedOnly, system);
 }
 
-std::vector<FileData*> FolderData::getFilesRecursive(unsigned int typeMask, bool displayedOnly, SystemData* system) const
+std::vector<FileData*> FolderData::getFilesRecursive(unsigned int typeMask, bool displayedOnly, SystemData* system, bool includeVirtualStorage) const
 {
 	std::vector<FileData*> out;
+
+	auto isVirtualFolder = [](FileData* file) 
+	{ 
+		if (file->getType() == GAME)
+			return false;
+
+		FolderData* fld = (FolderData*)file;
+		return fld->isVirtualStorage();
+	};
 
 	bool showHiddenFiles = Settings::getInstance()->getBool("ShowHiddenFiles") && !UIModeController::getInstance()->isUIModeKiosk();
 
@@ -745,7 +833,8 @@ std::vector<FileData*> FolderData::getFilesRecursive(unsigned int typeMask, bool
 					}
 				}
 
-				out.push_back(it);
+				if (includeVirtualStorage || !isVirtualFolder(it))
+					out.push_back(it);
 			}
 		}
 
@@ -755,12 +844,15 @@ std::vector<FileData*> FolderData::getFilesRecursive(unsigned int typeMask, bool
 		FolderData* folder = (FolderData*)it;		
 		if (folder->getChildren().size() > 0)
 		{
-			if (folder->isVirtualStorage() && folder->getSourceFileData()->getSystem()->isGroupChildSystem() && folder->getSourceFileData()->getSystem()->getName() == "windows_installers")
-				out.push_back(it);
-			else
+			if (includeVirtualStorage || !isVirtualFolder(folder))
 			{
-				std::vector<FileData*> subchildren = folder->getFilesRecursive(typeMask, displayedOnly, system);
-				out.insert(out.cend(), subchildren.cbegin(), subchildren.cend());
+				if (folder->isVirtualStorage() && folder->getSourceFileData()->getSystem()->isGroupChildSystem() && folder->getSourceFileData()->getSystem()->getName() == "windows_installers")
+					out.push_back(it);
+				else
+				{
+					std::vector<FileData*> subchildren = folder->getFilesRecursive(typeMask, displayedOnly, system, includeVirtualStorage);
+					out.insert(out.cend(), subchildren.cbegin(), subchildren.cend());
+				}
 			}
 		}
 	}
@@ -885,7 +977,7 @@ const std::string FileData::getCore(bool resolveDefault)
 	}
 
 	if (resolveDefault && core.empty())
-		core = getSourceFileData()->getSystem()->getDefaultCore(getEmulator());
+		core = getSourceFileData()->getSystem()->getCore();
 
 	return core;
 }
@@ -918,7 +1010,7 @@ const std::string FileData::getEmulator(bool resolveDefault)
 	}
 
 	if (resolveDefault && emulator.empty())
-		emulator = getSourceFileData()->getSystem()->getDefaultEmulator();
+		emulator = getSourceFileData()->getSystem()->getEmulator();
 
 	return emulator;
 }
@@ -1042,5 +1134,146 @@ void FileData::checkCrc32(bool force)
 	{
 		getMetadata().set(MetaDataId::Crc32, Utils::String::toUpper(crc));
 		saveToGamelistRecovery(this);
+	}
+}
+
+std::string FileData::getKeyboardMappingFilePath()
+{
+	if (Utils::FileSystem::isDirectory(getSourceFileData()->getPath()))
+		return getSourceFileData()->getPath() + "/padto.keys";
+
+	return getSourceFileData()->getPath() + ".keys";
+}
+
+bool FileData::hasP2kFile()
+{
+	std::string p2kPath = getSourceFileData()->getPath() + ".p2k.cfg";
+	if (Utils::FileSystem::isDirectory(getSourceFileData()->getPath()))
+		p2kPath = getSourceFileData()->getPath() + "/.p2k.cfg";
+
+	return Utils::FileSystem::exists(p2kPath);
+}
+
+void FileData::importP2k(const std::string& p2k)
+{
+	if (p2k.empty())
+		return;
+
+	std::string p2kPath = getSourceFileData()->getPath() + ".p2k.cfg";
+	if (Utils::FileSystem::isDirectory(getSourceFileData()->getPath()))
+		p2kPath = getSourceFileData()->getPath() + "/.p2k.cfg";
+
+	Utils::FileSystem::writeAllText(p2kPath, p2k);
+
+	std::string keysPath = getKeyboardMappingFilePath();
+	if (Utils::FileSystem::exists(keysPath))
+		Utils::FileSystem::removeFile(keysPath);
+}
+
+std::string FileData::convertP2kFile()
+{
+	std::string p2kPath = getSourceFileData()->getPath() + ".p2k.cfg";
+	if (Utils::FileSystem::isDirectory(getSourceFileData()->getPath()))
+		p2kPath = getSourceFileData()->getPath() + "/.p2k.cfg";
+
+	if (!Utils::FileSystem::exists(p2kPath))
+		return "";
+
+	std::string keysPath = getKeyboardMappingFilePath();
+	if (Utils::FileSystem::exists(keysPath))
+		return "";
+
+	auto map = KeyMappingFile::fromP2k(p2kPath);
+	if (map.isValid())
+	{
+		map.save(keysPath);
+		return keysPath;
+	}
+
+	return "";
+}
+
+bool FileData::hasKeyboardMapping()
+{
+	if (!Utils::FileSystem::exists(getKeyboardMappingFilePath()))
+		return hasP2kFile();
+
+	return true;
+}
+
+KeyMappingFile FileData::getKeyboardMapping()
+{
+	KeyMappingFile ret;
+	auto path = getKeyboardMappingFilePath();
+
+	// If pk2.cfg file but no .keys file, then convert & load
+	if (!Utils::FileSystem::exists(path) && hasP2kFile())
+	{
+		convertP2kFile();
+
+		ret = KeyMappingFile::load(path);
+		Utils::FileSystem::removeFile(path);
+		return ret;
+	}
+		
+	if (Utils::FileSystem::exists(path))
+		ret = KeyMappingFile::load(path);
+	else
+		ret = getSystem()->getKeyboardMapping(); // if .keys file does not exist, take system config as predefined mapping
+
+	ret.path = path;
+	return ret;
+}
+
+bool FileData::isFeatureSupported(EmulatorFeatures::Features feature)
+{
+	auto system = getSourceFileData()->getSystem();
+	return system->isFeatureSupported(getEmulator(), getCore(), feature);
+}
+
+bool FileData::isExtensionCompatible()
+{
+	auto game = getSourceFileData();
+	auto extension = Utils::String::toLower(Utils::FileSystem::getExtension(game->getPath()));
+
+	auto system = game->getSystem();
+	auto emulName = game->getEmulator();
+	auto coreName = game->getCore();
+
+	for (auto emul : system->getEmulators())
+	{
+		if (emulName == emul.name)
+		{
+			if (std::find(emul.incompatibleExtensions.cbegin(), emul.incompatibleExtensions.cend(), extension) != emul.incompatibleExtensions.cend())
+				return false;
+
+			for (auto core : emul.cores)
+			{
+				if (coreName == core.name)
+					return std::find(core.incompatibleExtensions.cbegin(), core.incompatibleExtensions.cend(), extension) == core.incompatibleExtensions.cend();
+			}
+
+			break;
+		}
+	}
+
+	return true;
+}
+
+void FolderData::removeFromVirtualFolders(FileData* game)
+{
+	for (auto it = mChildren.begin(); it != mChildren.end(); ++it) 
+	{		
+		if ((*it)->getType() == FOLDER)
+		{
+			((FolderData*)(*it))->removeFromVirtualFolders(game);
+			continue;
+		}
+
+		if ((*it) == game)
+		{
+			mChildren.erase(it);
+			return;
+		}
 	}
 }

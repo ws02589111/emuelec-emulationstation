@@ -7,6 +7,7 @@
 #include "guis/GuiSettings.h"
 #include "components/OptionListComponent.h"
 #include <SystemData.h>
+#include "KeyboardMapping.h"
 
 class StrInputConfig
 {
@@ -42,7 +43,7 @@ public:
 	bool input(InputConfig* config, Input input) override;
 	void onSizeChanged() override;
 	std::vector<HelpPrompt> getHelpPrompts() override;	
-	static void openQuitMenu_batocera_static(Window *window, bool quickAccessMenu = false); // batocera
+	static void openQuitMenu_batocera_static(Window *window, bool quickAccessMenu = false, bool animate = true); // batocera
 
 	static void popSystemConfigurationGui(Window* mWindow, SystemData *systemData);
 	static void popGameConfigurationGui(Window* mWindow, FileData* fileData);
@@ -50,6 +51,7 @@ public:
 	static void openThemeConfiguration(Window* mWindow, GuiComponent* s, std::shared_ptr<OptionListComponent<std::string>> theme_set, const std::string systemTheme = "");
 
 	static void updateGameLists(Window* window, bool confirm = true);
+	static void editKeyboardMappings(Window *window, IKeyboardMapContainer* mapping);
 
 private:
 	void addEntry(std::string name, bool add_arrow, const std::function<void()>& func, const std::string iconName = "");

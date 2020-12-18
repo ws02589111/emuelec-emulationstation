@@ -32,7 +32,10 @@ FileFilterIndex::FileFilterIndex()
 		{ LANG_FILTER, 	    &langIndexAllKeys,      &filterByLang,	    &langIndexFilteredKeys, 	"lang",		    false,				"",				_("LANGUAGE") },
 		{ REGION_FILTER, 	&regionIndexAllKeys,    &filterByRegion,	&regionIndexFilteredKeys, 	"region",		false,				"",				_("REGION") },
 		{ KIDGAME_FILTER, 	&kidGameIndexAllKeys, 	&filterByKidGame,	&kidGameIndexFilteredKeys, 	"kidgame",		false,				"",				_("KIDGAME") },
-		{ PLAYED_FILTER, 	&playedIndexAllKeys,    &filterByPlayed,	&playedIndexFilteredKeys, 	"played",		false,				"",				_("ALREADY PLAYED") }
+		{ PLAYED_FILTER, 	&playedIndexAllKeys,    &filterByPlayed,	&playedIndexFilteredKeys, 	"played",		false,				"",				_("ALREADY PLAYED") },
+#ifdef _ENABLEEMUELEC
+        { CHEEVOS_FILTER, 	&cheevosIndexAllKeys,   &filterByCheevos,	&cheevosIndexFilteredKeys, 	"cheevos",		false,				"",				_("HAS ACHIEVEMENTS") }
+#endif
 	};
 
 	std::vector<FilterDataDecl> filterDataDecl = std::vector<FilterDataDecl>(filterDecls, filterDecls + sizeof(filterDecls) / sizeof(filterDecls[0]));
@@ -55,6 +58,33 @@ std::vector<FilterDataDecl> FileFilterIndex::getFilterDataDecls()
 	return ret;
 }
 
+void FileFilterIndex::copyFrom(FileFilterIndex* indexToImport)
+{
+	resetFilters();
+	clearAllFilters();
+
+	if (indexToImport == nullptr)
+		return;
+
+	mTextFilter = indexToImport->mTextFilter;
+	mUseRelevency = indexToImport->mUseRelevency;
+
+	for (auto decl : indexToImport->mFilterDecl)
+	{
+		auto src = mFilterDecl.find(decl.first);
+		if (src == mFilterDecl.cend())
+			continue;
+
+		for (auto all : *decl.second.allIndexKeys)
+			(*src->second.allIndexKeys)[all.first] = all.second;
+
+		for (auto all : *decl.second.currentFilteredKeys)
+			(*src->second.currentFilteredKeys).insert(all);
+
+		*src->second.filteredByRef = *decl.second.filteredByRef;
+	}
+}
+
 void FileFilterIndex::importIndex(FileFilterIndex* indexToImport)
 {
 	struct IndexImportStructure
@@ -64,14 +94,20 @@ void FileFilterIndex::importIndex(FileFilterIndex* indexToImport)
 	};
 
 	IndexImportStructure indexStructDecls[] = {
+		{ &favoritesIndexAllKeys, &(indexToImport->favoritesIndexAllKeys) },
 		{ &genreIndexAllKeys, &(indexToImport->genreIndexAllKeys) },
 		{ &playersIndexAllKeys, &(indexToImport->playersIndexAllKeys) },
 		{ &pubDevIndexAllKeys, &(indexToImport->pubDevIndexAllKeys) },
 		{ &ratingsIndexAllKeys, &(indexToImport->ratingsIndexAllKeys) },
-		{ &favoritesIndexAllKeys, &(indexToImport->favoritesIndexAllKeys) },
 		{ &yearIndexAllKeys, &(indexToImport->yearIndexAllKeys) },
+		{ &langIndexAllKeys, &(indexToImport->langIndexAllKeys) },
+		{ &regionIndexAllKeys, &(indexToImport->regionIndexAllKeys) },
 		{ &kidGameIndexAllKeys, &(indexToImport->kidGameIndexAllKeys) },
-		{ &playedIndexAllKeys, &(indexToImport->playedIndexAllKeys) }
+#ifdef _ENABLEEMUELEC
+		{ &cheevosIndexAllKeys, &(indexToImport->cheevosIndexAllKeys) },
+#endif
+        { &playedIndexAllKeys, &(indexToImport->playedIndexAllKeys) }
+
 	};
 
 	std::vector<IndexImportStructure> indexImportDecl = std::vector<IndexImportStructure>(indexStructDecls, indexStructDecls + sizeof(indexStructDecls) / sizeof(indexStructDecls[0]));
@@ -95,6 +131,7 @@ void FileFilterIndex::importIndex(FileFilterIndex* indexToImport)
 
 void FileFilterIndex::resetIndex()
 {
+	mUseRelevency = false;
 	mTextFilter = "";
 	clearAllFilters();
 	clearIndex(genreIndexAllKeys);
@@ -108,6 +145,9 @@ void FileFilterIndex::resetIndex()
 
 	clearIndex(langIndexAllKeys);
 	clearIndex(regionIndexAllKeys);
+#ifdef _ENABLEEMUELEC
+	clearIndex(cheevosIndexAllKeys);
+#endif
 
 	manageIndexEntry(&favoritesIndexAllKeys, "FALSE", false);
 	manageIndexEntry(&favoritesIndexAllKeys, "TRUE", false);
@@ -117,6 +157,10 @@ void FileFilterIndex::resetIndex()
 
 	manageIndexEntry(&playedIndexAllKeys, "FALSE", false);
 	manageIndexEntry(&playedIndexAllKeys, "TRUE", false);
+#ifdef _ENABLEEMUELEC
+	manageIndexEntry(&cheevosIndexAllKeys, "FALSE", false);
+	manageIndexEntry(&cheevosIndexAllKeys, "TRUE", false);
+#endif
 }
 
 std::string FileFilterIndex::getIndexableKey(FileData* game, FilterIndexType type, bool getSecondary)
@@ -132,7 +176,7 @@ std::string FileFilterIndex::getIndexableKey(FileData* game, FilterIndexType typ
 			key = game->getMetadata(MetaDataId::Language);
 			break;
 		}
-
+		
 		case REGION_FILTER:
 		{
 			if (getSecondary)
@@ -144,18 +188,19 @@ std::string FileFilterIndex::getIndexableKey(FileData* game, FilterIndexType typ
 
 		case GENRE_FILTER:
 		{
-			key = Utils::String::toUpper(game->getMetadata(MetaDataId::Genre));
-			
-			if (getSecondary && !key.empty()) 
+			key = game->getMetadata(MetaDataId::Genre);
+			if (!key.empty())
 			{
 				auto idx = key.find('/');
-				if (idx != std::string::npos)
+
+				if (!getSecondary && idx != std::string::npos)
 					key = Utils::String::trim(key.substr(0, idx));
-				else
+				else if (getSecondary && idx == std::string::npos)
 					key = "";
 			}
 			break;
 		}
+
 		case PLAYER_FILTER:
 		{
 			if (getSecondary)
@@ -164,15 +209,17 @@ std::string FileFilterIndex::getIndexableKey(FileData* game, FilterIndexType typ
 			key = game->getMetadata(MetaDataId::Players);
 			break;
 		}
+
 		case PUBDEV_FILTER:
 		{
-			key = Utils::String::toUpper(game->getMetadata(MetaDataId::Publisher));
+			key = game->getMetadata(MetaDataId::Publisher);
 
 			if ((getSecondary && !key.empty()) || (!getSecondary && key.empty()))
-				key = Utils::String::toUpper(game->getMetadata(MetaDataId::Developer));
+				key = game->getMetadata(MetaDataId::Developer);
 		
 			break;
 		}
+
 		case RATINGS_FILTER:
 		{
 			int ratingNumber = 0;
@@ -181,53 +228,66 @@ std::string FileFilterIndex::getIndexableKey(FileData* game, FilterIndexType typ
 				std::string ratingString = game->getMetadata(MetaDataId::Rating);
 				if (!ratingString.empty()) 
 				{
-					try 
+					float rating = Utils::String::toFloat(ratingString);
+					if (rating > 0.0f)
 					{
-						ratingNumber = (int)((std::stod(ratingString)*5)+0.5);
-						if (ratingNumber < 0)
-							ratingNumber = 0;
+						if (rating > 1.0f)
+							rating = 1.0f;
 
+						ratingNumber = (int)Math::round(rating * 5);
 						key = std::to_string(ratingNumber) + " STARS";
-					}
-					catch (int e)
-					{
-						LOG(LogError) << "Error parsing Rating (invalid value, exception nr.): " << ratingString << ", " << e;
 					}
 				}
 			}
 			break;
 		}
+
 		case FAVORITES_FILTER:
 		{
 			if (game->getType() != GAME)
 				return "FALSE";
-			key = Utils::String::toUpper(game->getMetadata(MetaDataId::Favorite));
+
+			key = game->getMetadata(MetaDataId::Favorite);
 			break;
 		}
+
 		case KIDGAME_FILTER:
 		{
 			if (game->getType() != GAME)
 				return "FALSE";
-			key = Utils::String::toUpper(game->getMetadata(MetaDataId::KidGame));
+
+			key = game->getMetadata(MetaDataId::KidGame);
 			break;
 		}
+
 		case PLAYED_FILTER:
 		{
-			key = atoi(game->getMetadata(MetaDataId::PlayCount).c_str()) == 0 ? "FALSE" : "TRUE";
+			key = Utils::String::toInteger(game->getMetadata(MetaDataId::PlayCount)) == 0 ? "FALSE" : "TRUE";
 			break;
 		}
+
 		case YEAR_FILTER:
 		{
 			key = game->getMetadata(MetaDataId::ReleaseDate);
 			key = (key.length() >= 4 && key[0] >= '1' && key[0] <= '2') ? key.substr(0, 4) : "";
 			break;
 		}
+#ifdef _ENABLEEMUELEC
+		case CHEEVOS_FILTER:
+		{
+			if (getSecondary)
+				break;
+
+			key = game->getMetadata(MetaDataId::Cheevos);
+			break;
+		}
+#endif
 	}
 		
 	if (key.empty() || (type == RATINGS_FILTER && key == "0 STARS")) 
 		return UNKNOWN_LABEL;
 	
-	return key;
+	return Utils::String::toUpper(key);
 }
 
 void FileFilterIndex::addToIndex(FileData* game)
@@ -281,6 +341,9 @@ void FileFilterIndex::setFilter(FilterIndexType type, std::vector<std::string>* 
 
 void FileFilterIndex::clearAllFilters()
 {
+	mUseRelevency = false;
+	mTextFilter = "";
+
 	for (auto& it : mFilterDecl)
 	{
 		FilterDataDecl& filterData = it.second;
@@ -309,16 +372,105 @@ void FileFilterIndex::setUIModeFilters()
 	}	
 }
 
-void FileFilterIndex::setTextFilter(const std::string text) 
+void FileFilterIndex::setTextFilter(const std::string text, bool useRelevancy) 
 { 
-	mTextFilter = Utils::String::toUpper(text);
+	mTextFilter = text;
+	mUseRelevency = useRelevancy;
 }
 
-bool FileFilterIndex::showFile(FileData* game)
+float jw_distance(std::string s1, std::string s2, bool caseSensitive = true) {
+	float m = 0;
+	int low, high, range;
+	int k = 0, numTrans = 0;
+
+	// Exit early if either are empty
+	if (s1.length() == 0 || s2.length() == 0) {
+		return 0;
+	}
+
+	// Convert to lower if case-sensitive is false
+	if (caseSensitive == false) {
+		transform(s1.begin(), s1.end(), s1.begin(), ::tolower);
+		transform(s2.begin(), s2.end(), s2.begin(), ::tolower);
+	}
+
+	// Exit early if they're an exact match.
+	if (s1 == s2) {
+		return 1;
+	}
+
+	range = (std::max(s1.length(), s2.length()) / 2) - 1;
+	int s1Matches[65000] = {};
+	int s2Matches[65000] = {};
+
+	for (int i = 0; i < s1.length(); i++) {
+
+		// Low Value;
+		if (i >= range) {
+			low = i - range;
+		}
+		else {
+			low = 0;
+		}
+
+		// High Value;
+		if (i + range <= (s2.length() - 1)) {
+			high = i + range;
+		}
+		else {
+			high = s2.length() - 1;
+		}
+
+		for (int j = low; j <= high; j++) {
+			if (s1Matches[i] != 1 && s2Matches[j] != 1 && s1[i] == s2[j]) {
+				m += 1;
+				s1Matches[i] = 1;
+				s2Matches[j] = 1;
+				break;
+			}
+		}
+	}
+
+	// Exit early if no matches were found
+	if (m == 0) {
+		return 0;
+	}
+
+	// Count the transpositions.
+	for (int i = 0; i < s1.length(); i++) {
+		if (s1Matches[i] == 1) {
+			int j;
+			for (j = k; j < s2.length(); j++) {
+				if (s2Matches[j] == 1) {
+					k = j + 1;
+					break;
+				}
+			}
+
+			if (s1[i] != s2[j]) {
+				numTrans += 1;
+			}
+		}
+	}
+
+	float weight = (m / s1.length() + m / s2.length() + (m - (numTrans / 2)) / m) / 3;
+	float l = 0;
+	float p = 0.1;
+	if (weight > 0.7) {
+		while (s1[l] == s2[l] && l < 4) {
+			l += 1;
+		}
+
+		weight += l * p * (1 - weight);
+	}
+	return weight;
+}
+
+int FileFilterIndex::showFile(FileData* game)
 {
 	// this shouldn't happen, but just in case let's get it out of the way
 	if (!isFiltered())
-		return true;
+		return 1;
 
 	// if folder, needs further inspection - i.e. see if folder contains at least one element
 	// that should be shown
@@ -329,15 +481,151 @@ bool FileFilterIndex::showFile(FileData* game)
 
 		for (std::vector<FileData*>::const_iterator it = children.cbegin(); it != children.cend(); ++it )
 			if (showFile(*it))
-				return true;
+				return 1;
 
-		return false;
+		return 0;
 	}
 
 	bool keepGoing = false;
+	
+	int textScore = 0;
 
-	if (!mTextFilter.empty() && Utils::String::toUpper(game->getName()).find(mTextFilter) != std::string::npos)
-		keepGoing = true;
+	if (!mTextFilter.empty())
+	{
+		auto name = game->getSourceFileData()->getName();
+
+		if (!mUseRelevency)
+		{
+			if (Utils::String::containsIgnoreCase(name, mTextFilter))
+			{
+				textScore = 1;
+				keepGoing = true;
+			}
+		}
+		else
+		{
+			if (Utils::String::compareIgnoreCase(name, mTextFilter) == 0)
+			{
+				keepGoing = true;
+				textScore = 1;
+			}
+			else if (Utils::String::startsWithIgnoreCase(name, mTextFilter))
+			{
+				keepGoing = true;
+				textScore = 2;
+			}
+			else if (mTextFilter.find(' ') == std::string::npos && Utils::String::containsIgnoreCase(name, mTextFilter))
+			{
+				keepGoing = true;
+				textScore = 3;
+			}
+			else if (mTextFilter.find(' ') != std::string::npos)
+			{
+				auto simplify = [](const std::string& text)
+				{
+					auto s = Utils::String::toLower(text);
+					s = Utils::String::replace(s, ":", "");
+					s = Utils::String::replace(s, ".", "");
+					s = Utils::String::replace(s, " - ", " ");
+					s = Utils::String::replace(s, "- ", " ");				
+
+					std::vector<std::string> ret;
+
+					for (auto v : Utils::String::split(s, ' '))
+					{
+						if (v.empty() || v.length() <= 2 || v == "and" || v == "not" || v == "for" || v == "the" || v == "les" || v == "des")
+							continue;
+
+						ret.push_back(v);
+					}
+
+					return ret;
+				};
+
+				auto filters = simplify(mTextFilter);
+				auto words = simplify(name);
+
+				int totalWords = 0;
+				int commonWords = 0;
+				
+				for (int i = 0; i < filters.size(); i++)
+				{
+					auto filter = filters[i];
+
+					for (auto word : words)
+					{
+						if (word == filter)
+						{
+							commonWords++;
+							break;
+						}
+					}
+
+					totalWords++;
+				}
+				
+				int continuousWords = 0;
+				int maxContinuousWords = 0;
+				int wordsAtStart = 0;
+				bool countStart = true;
+
+				for (int j = 0 ; j < words.size(); j++)
+				{
+					auto word = words[j];
+
+					for (int i = 0; i < filters.size(); i++)
+					{
+						auto filter = filters[i];
+
+						if (word == filter)
+						{
+							if (countStart && i == j)
+								wordsAtStart++;
+							else
+								countStart = false;
+
+							continuousWords++;
+
+							if (maxContinuousWords < continuousWords)
+								maxContinuousWords = continuousWords;
+
+							j++;
+
+							if (j < words.size())
+								word = words[j];
+							else
+								break;
+
+							continue;
+						}
+						else
+							countStart = false;
+
+						continuousWords = 0;
+					}					
+				}
+				
+				if (commonWords > 0)
+				{
+					if (commonWords > 1 || (commonWords > 0 && filters.size() == 1))
+					{
+						int sc = ((wordsAtStart * 2) + (maxContinuousWords * 3) + commonWords);
+						textScore = 1000 - sc;
+						keepGoing = true;
+					}
+					else
+					{
+						auto dist = jw_distance(mTextFilter, name, false);
+						if (dist > 0.66)
+						{
+							textScore = 1500 - (500 * dist);
+							keepGoing = true;
+						}
+					}
+				}
+			}
+		}
+	}
 
 	bool hasFilter = false;
 
@@ -364,7 +652,7 @@ bool FileFilterIndex::showFile(FileData* game)
 		if (!keepGoing)
 		{
 			if (!filterData.hasSecondaryKey)
-				return false;
+				return 0;
 
 			std::string secKey = getIndexableKey(game, filterData.type, true);
 			if (secKey != UNKNOWN_LABEL)
@@ -373,13 +661,16 @@ bool FileFilterIndex::showFile(FileData* game)
 
 		// if still nothing, then it's not a match
 		if (!keepGoing)
-			return false;		
+			return 0;		
 	}
 
+	if (keepGoing && !mTextFilter.empty())
+		return textScore;
+	
 	if (mTextFilter.empty() && !hasFilter)
-		return true;
-
-	return keepGoing;
+		return 0;
+	
+	return keepGoing ? 1 : 0;
 }
 
 bool FileFilterIndex::isKeyBeingFilteredBy(std::string key, FilterIndexType type)
@@ -425,9 +716,11 @@ void FileFilterIndex::manageGenreEntryInIndex(FileData* game, bool remove)
 
 	manageIndexEntry(&genreIndexAllKeys, key, remove);
 
-	key = getIndexableKey(game, GENRE_FILTER, true);
-	if (!includeUnknown && key == UNKNOWN_LABEL)
-		manageIndexEntry(&genreIndexAllKeys, key, remove);
+	auto subkey = getIndexableKey(game, GENRE_FILTER, true);
+	if (!includeUnknown && (subkey == UNKNOWN_LABEL || subkey == "BIOS"))
+		return;	 // no valid genre info found
+
+	manageIndexEntry(&genreIndexAllKeys, subkey, remove);
 }
 
 void FileFilterIndex::managePlayerEntryInIndex(FileData* game, bool remove)
@@ -642,6 +935,10 @@ bool CollectionFilter::load(const std::string file)
 			langIndexFilteredKeys.insert(node.text().as_string());
 		else if (name == "region")
 			regionIndexFilteredKeys.insert(node.text().as_string());
+#ifdef _ENABLEEMUELEC
+		else if (name == "cheevos")
+			cheevosIndexFilteredKeys.insert(node.text().as_string());
+#endif
 	}
 
 	for (auto& it : mFilterDecl)
@@ -695,6 +992,11 @@ bool CollectionFilter::save()
 	for (auto key : regionIndexFilteredKeys)
 		root.append_child("region").text().set(key.c_str());
 
+#ifdef _ENABLEEMUELEC
+	for (auto key : cheevosIndexFilteredKeys)
+		root.append_child("cheevos").text().set(key.c_str());
+#endif
+
 	if (!doc.save_file(mPath.c_str()))
 	{
 		LOG(LogError) << "Error saving CollectionFilter to \"" << mPath << "\" !";
@@ -709,16 +1011,16 @@ bool CollectionFilter::isFiltered()
 	return mSystemFilter.size() > 0 || FileFilterIndex::isFiltered();
 }
 
-bool CollectionFilter::showFile(FileData* game)
+int CollectionFilter::showFile(FileData* game)
 {
 	if (game == nullptr)
-		return false;
+		return 0;
 
 	if (mSystemFilter.size() > 0 && game->getSourceFileData() != nullptr && game->getSourceFileData()->getSystem() != nullptr)
 	{
 		std::string system = game->getSourceFileData()->getSystem()->getName();
 		if (!isSystemSelected(system))
-			return false;
+			return 0;
 	}
 	
 	return FileFilterIndex::showFile(game);

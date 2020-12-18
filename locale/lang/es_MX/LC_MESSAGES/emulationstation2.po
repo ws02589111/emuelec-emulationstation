@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: emulationstation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-28 22:24+0100\n"
+"POT-Creation-Date: 2020-12-02 08:20+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: chochi (juliansk@gmail.com)\n"
 "Language-Team: \n"
@@ -393,6 +393,9 @@ msgstr "INICIAR EN SISTEMA"
 msgid "NONE"
 msgstr "NINGUNO"
 
+msgid "RESTORE LAST SELECTED"
+msgstr ""
+
 msgid "START ON GAMELIST"
 msgstr "INICIAR EN LISTAS DE JUEGOS"
 
@@ -401,6 +404,9 @@ msgstr "AGRUPAR COLECCIONES PERSONALES SIN TEMA"
 
 msgid "SHOW SYSTEM NAME IN COLLECTIONS"
 msgstr "MOSTRAR NOMBRE DE SISTEMA EN COLECCIONES"
+
+msgid "SHOW GAMES OF HIDDEN SYSTEMS IN COLLECTIONS"
+msgstr ""
 
 msgid "UPDATE GAMES LISTS"
 msgstr "ACTUALIZAR LISTAS DE JUEGOS"
@@ -459,6 +465,9 @@ msgstr "ORDENAR LOS JUEGOS POR"
 msgid "OTHER FILTERS"
 msgstr "OTROS FILTROS"
 
+msgid "FIND SIMILAR GAMES..."
+msgstr ""
+
 msgid "GAME MEDIAS"
 msgstr "IMÁGENES DE LOS JUEGOS"
 
@@ -501,11 +510,20 @@ msgstr "OPCIONES AVANZADAS DEL SISTEMA"
 msgid "ADVANCED GAME OPTIONS"
 msgstr "OPCIONES AVANZADAS DEL JUEGO"
 
+msgid "EDIT PAD TO KEYBOARD CONFIGURATION"
+msgstr ""
+
+msgid "CREATE PAD TO KEYBOARD CONFIGURATION"
+msgstr ""
+
 msgid "EDIT FOLDER METADATA"
 msgstr "EDITAR CARPETA DE METADATOS"
 
 msgid "EDIT THIS GAME'S METADATA"
 msgstr "EDITAR INFORMACIÓN DEL JUEGO"
+
+msgid "VIEW PAD TO KEYBOARD INFORMATION"
+msgstr ""
 
 msgid "RESET FILTERS"
 msgstr "RESTABLECER FILTROS"
@@ -519,8 +537,8 @@ msgstr "FUNCIÓN DESHABILITADA CUANDO EL SCRAPEO SE ESTÁ EJECUTANDO"
 msgid "CLOSE"
 msgstr "CERRAR"
 
-msgid "ARE YOU SURE ?"
-msgstr "¿ESTAS SEGURO?"
+msgid "ARE YOU SURE YOU WANT TO DELETE THIS ITEM ?"
+msgstr ""
 
 msgid "INPUT"
 msgstr "ENTRADA"
@@ -627,17 +645,26 @@ msgstr "NO SE HAN ENCONTRADO DISPOSITIVOS BLUETOOTH"
 msgid "CONTROLLERS LINKS HAVE BEEN DELETED."
 msgstr "TODOS LOS CONTROLES HAN SIDO DESVINCULADOS."
 
+msgid "RESET"
+msgstr "REESTABLECER"
+
+msgid "ADD COMBINATION KEY"
+msgstr ""
+
 msgid "CONTENT DOWNLOADER"
 msgstr "DESCARGADOR DE CONTENIDO"
 
 msgid "SELECT CONTENT TO INSTALL / REMOVE"
 msgstr "SELECCIONE CONTENIDO PARA INSTALAR / QUITAR"
 
-msgid "MISC"
-msgstr "MISCELÁNEA"
+msgid "UPDATE INSTALLED CONTENT"
+msgstr ""
 
 msgid "There are no items in this view"
 msgstr ""
+
+msgid "MISC"
+msgstr "MISCELÁNEA"
 
 msgid "UNINSTALL ADDED TO QUEUE"
 msgstr "DESINSTALAR AGREGADO A LA COLA"
@@ -755,6 +782,54 @@ msgstr "DIRECTORIO RECURSIVO DE IMÁGENES PERSONALIZADAS"
 
 msgid "CUSTOM IMAGE FILTER"
 msgstr "FILTRO DE IMÁGENES PERSONALIZADAS"
+
+msgid "PAD TO KEYBOARD CONFIGURATION"
+msgstr ""
+
+msgid "SELECT ACTIONS TO CHANGE"
+msgstr ""
+
+msgid "SAVE"
+msgstr "GUARDAR"
+
+msgid "DELETE"
+msgstr "BORRAR"
+
+msgid "PLAYER 1"
+msgstr ""
+
+msgid "PLAYER 2"
+msgstr ""
+
+msgid "COMBINATIONS"
+msgstr ""
+
+msgid "MOUSE CURSOR"
+msgstr ""
+
+msgid "EMULATE MOUSE CURSOR"
+msgstr ""
+
+msgid "LEFT ANALOG STICK"
+msgstr ""
+
+msgid "RIGHT ANALOG STICK"
+msgstr ""
+
+msgid "EDIT DESCRIPTION"
+msgstr ""
+
+msgid "DELETE MAPPING"
+msgstr ""
+
+msgid "SAVE CHANGES?"
+msgstr "¿GUARDAR LOS CAMBIOS?"
+
+msgid "ARE YOU SURE ?"
+msgstr "¿ESTAS SEGURO?"
+
+msgid "UPDATING EMULATIONSTATION"
+msgstr ""
 
 msgid "UPDATING BATOCERA"
 msgstr "ACTUALIZANDO BATOCERA"
@@ -1034,6 +1109,9 @@ msgstr "OBTENER ARTE DE FAN"
 msgid "SCRAPE MANUAL"
 msgstr "OBTENER MANUALES DE JUEGOS"
 
+msgid "SCRAPE PADTOKEY SETTINGS"
+msgstr ""
+
 msgid "USERNAME"
 msgstr "USUARIO"
 
@@ -1083,6 +1161,9 @@ msgstr "SINCRONIZACIÓN VERTICAL (VSYNC)"
 msgid "OVERSCAN"
 msgstr "SOBREESCANEO"
 
+msgid "USE OMX PLAYER (HW ACCELERATED)"
+msgstr "USAR OMX PLAYER (ACELERADO POR HW)"
+
 msgid "TOOLS"
 msgstr "HERRAMIENTAS"
 
@@ -1104,6 +1185,21 @@ msgstr "LA GENERACIÓN DEL ARCHIVO HA FALLADO"
 msgid "FORMAT A DISK"
 msgstr "FORMATEAR UN DISCO"
 
+msgid "CLEAN GAMELISTS & REMOVE UNUSED MEDIAS"
+msgstr ""
+
+msgid "Cleaning "
+msgstr ""
+
+msgid "CLEAR CACHES"
+msgstr ""
+
+msgid "RESET FILE EXTENSIONS"
+msgstr "RESTABLECER EXTENSIONES DE ARCHIVO"
+
+msgid "REDETECT GAMES LANG/REGION"
+msgstr "REDETECTAR JUEGOS POR IDIOMA / REGIÓN"
+
 msgid "DATA MANAGEMENT"
 msgstr "GESTIÓN DE DATOS"
 
@@ -1118,12 +1214,6 @@ msgstr "CONVERTIR UNICAMENTE LISTAS DE JUEGOS"
 
 msgid "SEARCH FOR LOCAL ART"
 msgstr "BUSCAR ARTE LOCAL"
-
-msgid "RESET FILE EXTENSIONS"
-msgstr "RESTABLECER EXTENSIONES DE ARCHIVO"
-
-msgid "REDETECT GAMES LANG/REGION"
-msgstr "REDETECTAR JUEGOS POR IDIOMA / REGIÓN"
 
 msgid "UI"
 msgstr "INTERFAZ DE USUARIO"
@@ -1229,9 +1319,6 @@ msgstr "HABILITAR KODI"
 msgid "KODI AT START"
 msgstr "INICIAR KODI AL INICIAR EL SISTEMA"
 
-msgid "START KODI WITH X"
-msgstr "INICIAR KODI AL PRESIONAR EL BOTÓN X"
-
 msgid "HARDWARE"
 msgstr "HARDWARE"
 
@@ -1252,6 +1339,9 @@ msgstr "CONFIGURACIÓN DE RETROACHIEVEMENTS"
 
 msgid "NETPLAY SETTINGS"
 msgstr "AJUSTES DE NETPLAY"
+
+msgid "CHECK BIOSES BEFORE RUNNING A GAME"
+msgstr ""
 
 msgid "MULTIMEDIA KEYS"
 msgstr "TECLAS MULTIMEDIA"
@@ -1508,6 +1598,12 @@ msgstr "MOSTRAR AYUDA EN PANTALLA"
 msgid "SHOW BATTERY STATUS"
 msgstr "MOSTRAR ESTADO DE LA BATERÍA"
 
+msgid "ICON"
+msgstr ""
+
+msgid "ICON AND TEXT"
+msgstr ""
+
 msgid "SHOW FILENAMES IN LISTS"
 msgstr "MOSTRAR NOMBRES DE ARCHIVO EN LAS LISTAS"
 
@@ -1598,8 +1694,14 @@ msgstr "ACCESO RÁPIDO"
 msgid "SKIP TO NEXT SONG"
 msgstr "SALTAR A LA SIGUIENTE CANCIÓN"
 
+msgid "LISTENING NOW"
+msgstr ""
+
 msgid "LAUNCH SCREENSAVER"
 msgstr "EJECUTAR SALVAPANTALLAS"
+
+msgid "VIEW USER'S MANUAL"
+msgstr ""
 
 msgid "VIEW BATOCERA MANUAL"
 msgstr "VER EL MANUAL DE BATOCERA"
@@ -1670,9 +1772,6 @@ msgstr "¿ESTÁS SEGURO DE QUERER FORMATEAR ESTA UNIDAD?"
 msgid "EDIT METADATA"
 msgstr "EDITAR LOS METADATOS"
 
-msgid "SAVE"
-msgstr "GUARDAR"
-
 msgid ""
 "THIS WILL DELETE THE ACTUAL GAME FILE(S)!\n"
 "ARE YOU SURE?"
@@ -1680,14 +1779,11 @@ msgstr ""
 "ESTO ELIMINARÁ EL ARCHIVO(S) DEL JUEGO ACTUAL!\n"
 "¿ESTÁS SEGURO?"
 
-msgid "DELETE"
-msgstr "BORRAR"
-
-msgid "SAVE CHANGES?"
-msgstr "¿GUARDAR LOS CAMBIOS?"
-
 msgid "NO DEVICE FOUND"
 msgstr "NO SE ENCONTRÓ DISPOSITIVO"
+
+msgid "SYSTEM INFO"
+msgstr ""
 
 msgid "ERROR: EVERY SYSTEM IS HIDDEN, RE-DISPLAYING ALL OF THEM NOW"
 msgstr ""
@@ -1695,9 +1791,6 @@ msgstr ""
 
 msgid "QUICK SEARCH"
 msgstr ""
-
-msgid "DO YOU WANT TO START KODI MEDIA CENTER ?"
-msgstr "¿QUIERES INICIAR EL CENTRO MULTIMEDIA KODI?"
 
 msgid "GO TO LETTER"
 msgstr ""
@@ -1712,6 +1805,9 @@ msgid "GO TO HARDWARE"
 msgstr "IR AL HARDWARE"
 
 msgid "GO TO DECADE"
+msgstr ""
+
+msgid "CONFIGURATION"
 msgstr ""
 
 #, c-format
@@ -1732,9 +1828,6 @@ msgid_plural "%i GAMES"
 msgstr[0] "%i JUEGO"
 msgstr[1] "%i JUEGOS"
 
-msgid "KODI"
-msgstr "KODI"
-
 msgid "NETPLAY"
 msgstr "NETPLAY"
 
@@ -1744,8 +1837,24 @@ msgstr "ALEATORIO"
 msgid "FILES"
 msgstr "ARCHIVOS"
 
+msgid ""
+"WARNING : THIS GAME'S FORMAT IS NOT SUPPORTED BY THE CURRENT EMULATOR/CORE.\n"
+"DO YOU WANT TO LAUNCH IT ANYWAY ?"
+msgstr ""
+
+msgid ""
+"WARNING : THE SYSTEM HAS MISSING BIOS AND THE GAME MAY NOT WORK CORRECTLY.\n"
+"DO YOU WANT TO LAUNCH IT ANYWAY ?"
+msgstr ""
+
 msgid "Preloading UI"
 msgstr "Precargar interfaz"
+
+msgid "Loading theme"
+msgstr ""
+
+msgid "Loading gamelists"
+msgstr ""
 
 msgid "MENU"
 msgstr "MENÚ"
@@ -1782,6 +1891,9 @@ msgstr "SETEAR CLAVE DE JUGADOR"
 
 msgid "SET VIEWER PASSWORD"
 msgstr "VER CLAVE DE JUGADOR"
+
+msgid "Games similar to"
+msgstr ""
 
 msgid "Searching"
 msgstr "Buscando"
@@ -1934,9 +2046,6 @@ msgstr "SHIFT PARA MAYÚSCULAS, MINÚSCULAS Y ESPECIALES"
 msgid "ALT GR"
 msgstr ""
 
-msgid "RESET"
-msgstr "REESTABLECER"
-
 msgid "SHIFT"
 msgstr "SHIFT"
 
@@ -1958,14 +2067,26 @@ msgstr "DERECHA"
 msgid "LEFT ANALOG UP"
 msgstr "ANALOGO IZQUIERDO; ARRIBA"
 
+msgid "LEFT ANALOG DOWN"
+msgstr ""
+
 msgid "LEFT ANALOG LEFT"
 msgstr "ANALOGO IZQUIERDO; IZQUIERDA"
+
+msgid "LEFT ANALOG RIGHT"
+msgstr ""
 
 msgid "RIGHT ANALOG UP"
 msgstr "ANALOGO DERECHO; ARRIBA"
 
+msgid "RIGHT ANALOG DOWN"
+msgstr ""
+
 msgid "RIGHT ANALOG LEFT"
 msgstr "ANALOGO DERECHO; IZQUIERDA"
+
+msgid "RIGHT ANALOG RIGHT"
+msgstr ""
 
 msgid "HOTKEY"
 msgstr "HOTKEY"
@@ -2099,6 +2220,15 @@ msgstr "%d m"
 #, c-format
 msgid "%d s"
 msgstr "%d s"
+
+#~ msgid "START KODI WITH X"
+#~ msgstr "INICIAR KODI AL PRESIONAR EL BOTÓN X"
+
+#~ msgid "DO YOU WANT TO START KODI MEDIA CENTER ?"
+#~ msgstr "¿QUIERES INICIAR EL CENTRO MULTIMEDIA KODI?"
+
+#~ msgid "KODI"
+#~ msgstr "KODI"
 
 #~ msgid "STATUS"
 #~ msgstr "ESTADO"
@@ -2297,9 +2427,6 @@ msgstr "%d s"
 
 #~ msgid "marquee"
 #~ msgstr "MARQUESINA"
-
-#~ msgid "USE OMX PLAYER (HW ACCELERATED)"
-#~ msgstr "USAR OMX PLAYER (ACELERADO POR HW)"
 
 #~ msgid "BLUE"
 #~ msgstr "AZUL"

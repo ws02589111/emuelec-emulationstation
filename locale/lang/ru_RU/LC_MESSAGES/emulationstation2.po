@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: batocera-emulationstation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-28 22:24+0100\n"
+"POT-Creation-Date: 2020-12-02 08:20+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ckau\n"
 "Language-Team: Russian <https://4pda.ru/forum/index.php?showtopic=802556>\n"
@@ -359,7 +359,7 @@ msgid "SELECT THEME FOLDER"
 msgstr "ВЫБЕРИТЕ ПАПКУ ТЕМЫ"
 
 msgid "CREATE NEW EDITABLE COLLECTION"
-msgstr "СОЗДАТЬ НОВУЮ ИЗМЕНЯЕМУЮ КОЛЛЕКЦИЮ"
+msgstr "СОЗДАТЬ НОВУЮ КОЛЛЕКЦИЮ"
 
 msgid "New Collection Name"
 msgstr "Название новой коллекции"
@@ -383,7 +383,7 @@ msgid "BY HARDWARE TYPE"
 msgstr "ПО ЖЕЛЕЗУ"
 
 msgid "BY RELEASE YEAR"
-msgstr ""
+msgstr "ПО ГОДУ ВЫПУСКА"
 
 msgid "SORT SYSTEMS"
 msgstr "СОРТИРОВКА СИСТЕМ"
@@ -394,6 +394,9 @@ msgstr "СИСТЕМА ПО УМОЛЧАНИЮ"
 msgid "NONE"
 msgstr "НЕТ"
 
+msgid "RESTORE LAST SELECTED"
+msgstr "ЗАПОМНИТЬ ПОСЛЕДНЮЮ"
+
 msgid "START ON GAMELIST"
 msgstr "НАЧАТЬ СО СПИСКА ИГР"
 
@@ -402,6 +405,9 @@ msgstr "СГРУППИРОВАТЬ СВОИ КОЛЛЕКЦИИ"
 
 msgid "SHOW SYSTEM NAME IN COLLECTIONS"
 msgstr "ОТОБРАЖАТЬ СИСТЕМУ В НАЗВАНИИ"
+
+msgid "SHOW GAMES OF HIDDEN SYSTEMS IN COLLECTIONS"
+msgstr "ПОКАЗАТЬ ИГРЫ ИЗ СПРЯТАННЫХ СИСТЕМ В КОЛЛЕКЦИИ"
 
 msgid "UPDATE GAMES LISTS"
 msgstr "ОБНОВИТЬ СПИСКИ ИГР"
@@ -460,6 +466,9 @@ msgstr "СОРТИРОВКА ПО"
 msgid "OTHER FILTERS"
 msgstr "ДРУГИЕ ФИЛЬТРЫ"
 
+msgid "FIND SIMILAR GAMES..."
+msgstr "НАЙТИ ПОХОЖИЕ ИГРЫ..."
+
 msgid "GAME MEDIAS"
 msgstr "МЕДИА ИГРЫ"
 
@@ -502,11 +511,20 @@ msgstr "ДОПОЛНИТЕЛЬНЫЕ НАСТРОЙКИ СИСТЕМЫ"
 msgid "ADVANCED GAME OPTIONS"
 msgstr "ДОПОЛНИТЕЛЬНЫЕ НАСТРОЙКИ ИГРЫ"
 
+msgid "EDIT PAD TO KEYBOARD CONFIGURATION"
+msgstr "РЕДАКТИРОВАТЬ НАСТРОЙКИ PADTOKEY"
+
+msgid "CREATE PAD TO KEYBOARD CONFIGURATION"
+msgstr "СОЗДАТЬ НАСТРОЙКИ PADTOKEY"
+
 msgid "EDIT FOLDER METADATA"
 msgstr "РЕДАКТИРОВАТЬ МЕТАДАННЫЕ ПАПКИ"
 
 msgid "EDIT THIS GAME'S METADATA"
 msgstr "РЕДАКТИРОВАТЬ МЕТАДАННЫЕ"
+
+msgid "VIEW PAD TO KEYBOARD INFORMATION"
+msgstr "ПОСМОТРЕТЬ ДАННЫЕ PADTOKEY"
 
 msgid "RESET FILTERS"
 msgstr "СБРОСИТЬ ФИЛЬТРЫ"
@@ -520,8 +538,8 @@ msgstr "ВО ВРЕМЯ ЗАГРУЗКИ ЭТА ФУНКЦИЯ ОТКЛЮЧЕН�
 msgid "CLOSE"
 msgstr "ЗАКРЫТЬ"
 
-msgid "ARE YOU SURE ?"
-msgstr "ВЫ УВЕРЕНЫ?"
+msgid "ARE YOU SURE YOU WANT TO DELETE THIS ITEM ?"
+msgstr "ВЫ УВЕРЕНЫ, ЧТО ХОТИТЕ УДАЛИТЬ ЭТОТ ОБЪЕКТ?"
 
 msgid "INPUT"
 msgstr "ВВОД"
@@ -628,17 +646,26 @@ msgstr "BLUETOOTH КОНТРОЛЛЕРЫ НЕ НАЙДЕНЫ"
 msgid "CONTROLLERS LINKS HAVE BEEN DELETED."
 msgstr "BLUETOOTH КОНТРОЛЛЕРЫ УДАЛЕНЫ"
 
+msgid "RESET"
+msgstr "СБРОС"
+
+msgid "ADD COMBINATION KEY"
+msgstr "ДОБАВИТЬ КОМБИНАЦИЮ"
+
 msgid "CONTENT DOWNLOADER"
 msgstr "ЗАГРУЗКА КОНТЕНТА"
 
 msgid "SELECT CONTENT TO INSTALL / REMOVE"
 msgstr "УСТАНОВКА / УДАЛЕНИЕ КОНТЕНТА"
 
-msgid "MISC"
-msgstr "РАЗНОЕ"
+msgid "UPDATE INSTALLED CONTENT"
+msgstr "ОБНОВИТЬ УСТАНОВЛЕННЫЙ КОНТЕНТ"
 
 msgid "There are no items in this view"
-msgstr ""
+msgstr "Нет объектов для отображения"
+
+msgid "MISC"
+msgstr "РАЗНОЕ"
 
 msgid "UNINSTALL ADDED TO QUEUE"
 msgstr "УДАЛЕНИЕ ДОБАВЛЕНО В ОЧЕРЕДЬ ЗАГРУЗКИ"
@@ -757,6 +784,54 @@ msgstr "ПАПКА ПОЛЬЗ. ИЗОБРАЖЕНИЙ РЕКУРСИВНО"
 msgid "CUSTOM IMAGE FILTER"
 msgstr "ФИЛЬТР ПОЛЬЗ. ИЗОБР."
 
+msgid "PAD TO KEYBOARD CONFIGURATION"
+msgstr "НАСТРОЙКИ PADTOKEY"
+
+msgid "SELECT ACTIONS TO CHANGE"
+msgstr "ВЫБЕРИТЕ ДЕЙСТВИЯ ДЛЯ ИЗМЕНЕНИЯ"
+
+msgid "SAVE"
+msgstr "СОХРАНИТЬ"
+
+msgid "DELETE"
+msgstr "УДАЛИТЬ"
+
+msgid "PLAYER 1"
+msgstr "ИГРОК 1"
+
+msgid "PLAYER 2"
+msgstr "ИГРОК 2"
+
+msgid "COMBINATIONS"
+msgstr "КОМБИНАЦИИ"
+
+msgid "MOUSE CURSOR"
+msgstr "КУРСОР МЫШИ"
+
+msgid "EMULATE MOUSE CURSOR"
+msgstr "ЭМУЛЯЦИЯ КУРСОРА МЫШИ"
+
+msgid "LEFT ANALOG STICK"
+msgstr "ЛЕВЫЙ СТИК"
+
+msgid "RIGHT ANALOG STICK"
+msgstr "ПРАВЫЙ СТИК"
+
+msgid "EDIT DESCRIPTION"
+msgstr "ИЗМЕНИТЬ ОПИСАНИЕ"
+
+msgid "DELETE MAPPING"
+msgstr "УДАЛИТЬ СОПОСТАВЛЕНИЕ"
+
+msgid "SAVE CHANGES?"
+msgstr "СОХРАНИТЬ ИЗМЕНЕНИЯ?"
+
+msgid "ARE YOU SURE ?"
+msgstr "ВЫ УВЕРЕНЫ?"
+
+msgid "UPDATING EMULATIONSTATION"
+msgstr "ОБНОВЛЕНИЕ EMULATIONSTATION"
+
 msgid "UPDATING BATOCERA"
 msgstr "ОБНОВЛЕНИЕ BATOCERA"
 
@@ -767,7 +842,7 @@ msgid "REBOOT SYSTEM TO APPLY"
 msgstr "ПЕРЕЗАГРУЗИТЕ СИСТЕМУ ДЛЯ ПРИМЕНЕНИЯ"
 
 msgid "REALLY UPDATE?"
-msgstr "ДЕЙСТВИТЕЛЬНО ОБНОВИТЬ?"
+msgstr "ЖЕЛАЕТЕ ОБНОВИТЬ?"
 
 msgid "NETWORK CONNECTION NEEDED"
 msgstr "ТРЕБУЕТСЯ ПОДКЛЮЧЕНИЕ К СЕТИ"
@@ -1036,6 +1111,9 @@ msgstr "ЗАГРУЗКА ФАН-АРТА"
 msgid "SCRAPE MANUAL"
 msgstr "ЗАГРУЗКА РУКОВОДСТВА"
 
+msgid "SCRAPE PADTOKEY SETTINGS"
+msgstr "ЗАГРУЗКА НАСТРОЕК PADTOKEY"
+
 msgid "USERNAME"
 msgstr "ИМЯ ПОЛЬЗОВАТЕЛЯ"
 
@@ -1055,7 +1133,7 @@ msgid "PLEASE ENTER THE CODE TO UNLOCK THE CURRENT UI MODE"
 msgstr "ПОЖАЛУЙСТА, ВВЕДИТЕ КОД, ЧТОБЫ РАЗБЛОКИРОВАТЬ ИНТЕРФЕЙС"
 
 msgid "INFORMATION"
-msgstr "ДАННЫЕ"
+msgstr "ХАРАКТЕРИСТИКИ"
 
 msgid "VERSION"
 msgstr "ВЕРСИЯ"
@@ -1084,6 +1162,9 @@ msgstr "VSYNC"
 msgid "OVERSCAN"
 msgstr "ВЫЛЕТЫ РАЗВЁРТКИ"
 
+msgid "USE OMX PLAYER (HW ACCELERATED)"
+msgstr "ИСПОЛЬЗОВАТЬ OMX ПЛЕЕР (HW ACCELERATED)"
+
 msgid "TOOLS"
 msgstr "ИНСТРУМЕНТЫ"
 
@@ -1105,6 +1186,21 @@ msgstr "ГЕНЕРАЦИЯ ФАЙЛА НЕ УДАЛАСЬ"
 msgid "FORMAT A DISK"
 msgstr "ФОРМАТИРОВАТЬ"
 
+msgid "CLEAN GAMELISTS & REMOVE UNUSED MEDIAS"
+msgstr "ОЧИСТИТЬ СПИСОК ИГР И УДАЛИТЬ НЕ ИСПОЛЬЗУЕМЫЕ МЕДИА"
+
+msgid "Cleaning "
+msgstr "Очистка "
+
+msgid "CLEAR CACHES"
+msgstr "ОЧИСТИТЬ КЭШ"
+
+msgid "RESET FILE EXTENSIONS"
+msgstr "СБРОСИТЬ РАСШИРЕНИЕ ФАЙЛОВ"
+
+msgid "REDETECT GAMES LANG/REGION"
+msgstr "ПЕРЕОПРЕДЕЛИТЬ ЯЗЫК/РЕГИОН ИГР"
+
 msgid "DATA MANAGEMENT"
 msgstr "УПРАВЛЕНИЕ ДАННЫМИ"
 
@@ -1119,12 +1215,6 @@ msgstr "АНАЛИЗИРОВАТЬ ТОЛЬКО СПИСОК ИГР"
 
 msgid "SEARCH FOR LOCAL ART"
 msgstr "ПОИСК ЛОКАЛЬНЫХ ИЗОБРАЖЕНИЙ"
-
-msgid "RESET FILE EXTENSIONS"
-msgstr "СБРОСИТЬ РАСШИРЕНИЕ ФАЙЛА"
-
-msgid "REDETECT GAMES LANG/REGION"
-msgstr "ПЕРЕОПРЕДЕЛИТЬ ЯЗЫК/РЕГИОН ИГР"
 
 msgid "UI"
 msgstr "ИНТЕРФЕЙС"
@@ -1151,7 +1241,7 @@ msgid "AUTOCONFIGURE EMULATORS CONTROLLERS"
 msgstr "АВТОНАСТРОЙКА КОНТРОЛЛЕРОВ"
 
 msgid "SHOW NETWORK INDICATOR"
-msgstr ""
+msgstr "ПОКАЗАТЬ ИНДИКАТОР СЕТИ"
 
 msgid "OPTIMIZATIONS"
 msgstr "ОПТИМИЗАЦИЯ"
@@ -1229,9 +1319,6 @@ msgstr "ВКЛЮЧИТЬ KODI"
 msgid "KODI AT START"
 msgstr "АВТОЗАПУСК KODI"
 
-msgid "START KODI WITH X"
-msgstr "ЗАПУСК KODI КНОПКОЙ X"
-
 msgid "HARDWARE"
 msgstr "ЖЕЛЕЗО"
 
@@ -1252,6 +1339,9 @@ msgstr "НАСТРОЙКИ РЕТРОДОСТИЖЕНИЙ"
 
 msgid "NETPLAY SETTINGS"
 msgstr "НАСТРОЙКИ NETPLAY"
+
+msgid "CHECK BIOSES BEFORE RUNNING A GAME"
+msgstr "ПРОВЕРИТЬ БИОСЫ ПЕРЕД ЗАПУСКОМ ИГРЫ"
 
 msgid "MULTIMEDIA KEYS"
 msgstr "МУЛЬТИМЕДИЙНЫЕ КНОПКИ"
@@ -1395,7 +1485,7 @@ msgid "GAME HASHING IS RUNNING. DO YOU WANT TO STOP IT ?"
 msgstr "ЗАПУЩЕНО ХЕШИРОВАНИЕ ИГР. ОСТАНОВИТЬ?"
 
 msgid "REALLY UPDATE GAMES LISTS ?"
-msgstr "ДЕЙСТВИТЕЛЬНО ОБНОВИТЬ СПИСКИ ИГР?"
+msgstr "ЖЕЛАЕТЕ ОБНОВИТЬ СПИСКИ ИГР?"
 
 msgid "CONFIGURE A CONTROLLER"
 msgstr "НАСТРОИТЬ КОНТРОЛЛЕР"
@@ -1507,6 +1597,12 @@ msgstr "ЭКРАННЫЕ ПОДСКАЗКИ"
 msgid "SHOW BATTERY STATUS"
 msgstr "ПОКАЗАТЬ СОСТОЯНИЕ БАТАРЕИ"
 
+msgid "ICON"
+msgstr "ИКОНКА"
+
+msgid "ICON AND TEXT"
+msgstr "ИКОНКА И ТЕКСТ"
+
 msgid "SHOW FILENAMES IN LISTS"
 msgstr "ПОКАЗАТЬ НАСТОЯЩЕЕ НАЗВАНИЕ ФАЙЛА"
 
@@ -1562,7 +1658,7 @@ msgid "NOT CONNECTED"
 msgstr "НЕ ПОДКЛЮЧЕНО"
 
 msgid "INTERNET STATUS"
-msgstr ""
+msgstr "СТАТУС СЕТИ"
 
 msgid "HOSTNAME"
 msgstr "ИМЯ ХОСТА"
@@ -1597,8 +1693,14 @@ msgstr "БЫСТРЫЙ ДОСТУП"
 msgid "SKIP TO NEXT SONG"
 msgstr "ПРОПУСТИТЬ ПЕСНЮ"
 
+msgid "LISTENING NOW"
+msgstr "СЕЙЧАС ИГРАЕТ"
+
 msgid "LAUNCH SCREENSAVER"
 msgstr "ЗАСТАВКА"
+
+msgid "VIEW USER'S MANUAL"
+msgstr "РУКОВОДСТВО ПОЛЬЗОВАТЕЛЯ"
 
 msgid "VIEW BATOCERA MANUAL"
 msgstr "РУКОВОДСТВО ПО BATOCERA"
@@ -1669,9 +1771,6 @@ msgstr "ВЫ УВЕРЕНЫ, ЧТО ХОТИТЕ ОТФОРМАТИРОВАТЬ 
 msgid "EDIT METADATA"
 msgstr "РЕДАКТИРОВАТЬ МЕТАДАННЫЕ"
 
-msgid "SAVE"
-msgstr "СОХРАНИТЬ"
-
 msgid ""
 "THIS WILL DELETE THE ACTUAL GAME FILE(S)!\n"
 "ARE YOU SURE?"
@@ -1679,29 +1778,23 @@ msgstr ""
 "УДАЛЕНИЕ ФАЙЛОВ ИГРЫ!\n"
 "ВЫ УВЕРЕНЫ?"
 
-msgid "DELETE"
-msgstr "УДАЛИТЬ"
-
-msgid "SAVE CHANGES?"
-msgstr "СОХРАНИТЬ ИЗМЕНЕНИЯ?"
-
 msgid "NO DEVICE FOUND"
 msgstr "УСТРОЙСТВО НЕ НАЙДЕНО"
+
+msgid "SYSTEM INFO"
+msgstr "СИСТЕМНАЯ ИНФОРМАЦИЯ"
 
 msgid "ERROR: EVERY SYSTEM IS HIDDEN, RE-DISPLAYING ALL OF THEM NOW"
 msgstr "ОШИБКА: ВСЕ СИСТЕМЫ СКРЫТЫ, ВКЛЮЧЕНИЕ ПОВТОРНОГО ОТОБРАЖЕНИЯ"
 
 msgid "QUICK SEARCH"
-msgstr ""
-
-msgid "DO YOU WANT TO START KODI MEDIA CENTER ?"
-msgstr "ВЫ ХОТИТЕ ЗАПУСТИТЬ МЕДИА-ЦЕНТР KODI?"
+msgstr "БЫСТРЫЙ ПОИСК"
 
 msgid "GO TO LETTER"
-msgstr ""
+msgstr "ПЕРЕЙТИ К СИМВОЛУ"
 
 msgid "COLLECTIONS"
-msgstr ""
+msgstr "КОЛЛЕКЦИИ"
 
 msgid "GO TO MANUFACTURER"
 msgstr "ПЕРЕЙТИ К ПРОИЗВОДИТЕЛЮ"
@@ -1710,7 +1803,10 @@ msgid "GO TO HARDWARE"
 msgstr "ПЕРЕЙТИ К ЖЕЛЕЗУ"
 
 msgid "GO TO DECADE"
-msgstr ""
+msgstr "ПЕРЕЙТИ К ДЕСЯТИЛЕТИЮ"
+
+msgid "CONFIGURATION"
+msgstr "КОНФИГУРАЦИЯ"
 
 #, c-format
 msgid "%i COLLECTION"
@@ -1733,9 +1829,6 @@ msgstr[0] "%i ИГРА"
 msgstr[1] "%i ИГРЫ"
 msgstr[2] "%i ИГР"
 
-msgid "KODI"
-msgstr "KODI"
-
 msgid "NETPLAY"
 msgstr "NETPLAY"
 
@@ -1745,8 +1838,28 @@ msgstr "СЛУЧАЙНО"
 msgid "FILES"
 msgstr "ФАЙЛЫ"
 
+msgid ""
+"WARNING : THIS GAME'S FORMAT IS NOT SUPPORTED BY THE CURRENT EMULATOR/CORE.\n"
+"DO YOU WANT TO LAUNCH IT ANYWAY ?"
+msgstr ""
+"ВНИМАНИЕ : ФОРМАТ ЭТОЙ ИГРЫ НЕ ПОДДЕРЖИВАЕТСЯ ТЕКУЩИМ ЭМУЛЯТОРОМ/ЯДРОМ.\n"
+"ПОПРОБОВАТЬ ЗАПУСТИТЬ В ЛЮБОМ СЛУЧАЕ?"
+
+msgid ""
+"WARNING : THE SYSTEM HAS MISSING BIOS AND THE GAME MAY NOT WORK CORRECTLY.\n"
+"DO YOU WANT TO LAUNCH IT ANYWAY ?"
+msgstr ""
+"ВНИМАНИЕ : В СИСТЕМЕ ОТСУТСТВУЕТ BIOS, ИГРА МОЖЕТ РАБОТАТЬ НЕПРАВИЛЬНО.\n"
+"ЗАПУСТИТЬ В ЛЮБОМ СЛУЧАЕ?"
+
 msgid "Preloading UI"
 msgstr "Предзагрузка интерфейса"
+
+msgid "Loading theme"
+msgstr "Загрузка темы"
+
+msgid "Loading gamelists"
+msgstr "Загрузка списка игр"
 
 msgid "MENU"
 msgstr "МЕНЮ"
@@ -1779,10 +1892,13 @@ msgid "START NETPLAY HOST"
 msgstr "ЗАПУСТИТЬ NETPLAY ХОСТ"
 
 msgid "SET PLAYER PASSWORD"
-msgstr "УСТАНОВИТЬ ПАРОЛЬ ИГРОКА"
+msgstr "УСТАНОВИТЬ ПАРОЛЬ ДЛЯ ИГРОКА"
 
 msgid "SET VIEWER PASSWORD"
-msgstr "УСТАНОВИТЬ ПАРОЛЬ ЗРИТЕЛЯ"
+msgstr "УСТАНОВИТЬ ПАРОЛЬ ДЛЯ ЗРИТЕЛЯ"
+
+msgid "Games similar to"
+msgstr "Игры похожие на"
 
 msgid "Searching"
 msgstr "Поиск"
@@ -1932,10 +2048,7 @@ msgid "SHIFTS FOR UPPER,LOWER, AND SPECIAL"
 msgstr "SHIFT ДЛЯ РЕГИСТРА И СИМВОЛОВ"
 
 msgid "ALT GR"
-msgstr ""
-
-msgid "RESET"
-msgstr "СБРОС"
+msgstr "ALT GR"
 
 msgid "SHIFT"
 msgstr "SHIFT"
@@ -1958,14 +2071,26 @@ msgstr "ВПРАВО"
 msgid "LEFT ANALOG UP"
 msgstr "ЛЕВЫЙ СТИК ВВЕРХ"
 
+msgid "LEFT ANALOG DOWN"
+msgstr "ЛЕВЫЙ СТИК ВНИЗ"
+
 msgid "LEFT ANALOG LEFT"
 msgstr "ЛЕВЫЙ СТИК ВЛЕВО"
+
+msgid "LEFT ANALOG RIGHT"
+msgstr "ЛЕВЫЙ СТИК ВПРАВО"
 
 msgid "RIGHT ANALOG UP"
 msgstr "ПРАВЫЙ СТИК ВВЕРХ"
 
+msgid "RIGHT ANALOG DOWN"
+msgstr "ПРАВЫЙ СТИК ВНИЗ"
+
 msgid "RIGHT ANALOG LEFT"
 msgstr "ПРАВЫЙ СТИК ВЛЕВО"
+
+msgid "RIGHT ANALOG RIGHT"
+msgstr "ПРАВЫЙ СТИК ВПРАВО"
 
 msgid "HOTKEY"
 msgstr "ГОРЯЧАЯ КНОПКА"
@@ -2107,6 +2232,15 @@ msgstr "%d м"
 #, c-format
 msgid "%d s"
 msgstr "%d с"
+
+#~ msgid "START KODI WITH X"
+#~ msgstr "ЗАПУСК KODI КНОПКОЙ X"
+
+#~ msgid "DO YOU WANT TO START KODI MEDIA CENTER ?"
+#~ msgstr "ВЫ ХОТИТЕ ЗАПУСТИТЬ МЕДИА-ЦЕНТР KODI?"
+
+#~ msgid "KODI"
+#~ msgstr "KODI"
 
 #~ msgid "STATUS"
 #~ msgstr "СОСТОЯНИЕ"

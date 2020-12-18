@@ -104,7 +104,8 @@ public:
 		DISKFORMAT = 10,
 		OVERCLOCK = 11,
 		PDFEXTRACTION = 12,
-		BATOCERASTORE = 13
+		BATOCERASTORE = 13,
+		EVMAPY = 14
 	};
 
 	virtual bool isScriptingSupported(ScriptId script);
@@ -160,7 +161,7 @@ public:
     std::vector<std::string> getAvailableInstallDevices();
     std::vector<std::string> getAvailableInstallArchitectures();
     std::vector<std::string> getAvailableOverclocking();
-    std::vector<BiosSystem> getBiosInformations();
+    std::vector<BiosSystem> getBiosInformations(const std::string system = "");
     virtual std::vector<std::string> getVideoModes();
 
 	virtual std::vector<std::string> getAvailableStorageDevices();
@@ -203,6 +204,7 @@ public:
 	std::pair<std::string, int> installBatoceraStorePackage(std::string name, const std::function<void(const std::string)>& func = nullptr);
 	std::pair<std::string, int> uninstallBatoceraStorePackage(std::string name, const std::function<void(const std::string)>& func = nullptr);
 	void updateBatoceraStorePackageList();
+	void refreshBatoceraStorePackageList();
 
 	bool	getBrighness(int& value);
 	void	setBrighness(int value);
@@ -210,6 +212,7 @@ public:
 	std::vector<std::string> getWifiNetworks(bool scan = false);
 
 	bool downloadFile(const std::string url, const std::string fileName, const std::string label = "", const std::function<void(const std::string)>& func = nullptr);
+	std::string downloadToCache(const std::string url);
 
 	// Formating
 	std::vector<std::string> getFormatDiskList();

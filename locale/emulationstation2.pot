@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-28 22:24+0100\n"
+"POT-Creation-Date: 2020-12-02 08:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -398,6 +398,9 @@ msgstr ""
 msgid "NONE"
 msgstr ""
 
+msgid "RESTORE LAST SELECTED"
+msgstr ""
+
 msgid "START ON GAMELIST"
 msgstr ""
 
@@ -405,6 +408,9 @@ msgid "GROUP UNTHEMED CUSTOM COLLECTIONS"
 msgstr ""
 
 msgid "SHOW SYSTEM NAME IN COLLECTIONS"
+msgstr ""
+
+msgid "SHOW GAMES OF HIDDEN SYSTEMS IN COLLECTIONS"
 msgstr ""
 
 msgid "UPDATE GAMES LISTS"
@@ -464,6 +470,9 @@ msgstr ""
 msgid "OTHER FILTERS"
 msgstr ""
 
+msgid "FIND SIMILAR GAMES..."
+msgstr ""
+
 msgid "GAME MEDIAS"
 msgstr ""
 
@@ -506,10 +515,19 @@ msgstr ""
 msgid "ADVANCED GAME OPTIONS"
 msgstr ""
 
+msgid "EDIT PAD TO KEYBOARD CONFIGURATION"
+msgstr ""
+
+msgid "CREATE PAD TO KEYBOARD CONFIGURATION"
+msgstr ""
+
 msgid "EDIT FOLDER METADATA"
 msgstr ""
 
 msgid "EDIT THIS GAME'S METADATA"
+msgstr ""
+
+msgid "VIEW PAD TO KEYBOARD INFORMATION"
 msgstr ""
 
 msgid "RESET FILTERS"
@@ -524,7 +542,7 @@ msgstr ""
 msgid "CLOSE"
 msgstr ""
 
-msgid "ARE YOU SURE ?"
+msgid "ARE YOU SURE YOU WANT TO DELETE THIS ITEM ?"
 msgstr ""
 
 msgid "INPUT"
@@ -632,16 +650,25 @@ msgstr ""
 msgid "CONTROLLERS LINKS HAVE BEEN DELETED."
 msgstr ""
 
+msgid "RESET"
+msgstr ""
+
+msgid "ADD COMBINATION KEY"
+msgstr ""
+
 msgid "CONTENT DOWNLOADER"
 msgstr ""
 
 msgid "SELECT CONTENT TO INSTALL / REMOVE"
 msgstr ""
 
-msgid "MISC"
+msgid "UPDATE INSTALLED CONTENT"
 msgstr ""
 
 msgid "There are no items in this view"
+msgstr ""
+
+msgid "MISC"
 msgstr ""
 
 msgid "UNINSTALL ADDED TO QUEUE"
@@ -759,6 +786,54 @@ msgid "CUSTOM IMAGE DIR RECURSIVE"
 msgstr ""
 
 msgid "CUSTOM IMAGE FILTER"
+msgstr ""
+
+msgid "PAD TO KEYBOARD CONFIGURATION"
+msgstr ""
+
+msgid "SELECT ACTIONS TO CHANGE"
+msgstr ""
+
+msgid "SAVE"
+msgstr ""
+
+msgid "DELETE"
+msgstr ""
+
+msgid "PLAYER 1"
+msgstr ""
+
+msgid "PLAYER 2"
+msgstr ""
+
+msgid "COMBINATIONS"
+msgstr ""
+
+msgid "MOUSE CURSOR"
+msgstr ""
+
+msgid "EMULATE MOUSE CURSOR"
+msgstr ""
+
+msgid "LEFT ANALOG STICK"
+msgstr ""
+
+msgid "RIGHT ANALOG STICK"
+msgstr ""
+
+msgid "EDIT DESCRIPTION"
+msgstr ""
+
+msgid "DELETE MAPPING"
+msgstr ""
+
+msgid "SAVE CHANGES?"
+msgstr ""
+
+msgid "ARE YOU SURE ?"
+msgstr ""
+
+msgid "UPDATING EMULATIONSTATION"
 msgstr ""
 
 msgid "UPDATING BATOCERA"
@@ -1032,6 +1107,9 @@ msgstr ""
 msgid "SCRAPE MANUAL"
 msgstr ""
 
+msgid "SCRAPE PADTOKEY SETTINGS"
+msgstr ""
+
 msgid "USERNAME"
 msgstr ""
 
@@ -1080,6 +1158,9 @@ msgstr ""
 msgid "OVERSCAN"
 msgstr ""
 
+msgid "USE OMX PLAYER (HW ACCELERATED)"
+msgstr ""
+
 msgid "TOOLS"
 msgstr ""
 
@@ -1101,6 +1182,21 @@ msgstr ""
 msgid "FORMAT A DISK"
 msgstr ""
 
+msgid "CLEAN GAMELISTS & REMOVE UNUSED MEDIAS"
+msgstr ""
+
+msgid "Cleaning "
+msgstr ""
+
+msgid "CLEAR CACHES"
+msgstr ""
+
+msgid "RESET FILE EXTENSIONS"
+msgstr ""
+
+msgid "REDETECT GAMES LANG/REGION"
+msgstr ""
+
 msgid "DATA MANAGEMENT"
 msgstr ""
 
@@ -1114,12 +1210,6 @@ msgid "PARSE GAMESLISTS ONLY"
 msgstr ""
 
 msgid "SEARCH FOR LOCAL ART"
-msgstr ""
-
-msgid "RESET FILE EXTENSIONS"
-msgstr ""
-
-msgid "REDETECT GAMES LANG/REGION"
 msgstr ""
 
 msgid "UI"
@@ -1221,9 +1311,6 @@ msgstr ""
 msgid "KODI AT START"
 msgstr ""
 
-msgid "START KODI WITH X"
-msgstr ""
-
 msgid "HARDWARE"
 msgstr ""
 
@@ -1243,6 +1330,9 @@ msgid "RETROACHIEVEMENTS SETTINGS"
 msgstr ""
 
 msgid "NETPLAY SETTINGS"
+msgstr ""
+
+msgid "CHECK BIOSES BEFORE RUNNING A GAME"
 msgstr ""
 
 msgid "MULTIMEDIA KEYS"
@@ -1494,6 +1584,12 @@ msgstr ""
 msgid "SHOW BATTERY STATUS"
 msgstr ""
 
+msgid "ICON"
+msgstr ""
+
+msgid "ICON AND TEXT"
+msgstr ""
+
 msgid "SHOW FILENAMES IN LISTS"
 msgstr ""
 
@@ -1584,7 +1680,13 @@ msgstr ""
 msgid "SKIP TO NEXT SONG"
 msgstr ""
 
+msgid "LISTENING NOW"
+msgstr ""
+
 msgid "LAUNCH SCREENSAVER"
+msgstr ""
+
+msgid "VIEW USER'S MANUAL"
 msgstr ""
 
 msgid "VIEW BATOCERA MANUAL"
@@ -1656,30 +1758,21 @@ msgstr ""
 msgid "EDIT METADATA"
 msgstr ""
 
-msgid "SAVE"
-msgstr ""
-
 msgid ""
 "THIS WILL DELETE THE ACTUAL GAME FILE(S)!\n"
 "ARE YOU SURE?"
 msgstr ""
 
-msgid "DELETE"
-msgstr ""
-
-msgid "SAVE CHANGES?"
-msgstr ""
-
 msgid "NO DEVICE FOUND"
+msgstr ""
+
+msgid "SYSTEM INFO"
 msgstr ""
 
 msgid "ERROR: EVERY SYSTEM IS HIDDEN, RE-DISPLAYING ALL OF THEM NOW"
 msgstr ""
 
 msgid "QUICK SEARCH"
-msgstr ""
-
-msgid "DO YOU WANT TO START KODI MEDIA CENTER ?"
 msgstr ""
 
 msgid "GO TO LETTER"
@@ -1695,6 +1788,9 @@ msgid "GO TO HARDWARE"
 msgstr ""
 
 msgid "GO TO DECADE"
+msgstr ""
+
+msgid "CONFIGURATION"
 msgstr ""
 
 #, c-format
@@ -1715,9 +1811,6 @@ msgid_plural "%i GAMES"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "KODI"
-msgstr ""
-
 msgid "NETPLAY"
 msgstr ""
 
@@ -1727,7 +1820,23 @@ msgstr ""
 msgid "FILES"
 msgstr ""
 
+msgid ""
+"WARNING : THIS GAME'S FORMAT IS NOT SUPPORTED BY THE CURRENT EMULATOR/CORE.\n"
+"DO YOU WANT TO LAUNCH IT ANYWAY ?"
+msgstr ""
+
+msgid ""
+"WARNING : THE SYSTEM HAS MISSING BIOS AND THE GAME MAY NOT WORK CORRECTLY.\n"
+"DO YOU WANT TO LAUNCH IT ANYWAY ?"
+msgstr ""
+
 msgid "Preloading UI"
+msgstr ""
+
+msgid "Loading theme"
+msgstr ""
+
+msgid "Loading gamelists"
 msgstr ""
 
 msgid "MENU"
@@ -1764,6 +1873,9 @@ msgid "SET PLAYER PASSWORD"
 msgstr ""
 
 msgid "SET VIEWER PASSWORD"
+msgstr ""
+
+msgid "Games similar to"
 msgstr ""
 
 msgid "Searching"
@@ -1916,9 +2028,6 @@ msgstr ""
 msgid "ALT GR"
 msgstr ""
 
-msgid "RESET"
-msgstr ""
-
 msgid "SHIFT"
 msgstr ""
 
@@ -1940,13 +2049,13 @@ msgstr ""
 msgid "LEFT ANALOG UP"
 msgstr ""
 
-msgid "LEFT ANALOG RIGHT"
-msgstr ""
-
 msgid "LEFT ANALOG DOWN"
 msgstr ""
 
 msgid "LEFT ANALOG LEFT"
+msgstr ""
+
+msgid "LEFT ANALOG RIGHT"
 msgstr ""
 
 msgid "RIGHT ANALOG UP"
@@ -1955,10 +2064,10 @@ msgstr ""
 msgid "RIGHT ANALOG DOWN"
 msgstr ""
 
-msgid "RIGHT ANALOG RIGHT"
+msgid "RIGHT ANALOG LEFT"
 msgstr ""
 
-msgid "RIGHT ANALOG LEFT"
+msgid "RIGHT ANALOG RIGHT"
 msgstr ""
 
 msgid "HOTKEY"
@@ -1999,96 +2108,6 @@ msgid "PRESS ANYTHING"
 msgstr ""
 
 msgid "ALREADY TAKEN"
-msgstr ""
-
-msgid "WELCOME"
-msgstr ""
-
-#, c-format
-msgid "%i GAMEPAD DETECTED"
-msgid_plural "%i GAMEPADS DETECTED"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "NO GAMEPADS DETECTED"
-msgstr ""
-
-msgid "HOLD A BUTTON ON YOUR DEVICE TO CONFIGURE IT."
-msgstr ""
-
-msgid "DISCARD CHANGES"
-msgstr ""
-
-msgid "up/down"
-msgstr ""
-
-msgid "accept"
-msgstr ""
-
-msgid "SELECT ALL"
-msgstr ""
-
-msgid "select all"
-msgstr ""
-
-msgid "SELECT NONE"
-msgstr ""
-
-msgid "select none"
-msgstr ""
-
-#, c-format
-msgid "%i SELECTED"
-msgid_plural "%i SELECTED"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "CHANGE"
-msgstr ""
-
-msgid "MOVE CURSOR"
-msgstr ""
-
-msgid "EDIT"
-msgstr ""
-
-#, c-format
-msgid "%d day ago"
-msgid_plural "%d days ago"
-msgstr[0] ""
-msgstr[1] ""
-
-#, c-format
-msgid "%d hour ago"
-msgid_plural "%d hours ago"
-msgstr[0] ""
-msgstr[1] ""
-
-#, c-format
-msgid "%d minute ago"
-msgid_plural "%d minutes ago"
-msgstr[0] ""
-msgstr[1] ""
-
-#, c-format
-msgid "%d second ago"
-msgid_plural "%d seconds ago"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "WORKING..."
-msgstr ""
-
-#, c-format
-msgid "%d h"
-msgstr ""
-
-#, c-format
-msgid "%d m"
-msgstr ""
-
-#, c-format
-msgid "%d s"
 msgstr ""
 
 msgid "DANGER ZONE!"
