@@ -127,6 +127,15 @@ HttpReq::HttpReq(const std::string& url, const std::string outputFilename)
 		return;
 	}
 
+	//set curl to handle redirects
+	err = curl_easy_setopt(mHandle, CURLOPT_CONNECTTIMEOUT, 10L);
+	if (err != CURLE_OK)
+	{
+		mStatus = REQ_IO_ERROR;
+		onError(curl_easy_strerror(err));
+		return;
+	}
+		
 	//set curl max redirects
 	err = curl_easy_setopt(mHandle, CURLOPT_MAXREDIRS, 2L);
 	if(err != CURLE_OK)
@@ -314,11 +323,15 @@ HttpReq::Status HttpReq::status()
 					int http_status_code;
 					curl_easy_getinfo(msg->easy_handle, CURLINFO_RESPONSE_CODE, &http_status_code);
 
+					char *ct = NULL;
+					if (!curl_easy_getinfo(msg->easy_handle, CURLINFO_CONTENT_TYPE, &ct) && ct)
+						req->mResponseContentType = ct;
+
 					if (http_status_code < 200 || http_status_code > 299)
 					{
 						std::string err;
 
-						if (http_status_code >= 400 && http_status_code < 499)
+						if (http_status_code >= 400 && http_status_code <= 500)
 						{
 							if (req->mFilePath.empty())
 								err = req->getContent();

@@ -10,9 +10,9 @@
 #include <pugixml/src/pugixml.hpp>
 #include <cstring>
 #include "SystemConf.h"
-#include "md5.h"
 #include <thread>
 #include "LangParser.h"
+#include "ApiSystem.h"
 
 using namespace PlatformIds;
 
@@ -44,6 +44,7 @@ const std::map<PlatformId, unsigned short> screenscraper_platformid_map{
 	// missing Atari XE ?
 	{ COLECOVISION, 48 },
 	{ COMMODORE_64, 66 },
+	{ COMMODORE_VIC20, 73 },
 	{ INTELLIVISION, 115 },
 	{ MAC_OS, 146 },
 	{ XBOX, 32 },
@@ -63,7 +64,7 @@ const std::map<PlatformId, unsigned short> screenscraper_platformid_map{
 	{ NINTENDO_GAMECUBE, 13 },
 	{ NINTENDO_WII, 16 },
 	{ NINTENDO_WII_U, 18 },
-	{ NINTENDO_SWITCH, 225 },	
+	{ NINTENDO_SWITCH, 225 },
 	{ NINTENDO_VIRTUAL_BOY, 11 },
 	{ NINTENDO_GAME_AND_WATCH, 52 },
 	{ PC, 135 },
@@ -96,9 +97,9 @@ const std::map<PlatformId, unsigned short> screenscraper_platformid_map{
 	{ VIDEOPAC_ODYSSEY2, 104 },
 	{ VECTREX, 102 },
 	{ TRS80_COLOR_COMPUTER, 144 },
-	{ TANDY, 144 },	
+	{ TANDY, 144 },
 	{ SUPERGRAFX, 105 },
-	
+
 	{ AMIGACD32, 130 },
 	{ AMIGACDTV, 129 },
 	{ ATOMISWAVE, 53 },
@@ -115,12 +116,15 @@ const std::map<PlatformId, unsigned short> screenscraper_platformid_map{
 	{ ZX81, 77 },
 	{ TIC80, 222 },
 	{ MOONLIGHT, 138 }, // "PC Windows"
+	{ MODEL3, 55 },
+	{ TI99, 205 },
 
 	// Windows
 	{ VISUALPINBALL, 198 },
 	{ FUTUREPINBALL, 199 },
 
 	// Misc
+	{ VIC20, 73 },
 	{ ORICATMOS, 131 },
 	{ CHANNELF, 80 },
 	{ THOMSON_TO_MO, 141 },
@@ -145,6 +149,54 @@ static pugi::xml_node find_child_by_attribute_list(const pugi::xml_node& node_pa
 	return pugi::xml_node(NULL);
 }
 
+bool ScreenScraperScraper::isSupportedPlatform(SystemData* system)
+{
+	std::string platformQueryParam;
+	auto& platforms = system->getPlatformIds();
+
+	for (auto platform : platforms)
+		if (screenscraper_platformid_map.find(platform) != screenscraper_platformid_map.cend())
+			return true;
+
+	return false;
+}
+
+bool ScreenScraperScraper::hasMissingMedia(FileData* file)
+{
+
+	if (Settings::getInstance()->getBool("ScrapeManual") && (file->getMetadata(MetaDataId::Manual).empty() || !Utils::FileSystem::exists(file->getMetadata(MetaDataId::Manual))))
+		return true;
+
+	if (Settings::getInstance()->getBool("ScrapeMap") && (file->getMetadata(MetaDataId::Map).empty() || !Utils::FileSystem::exists(file->getMetadata(MetaDataId::Map))))
+		return true;
+
+	if (Settings::getInstance()->getBool("ScrapeFanart") && (file->getMetadata(MetaDataId::FanArt).empty() || !Utils::FileSystem::exists(file->getMetadata(MetaDataId::FanArt))))
+		return true;
+
+	if (Settings::getInstance()->getBool("ScrapeVideos") && (file->getMetadata(MetaDataId::Video).empty() || !Utils::FileSystem::exists(file->getMetadata(MetaDataId::Video))))
+		return true;
+
+	if (!Settings::getInstance()->getString("ScrapperLogoSrc").empty() && (file->getMetadata(MetaDataId::Marquee).empty() || !Utils::FileSystem::exists(file->getMetadata(MetaDataId::Marquee))))
+		return true;
+
+	if (!Settings::getInstance()->getString("ScrapperImageSrc").empty() && (file->getMetadata(MetaDataId::Image).empty() || !Utils::FileSystem::exists(file->getMetadata(MetaDataId::Image))))
+		return true;
+
+	if (!Settings::getInstance()->getString("ScrapperThumbSrc").empty() && (file->getMetadata(MetaDataId::Thumbnail).empty() || !Utils::FileSystem::exists(file->getMetadata(MetaDataId::Thumbnail))))
+		return true;
+
+	if (Settings::getInstance()->getBool("ScrapeBoxBack") && (file->getMetadata(MetaDataId::BoxBack).empty() || !Utils::FileSystem::exists(file->getMetadata(MetaDataId::BoxBack))))
+		return true;
+
+	if (Settings::getInstance()->getBool("ScrapeTitleShot") && (file->getMetadata(MetaDataId::TitleShot).empty() || !Utils::FileSystem::exists(file->getMetadata(MetaDataId::TitleShot))))
+		return true;
+
+	if (Settings::getInstance()->getBool("ScrapeCartridge") && (file->getMetadata(MetaDataId::Cartridge).empty() || !Utils::FileSystem::exists(file->getMetadata(MetaDataId::Cartridge))))
+		return true;
+
+	return false;
+}
+
 void ScreenScraperScraper::generateRequests(const ScraperSearchParams& params,
 	std::queue<std::unique_ptr<ScraperRequest>>& requests,
 	std::vector<ScraperSearchResult>& results)
@@ -156,7 +208,11 @@ void ScreenScraperScraper::generateRequests(const ScraperSearchParams& params,
 	// FCA Fix for names override not working on Retropie
 	if (params.nameOverride.length() == 0)
 	{
-		path = ssConfig.getGameSearchUrl(params.game->getFileName());
+		if (Utils::FileSystem::isDirectory(params.game->getPath()))
+			path = ssConfig.getGameSearchUrl(params.game->getDisplayName());
+		else 
+			path = ssConfig.getGameSearchUrl(params.game->getFileName());
+
 		path += "&romtype=rom";
 
 		if (!params.game->getMetadata(MetaDataId::Md5).empty())
@@ -166,44 +222,15 @@ void ScreenScraperScraper::generateRequests(const ScraperSearchParams& params,
 			// Use md5 to search scrapped game
 			size_t length = Utils::FileSystem::getFileSize(params.game->getFullPath());
 			if (length > 0 && length <= 131072 * 1024) // 128 Mb max
-			{
-				try
+			{												
+				std::string val = ApiSystem::getInstance()->getMD5(params.game->getFullPath(), params.system->shouldExtractHashesFromArchives());
+				if (!val.empty())
 				{
-					// 64 Kb blocks
-#define MD5BUFFERSIZE 64 * 1024
-
-					char* buffer = new char[MD5BUFFERSIZE];
-					if (buffer)
-					{
-						size_t size;
-
-						FILE* file = fopen(params.game->getFullPath().c_str(), "rb");
-						if (file)
-						{
-							MD5 md5 = MD5();
-
-							while (size = fread(buffer, 1, MD5BUFFERSIZE, file))
-								md5.update(buffer, size);
-
-							md5.finalize();
-
-							std::string val = md5.hexdigest();
-							if (!val.empty())
-							{
-								params.game->setMetadata("md5", val);
-								path += "&md5=" + val;
-							}
-
-							fclose(file);
-						}
-
-						delete buffer;
-					}
+					params.game->setMetadata(MetaDataId::Md5, val);
+					path += "&md5=" + val;
 				}
-				catch (std::bad_alloc& ex) 
-				{
+				else
 					path += "&romtaille=" + std::to_string(length);
-				}
 			}
 			else
 				path += "&romtaille=" + std::to_string(length);
@@ -263,7 +290,7 @@ bool ScreenScraperRequest::process(HttpReq* request, std::vector<ScraperSearchRe
 	}
 
 	pugi::xml_document doc;
-	pugi::xml_parse_result parseResult = doc.load(content.c_str());
+	pugi::xml_parse_result parseResult = doc.load_string(content.c_str());
 
 	if (!parseResult)
 	{
@@ -329,28 +356,29 @@ pugi::xml_node ScreenScraperRequest::findMedia(pugi::xml_node media_list, std::s
 
 std::vector<std::string> ScreenScraperRequest::getRipList(std::string imageSource)
 {
-	std::vector<std::string> ripList;
-
 	if (imageSource == "ss")
-		ripList = { "ss", "sstitle", "mixrbv1", "mixrbv2", "box-2D", "box-3D" };
-	else if (imageSource == "sstitle")
-		ripList = { "sstitle", "ss", "mixrbv1", "mixrbv2", "box-2D", "box-3D" };
-	else if (imageSource == "mixrbv1" || imageSource == "mixrbv2" || imageSource == "mixrbv")
-		ripList = { "mixrbv1", "mixrbv2", "ss", "box-3D", "box-2D" };
-	else if (imageSource == "box-2D")
-		ripList = { "box-2D", "box-3D" };
-	else if (imageSource == "box-3D")
-		ripList = { "box-3D", "box-2D" };
-	else if (imageSource == "wheel")
-		ripList = { "wheel", "wheel-hd", "wheel-steel", "wheel-carbon", "screenmarqueesmall", "screenmarquee" };
-	else if (imageSource == "marquee")
-		ripList = { "screenmarqueesmall", "screenmarquee", "wheel", "wheel-hd", "wheel-steel", "wheel-carbon" };
-	else if (imageSource == "video")
-		ripList = { "video-normalized", "video" };
-	else 
-		ripList = { imageSource };
+		return { "ss", "sstitle" };
+	if (imageSource == "sstitle")
+		return { "sstitle", "ss" };	
+	if (imageSource == "mixrbv1" || imageSource == "mixrbv")
+		return { "mixrbv1", "mixrbv2" };	
+	if (imageSource == "mixrbv2")
+		return { "mixrbv2", "mixrbv1" };	
+	if (imageSource == "box-2D")
+		return { "box-2D", "box-3D" };
+	if (imageSource == "box-3D")
+		return { "box-3D", "box-2D" };
+	if (imageSource == "wheel")
+		return { "wheel", "wheel-hd", "wheel-steel", "wheel-carbon", "screenmarqueesmall", "screenmarquee" };
+	if (imageSource == "marquee")
+		return { "screenmarqueesmall", "screenmarquee", "wheel", "wheel-hd", "wheel-steel", "wheel-carbon" };
+	if (imageSource == "video")
+		return { "video-normalized", "video" };
 
-	return ripList;
+	//if (imageSource == "box-2D-back")
+	//	return{ "box-2D-back" };
+		
+	return { imageSource };
 }
 
 void ScreenScraperRequest::processGame(const pugi::xml_document& xmldoc, std::vector<ScraperSearchResult>& out_results)
@@ -399,14 +427,19 @@ void ScreenScraperRequest::processGame(const pugi::xml_document& xmldoc, std::ve
 			}
 		}
 
+		if (game.attribute("id"))
+			result.mdl.set(MetaDataId::ScraperId, game.attribute("id").value());
+		else
+			result.mdl.set(MetaDataId::ScraperId, "");
+
 		// Name fallback: US, WOR(LD). ( Xpath: Data/jeu[0]/noms/nom[*] ). 
-		result.mdl.set("name", find_child_by_attribute_list(game.child("noms"), "nom", "region", { region, "wor", "us" , "ss", "eu", "jp" }).text().get());
+		result.mdl.set(MetaDataId::Name, find_child_by_attribute_list(game.child("noms"), "nom", "region", { region, "wor", "us" , "ss", "eu", "jp" }).text().get());
 
 		// Description fallback language: EN, WOR(LD)
 		std::string description = find_child_by_attribute_list(game.child("synopsis"), "synopsis", "langue", { language, "en", "wor" }).text().get();
 
 		if (!description.empty())
-			result.mdl.set("desc", Utils::String::decodeXmlString(description));
+			result.mdl.set(MetaDataId::Desc, Utils::String::decodeXmlString(description));
 
 		// Genre fallback language: EN. ( Xpath: Data/jeu[0]/genres/genre[*] )		
 		if (game.child("genres"))
@@ -446,7 +479,7 @@ void ScreenScraperRequest::processGame(const pugi::xml_document& xmldoc, std::ve
 				genre = genre + " / " + subgenre;
 
 			if (!genre.empty())
-				result.mdl.set("genre", genre);
+				result.mdl.set(MetaDataId::Genre, genre);
 		}
 
 		// Get the date proper. The API returns multiple 'date' children nodes to the 'dates' main child of 'jeu'.
@@ -455,22 +488,22 @@ void ScreenScraperRequest::processGame(const pugi::xml_document& xmldoc, std::ve
 
 		// Date can be YYYY-MM-DD or just YYYY.
 		if (_date.length() > 4)
-			result.mdl.set("releasedate", Utils::Time::DateTime(Utils::Time::stringToTime(_date, "%Y-%m-%d")));
+			result.mdl.set(MetaDataId::ReleaseDate, Utils::Time::DateTime(Utils::Time::stringToTime(_date, "%Y-%m-%d")));
 		else if (_date.length() > 0)
-			result.mdl.set("releasedate", Utils::Time::DateTime(Utils::Time::stringToTime(_date, "%Y")));
+			result.mdl.set(MetaDataId::ReleaseDate, Utils::Time::DateTime(Utils::Time::stringToTime(_date, "%Y")));
 
 		/// Developer for the game( Xpath: Data/jeu[0]/developpeur )
 		std::string developer = game.child("developpeur").text().get();
 		if (!developer.empty())
-			result.mdl.set("developer", Utils::String::replace(developer, "&nbsp;", " "));
+			result.mdl.set(MetaDataId::Developer, Utils::String::replace(developer, "&nbsp;", " "));
 
 		// Publisher for the game ( Xpath: Data/jeu[0]/editeur )
 		std::string publisher = game.child("editeur").text().get();
 		if (!publisher.empty())
-			result.mdl.set("publisher", Utils::String::replace(publisher, "&nbsp;", " "));
+			result.mdl.set(MetaDataId::Publisher, Utils::String::replace(publisher, "&nbsp;", " "));
 
 		// Players
-		result.mdl.set("players", game.child("joueurs").text().get());
+		result.mdl.set(MetaDataId::Players, game.child("joueurs").text().get());
 
         if(game.child("systeme").attribute("id"))
         {
@@ -478,7 +511,7 @@ void ScreenScraperRequest::processGame(const pugi::xml_document& xmldoc, std::ve
 			
 			auto arcadeSystem = ArcadeSystems.find(systemId);
             if(arcadeSystem != ArcadeSystems.cend())
-                result.mdl.set("arcadesystemname", arcadeSystem->second.first);
+                result.mdl.set(MetaDataId::ArcadeSystemName, arcadeSystem->second.first);
 		}
 
         // TODO: Validate rating
@@ -487,8 +520,10 @@ void ScreenScraperRequest::processGame(const pugi::xml_document& xmldoc, std::ve
 			float ratingVal = (game.child("note").text().as_int() / 20.0f);
 			std::stringstream ss;
 			ss << ratingVal;
-			result.mdl.set("rating", ss.str());
+			result.mdl.set(MetaDataId::Rating, ss.str());
 		}
+		else 
+			result.mdl.set(MetaDataId::Rating, "-1");
 
 		if (Settings::getInstance()->getBool("ScrapePadToKey") && game.child("sp2kcfg"))
 			result.p2k = game.child("sp2kcfg").text().get();
@@ -567,6 +602,20 @@ void ScreenScraperRequest::processGame(const pugi::xml_document& xmldoc, std::ve
 						LOG(LogDebug) << "Failed to find media XML node for video";
 				}
 			}
+			
+			if (Settings::getInstance()->getBool("ScrapeBoxBack"))
+			{
+				ripList = getRipList("box-2D-back");
+				if (!ripList.empty())
+				{
+					pugi::xml_node art = findMedia(media_list, ripList, region);
+					if (art)
+						result.urls[MetaDataId::BoxBack] = ScraperSearchItem(ensureUrl(art.text().get()), art.attribute("format") ? "." + std::string(art.attribute("format").value()) : "");
+					else
+						LOG(LogDebug) << "Failed to find media XML node for video";
+				}
+			}
+
 
 			if (Settings::getInstance()->getBool("ScrapeManual"))
 			{
@@ -695,7 +744,7 @@ ScreenScraperUser ScreenScraperRequest::processUserInfo(const pugi::xml_document
 	return user;
 }
 
-int ScreenScraperScraper::getThreadCount()
+int ScreenScraperScraper::getThreadCount(std::string &result)
 {
 	ScreenScraperRequest::ScreenScraperConfig ssConfig;
 	std::string url = ssConfig.getUserInfoUrl();
@@ -703,10 +752,17 @@ int ScreenScraperScraper::getThreadCount()
 	HttpReq httpreq(url);
 	httpreq.wait();
 	
+	if (httpreq.status() != HttpReq::REQ_SUCCESS)
+	{
+		result = httpreq.getErrorMsg();
+		result = Utils::String::trim(Utils::String::replace(result, "<br>", "\r\n"));
+		return -1;
+	}
+
 	auto content = httpreq.getContent();
 
 	pugi::xml_document doc;
-	pugi::xml_parse_result parseResult = doc.load(content.c_str());
+	pugi::xml_parse_result parseResult = doc.load_string(content.c_str());
 	if (parseResult)
 	{
 		auto userInfo = ScreenScraperRequest::processUserInfo(doc);

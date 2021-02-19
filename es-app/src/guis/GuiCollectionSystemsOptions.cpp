@@ -229,6 +229,9 @@ void GuiCollectionSystemsOptions::initializeMenu()
 				systemfocus_list->add(system->getName(), system->getName(), startupSystem == system->getName());
 	}
 
+	if (!systemfocus_list->hasSelection())
+		systemfocus_list->selectFirstItem();
+
 	addWithLabel(_("START ON SYSTEM"), systemfocus_list);
 	addSaveFunc([systemfocus_list] 
 	{ 
@@ -276,6 +279,7 @@ void GuiCollectionSystemsOptions::initializeMenu()
 				for (auto file : sys->getRootFolder()->getFilesRecursive(GAME, false))
 					file->refreshMetadata();
 
+			SystemData::resetSettings();
 			FileData::resetSettings();
 			setVariable("reloadAll", true);
 		}
@@ -289,7 +293,7 @@ void GuiCollectionSystemsOptions::initializeMenu()
 		if (Settings::getInstance()->setBool("HiddenSystemsShowGames", alsoHideGames->getState()))
 		{
 			FileData::resetSettings();
-			setVariable("reloadAll", true);
+			setVariable("reloadSystems", true);
 		}
 	});
 	
@@ -297,9 +301,6 @@ void GuiCollectionSystemsOptions::initializeMenu()
 	if (!ApiSystem::getInstance()->isScriptingSupported(ApiSystem::GAMESETTINGS))
 		addEntry(_("UPDATE GAMES LISTS"), false, [this] { GuiMenu::updateGameLists(mWindow); }); // Game List Update
 #endif		
-
-	if(CollectionSystemManager::get()->isEditing())
-		addEntry((_("FINISH EDITING COLLECTION") + " : " + Utils::String::toUpper(CollectionSystemManager::get()->getEditingCollection())).c_str(), false, std::bind(&GuiCollectionSystemsOptions::exitEditMode, this));
 	
 	addSaveFunc([this]
 	{
@@ -364,8 +365,10 @@ void GuiCollectionSystemsOptions::createCollection(std::string inName)
 
 	ViewController::get()->goToSystemView(newSys);
 
+	// Make sure the physical file is created
+	CollectionSystemManager::get()->saveCustomCollection(newSys);
+
 	Window* window = mWindow;
-	CollectionSystemManager::get()->setEditMode(name);
 	while(window->peekGui() && window->peekGui() != ViewController::get())
 		delete window->peekGui();
 }
@@ -418,12 +421,6 @@ void GuiCollectionSystemsOptions::createFilterCollection(std::string inName)
 	});
 	
 	window->pushGui(ggf);
-}
-
-void GuiCollectionSystemsOptions::exitEditMode()
-{
-	CollectionSystemManager::get()->exitEditMode();
-	close();
 }
 
 GuiCollectionSystemsOptions::~GuiCollectionSystemsOptions()

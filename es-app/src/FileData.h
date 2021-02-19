@@ -7,9 +7,11 @@
 #include <unordered_map>
 #include "KeyboardMapping.h"
 #include "SystemData.h"
+#include "SaveState.h"
 
 class Window;
 struct SystemEnvironmentData;
+
 
 enum FileType
 {
@@ -44,6 +46,8 @@ struct LaunchGameOptions
 
 	std::string core;
 	std::string netplayClientPassword;
+
+	SaveState	saveStateInfo;
 };
 
 class FolderData;
@@ -85,6 +89,7 @@ public:
 	virtual const bool getHidden();
 	virtual const bool getFavorite();
 	virtual const bool getKidGame();
+	virtual const bool hasCheevos();
 
 	const std::string getConfigurationName();
 
@@ -94,6 +99,7 @@ public:
 
 	virtual std::string getKey();
 	const bool isArcadeAsset();
+	const bool isVerticalArcadeGame();
 	inline std::string getFullPath() { return getPath(); };
 	inline std::string getFileName() { return Utils::FileSystem::getFileName(getPath()); };
 	virtual FileData* getSourceFileData();
@@ -115,13 +121,15 @@ public:
 	void setMetadata(MetaDataList value) { getMetadata() = value; } 
 	
 	std::string getMetadata(MetaDataId key) { return getMetadata().get(key); }
-	//std::string getMetadata(const std::string& key) { return getMetadata().get(key); }
-	void setMetadata(const std::string& key, const std::string& value) { getMetadata().set(key, value); }
+	void setMetadata(MetaDataId key, const std::string& value) { return getMetadata().set(key, value); }
 
 	void detectLanguageAndRegion(bool overWrite);
 
 	void deleteGameFiles();
+
 	void checkCrc32(bool force = false);
+	void checkMd5(bool force = false);
+	void checkCheevosHash(bool force = false);
 
 	void importP2k(const std::string& p2k);
 	std::string convertP2kFile();
@@ -131,6 +139,8 @@ public:
 	KeyMappingFile getKeyboardMapping();
 	bool isFeatureSupported(EmulatorFeatures::Features feature);
 	bool isExtensionCompatible();
+
+	std::string getCurrentGameSetting(const std::string& settingName);
 
 private:
 	std::string getKeyboardMappingFilePath();
@@ -174,19 +184,10 @@ class FolderData : public FileData
 	friend class SystemData;
 
 public:
-	FolderData(const std::string& startpath, SystemData* system, bool ownsChildrens=true) : FileData(FOLDER, startpath, system)
-	{
-		mIsDisplayableAsVirtualFolder = false;
-		mOwnsChildrens = ownsChildrens;
-	}
-
-	~FolderData()
-	{
-		clear();
-	}
+	FolderData(const std::string& startpath, SystemData* system, bool ownsChildrens = true);
+	~FolderData();
 
 	inline bool isVirtualStorage() { return !mOwnsChildrens; }
-
 	inline bool isVirtualFolderDisplay() { return mIsDisplayableAsVirtualFolder && !mOwnsChildrens; }
 	
 	void enableVirtualFolderDisplay(bool value) { mIsDisplayableAsVirtualFolder = value; };
@@ -206,17 +207,7 @@ public:
 
 	FileData* findUniqueGameForFolder();
 
-	void clear()
-	{
-		if (mOwnsChildrens)
-		{
-			for (int i = mChildren.size() - 1; i >= 0; i--)
-				delete mChildren.at(i);
-		}
-
-		mChildren.clear();
-	}	
-
+	void clear();
 	void removeVirtualFolders();
 	void removeFromVirtualFolders(FileData* game);
 

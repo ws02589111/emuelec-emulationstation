@@ -26,6 +26,7 @@ namespace PlatformIds
 		{ "atarixe",				ATARI_XE },
 		{ "colecovision",			COLECOVISION },
 		{ "c64",					COMMODORE_64 },
+		{ "vic20",				COMMODORE_VIC20 },
 		{ "intellivision",			INTELLIVISION },
 		{ "macintosh",				MAC_OS },
 		{ "xbox",					XBOX },
@@ -126,6 +127,14 @@ namespace PlatformIds
 		{ "palm",					PALMOS },
 		{ "daphne",					DAPHNE },
 		{ "solarus",				SOLARUS },
+
+		{ "vic20",					VIC20 },
+		{ "c20",					VIC20 },
+		{ "ti99",					TI99 },
+			
+		{ "model3",					MODEL3 },
+			
+		{ "imageviewer",			IMAGEVIEWER },
 
 		{ "ignore",					PLATFORM_IGNORE },
 		{ "invalid",				PLATFORM_COUNT }

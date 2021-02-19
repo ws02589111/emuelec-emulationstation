@@ -12,6 +12,7 @@
 #include <assert.h>
 #include "Settings.h"
 #include <algorithm>
+#include "LocaleES.h"
 
 #define KEYBOARD_GUID_STRING "-1"
 #define CEC_GUID_STRING      "-2"
@@ -77,14 +78,15 @@ void InputManager::init()
 
 void InputManager::addJoystickByDeviceIndex(int id)
 {
-	assert(id >= 0 && id < SDL_NumJoysticks());
-	
 	// open joystick & add to our list
 	SDL_Joystick* joy = SDL_JoystickOpen(id);
-	assert(joy);
+	if (joy == nullptr)
+		return;
 
 	// add it to our list so we can close it again later
 	SDL_JoystickID joyId = SDL_JoystickInstanceID(joy);
+	removeJoystickByJoystickID(joyId);
+
 	mJoysticks[joyId] = joy;
 
 	char guid[65];
@@ -93,11 +95,9 @@ void InputManager::addJoystickByDeviceIndex(int id)
 	// create the InputConfig
 	mInputConfigs[joyId] = new InputConfig(joyId, id, SDL_JoystickName(joy), guid, SDL_JoystickNumButtons(joy), SDL_JoystickNumHats(joy), SDL_JoystickNumAxes(joy)); // batocera
 	if(!loadInputConfig(mInputConfigs[joyId]))
-	{
 		LOG(LogInfo) << "Added unconfigured joystick " << SDL_JoystickName(joy) << " (GUID: " << guid << ", instance ID: " << joyId << ", device index: " << id << ").";
-	}else{
+	else
 		LOG(LogInfo) << "Added known joystick " << SDL_JoystickName(joy) << " (instance ID: " << joyId << ", device index: " << id << ")";
-	}
 
 	// set up the prevAxisValues
 	int numAxes = SDL_JoystickNumAxes(joy);
@@ -107,17 +107,21 @@ void InputManager::addJoystickByDeviceIndex(int id)
 
 void InputManager::removeJoystickByJoystickID(SDL_JoystickID joyId)
 {
-	assert(joyId != -1);
-
 	// delete old prevAxisValues
 	auto axisIt = mPrevAxisValues.find(joyId);
-	delete[] axisIt->second;
-	mPrevAxisValues.erase(axisIt);
+	if (axisIt != mPrevAxisValues.cend())
+	{
+		delete[] axisIt->second;
+		mPrevAxisValues.erase(axisIt);
+	}
 
 	// delete old InputConfig
 	auto it = mInputConfigs.find(joyId);
-	delete it->second;
-	mInputConfigs.erase(it);
+	if (it != mInputConfigs.cend())
+	{
+		delete it->second;
+		mInputConfigs.erase(it);
+	}
 
 	// close the joystick
 	auto joyIt = mJoysticks.find(joyId);
@@ -125,9 +129,9 @@ void InputManager::removeJoystickByJoystickID(SDL_JoystickID joyId)
 	{
 		SDL_JoystickClose(joyIt->second);
 		mJoysticks.erase(joyIt);
-	}else{
-		LOG(LogError) << "Could not find joystick to close (instance ID: " << joyId << ")";
 	}
+	else
+		LOG(LogError) << "Could not find joystick to close (instance ID: " << joyId << ")";
 }
 
 // batocera
@@ -239,17 +243,17 @@ InputConfig* InputManager::getInputConfigByDevice(int device)
 bool InputManager::parseEvent(const SDL_Event& ev, Window* window)
 {
 	bool causedEvent = false;
-	switch(ev.type)
+	switch (ev.type)
 	{
 	case SDL_JOYAXISMOTION:
-	  {
-            // batocera
-	    // some axes are "full" : from -32000 to +32000
-	    // in this case, their unpressed state is not 0
-	    // SDL provides a function to get this value
-	    // in es, the trick is to minus this value to the value to do as if it started at 0
-	    int initialValue = 0;
-	    Sint16 x;
+	{
+		// batocera
+	// some axes are "full" : from -32000 to +32000
+	// in this case, their unpressed state is not 0
+	// SDL provides a function to get this value
+	// in es, the trick is to minus this value to the value to do as if it started at 0
+		int initialValue = 0;
+		Sint16 x;
 
 #if SDL_VERSION_ATLEAST(2, 0, 9)
 		// SDL_JoystickGetAxisInitialState doesn't work with 8bitdo start+b
@@ -262,7 +266,7 @@ bool InputManager::parseEvent(const SDL_Event& ev, Window* window)
 
 			auto it = mJoysticksInitialValues.find(guid);
 			if (it != mJoysticksInitialValues.cend())
-				initialValue = it->second;			
+				initialValue = it->second;
 			else if (SDL_JoystickGetAxisInitialState(mJoysticks[ev.jaxis.which], ev.jaxis.axis, &x))
 			{
 				mJoysticksInitialValues[guid] = x;
@@ -272,13 +276,13 @@ bool InputManager::parseEvent(const SDL_Event& ev, Window* window)
 #endif
 
 		//if it switched boundaries
-		if((abs(ev.jaxis.value-initialValue) > DEADZONE) != (abs(mPrevAxisValues[ev.jaxis.which][ev.jaxis.axis]) > DEADZONE)) // batocera
+		if ((abs(ev.jaxis.value - initialValue) > DEADZONE) != (abs(mPrevAxisValues[ev.jaxis.which][ev.jaxis.axis]) > DEADZONE)) // batocera
 		{
 			int normValue;
-			if(abs(ev.jaxis.value-initialValue) <= DEADZONE) // batocera
+			if (abs(ev.jaxis.value - initialValue) <= DEADZONE) // batocera
 				normValue = 0;
 			else
-				if(ev.jaxis.value-initialValue > 0) // batocera
+				if (ev.jaxis.value - initialValue > 0) // batocera
 					normValue = 1;
 				else
 					normValue = -1;
@@ -287,9 +291,9 @@ bool InputManager::parseEvent(const SDL_Event& ev, Window* window)
 			causedEvent = true;
 		}
 
-		mPrevAxisValues[ev.jaxis.which][ev.jaxis.axis] = ev.jaxis.value-initialValue; // batocera
+		mPrevAxisValues[ev.jaxis.which][ev.jaxis.axis] = ev.jaxis.value - initialValue; // batocera
 		return causedEvent;
-	  }
+	}
 	case SDL_JOYBUTTONDOWN:
 	case SDL_JOYBUTTONUP:
 		window->input(getInputConfigByDevice(ev.jbutton.which), Input(ev.jbutton.which, TYPE_BUTTON, ev.jbutton.button, ev.jbutton.state == SDL_PRESSED, false));
@@ -300,22 +304,22 @@ bool InputManager::parseEvent(const SDL_Event& ev, Window* window)
 		return true;
 
 	case SDL_KEYDOWN:
-		if(ev.key.keysym.sym == SDLK_BACKSPACE && SDL_IsTextInputActive())
+		if (ev.key.keysym.sym == SDLK_BACKSPACE && SDL_IsTextInputActive())
 		{
 			window->textInput("\b");
 		}
 
-		if(ev.key.repeat)
+		if (ev.key.repeat)
 			return false;
 
-                // batocera
-		//if(ev.key.keysym.sym == SDLK_F4)
-		//{
-		//	SDL_Event* quit = new SDL_Event();
-		//	quit->type = SDL_QUIT;
-		//	SDL_PushEvent(quit);
-		//	return false;
-		//}
+		// batocera
+//if(ev.key.keysym.sym == SDLK_F4)
+//{
+//	SDL_Event* quit = new SDL_Event();
+//	quit->type = SDL_QUIT;
+//	SDL_PushEvent(quit);
+//	return false;
+//}
 
 #ifdef _ENABLEEMUELEC
 		/* use the POWER KEY to turn off EmuELEC, specially useful for GTKING-PRO and Odroid Go Advance*/
@@ -338,11 +342,41 @@ bool InputManager::parseEvent(const SDL_Event& ev, Window* window)
 		break;
 
 	case SDL_JOYDEVICEADDED:
-		addJoystickByDeviceIndex(ev.jdevice.which); // ev.jdevice.which is a device index
-		computeLastKnownPlayersDeviceIndexes(); // batocera
+		{
+			bool exists = std::find_if(mInputConfigs.cbegin(), mInputConfigs.cend(), [ev](const std::pair<SDL_JoystickID, InputConfig*> & t) { return t.second != nullptr && t.second->getDeviceIndex() == ev.jdevice.which; }) != mInputConfigs.cend();
+
+			addJoystickByDeviceIndex(ev.jdevice.which); // ev.jdevice.which is a device index
+			computeLastKnownPlayersDeviceIndexes(); // batocera
+
+			if (!exists)
+			{
+				for (auto it : mInputConfigs)
+				{
+					if (it.second != nullptr && it.second->getDeviceIndex() == ev.jdevice.which)
+					{
+						char trstring[1024];
+						snprintf(trstring, 1024, _("%s connected").c_str(), it.second->getDeviceName().c_str());
+						window->displayNotificationMessage(_U("\uF11B ") + std::string(trstring));
+						break;
+					}
+				}
+			}
+		}
+
 		return true;
 
 	case SDL_JOYDEVICEREMOVED:
+
+		{
+			auto it = mInputConfigs.find(ev.jdevice.which);
+			if (it != mInputConfigs.cend() && it->second != nullptr)
+			{				
+				char trstring[1024];
+				snprintf(trstring, 1024, _("%s disconnected").c_str(), it->second->getDeviceName().c_str());
+				window->displayNotificationMessage(_U("\uF11B ") + std::string(trstring));
+			}
+		}
+
 		removeJoystickByJoystickID(ev.jdevice.which); // ev.jdevice.which is an SDL_JoystickID (instance ID)
 		computeLastKnownPlayersDeviceIndexes(); // batocera
 		return false;

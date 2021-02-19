@@ -66,13 +66,13 @@ private:
 
 #ifdef _ENABLEEMUELEC
 	void openEmuELECSettings(); /* < emuelec */
+    static void openDangerZone(Window* mWindow, std::string configName);
 #endif
 	// batocera	
 	void openSystemSettings_batocera();
 	void openGamesSettings_batocera();
 	void openControllersSettings_batocera();		
-	void openNetworkSettings_batocera(bool selectWifiEnable = false);
-	void openScraperSettings_batocera();
+	void openNetworkSettings_batocera(bool selectWifiEnable = false);	
 	void openQuitMenu_batocera();
 	void openSystemInformations_batocera();
 	void openDeveloperSettings();

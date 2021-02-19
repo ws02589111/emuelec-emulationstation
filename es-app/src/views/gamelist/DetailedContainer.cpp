@@ -6,6 +6,7 @@
 #include "SystemData.h"
 #include "LocaleES.h"
 #include "LangParser.h"
+#include "SaveStateRepository.h"
 
 #ifdef _RPI_
 #include "Settings.h"
@@ -17,7 +18,13 @@ DetailedContainer::DetailedContainer(ISimpleGameListView* parent, GuiComponent* 
 	mParent(parent), mList(list), mWindow(window), mViewType(viewType),
 	mDescContainer(window), mDescription(window),
 	mImage(nullptr), mVideo(nullptr), mThumbnail(nullptr), mFlag(nullptr),
-	mKidGame(nullptr), mNotKidGame(nullptr), mFavorite(nullptr), mHidden(nullptr), mManual(nullptr), mNoManual(nullptr), mNotFavorite(nullptr),
+	mKidGame(nullptr), mNotKidGame(nullptr), mHidden(nullptr), 
+	mFavorite(nullptr), mNotFavorite(nullptr),
+	mManual(nullptr), mNoManual(nullptr), 
+	mMap(nullptr), mNoMap(nullptr),
+	mCheevos(nullptr), mNotCheevos(nullptr),
+	mSaveState(nullptr), mNoSaveState(nullptr),
+	mState(false),
 
 	mLblRating(window), mLblReleaseDate(window), mLblDeveloper(window), mLblPublisher(window),
 	mLblGenre(window), mLblPlayers(window), mLblLastPlayed(window), mLblPlayCount(window), mLblGameTime(window), mLblFavorite(window),
@@ -34,8 +41,8 @@ DetailedContainer::DetailedContainer(ISimpleGameListView* parent, GuiComponent* 
 		{ "md_boxart", { MetaDataId::BoxArt, MetaDataId::Thumbnail } },
 		{ "md_wheel",{ MetaDataId::Wheel, MetaDataId::Marquee } },
 		{ "md_cartridge",{ MetaDataId::Cartridge } },
-		{ "md_mix",{ MetaDataId::Mix, MetaDataId::Image, MetaDataId::Thumbnail } },
-		{ "md_map", { MetaDataId::Map } }
+		{ "md_boxback",{ MetaDataId::BoxBack } },		
+		{ "md_mix",{ MetaDataId::Mix, MetaDataId::Image, MetaDataId::Thumbnail } }
 	};
 
 	for (auto md : mdl)
@@ -155,11 +162,29 @@ DetailedContainer::~DetailedContainer()
 	if (mNoManual != nullptr)
 		delete mNoManual;
 
+	if (mMap != nullptr)
+		delete mMap;
+
+	if (mNoMap != nullptr)
+		delete mNoMap;
+
+	if (mSaveState != nullptr)
+		delete mSaveState;
+
+	if (mNoSaveState != nullptr)
+		delete mNoSaveState;
+	
 	if (mKidGame != nullptr)
 		delete mKidGame;
 
 	if (mNotKidGame != nullptr)
 		delete mNotKidGame;
+
+	if (mCheevos != nullptr)
+		delete mCheevos;
+
+	if (mNotCheevos != nullptr)
+		delete mNotCheevos;
 
 	if (mFavorite != nullptr)
 		delete mFavorite;
@@ -199,7 +224,7 @@ void DetailedContainer::createImageComponent(ImageComponent** pImage)
 	auto mSize = mParent->getSize();
 
 	// Image	
-	auto image = new ImageComponent(mWindow);
+	auto image = new ImageComponent(mWindow, mViewType == DetailedContainerType::VideoView);
 	image->setAllowFading(false);
 	image->setOrigin(0.5f, 0.5f);
 	image->setPosition(mSize.x() * 0.25f, mList->getPosition().y() + mSize.y() * 0.2125f);
@@ -332,6 +357,7 @@ void DetailedContainer::onThemeChanged(const std::shared_ptr<ThemeData>& theme)
 {
 	using namespace ThemeFlags;
 
+	mState = false;
 	mName.applyTheme(theme, getName(), "md_name", ALL);	
 
 	if (theme->getElement(getName(), "md_video", "video"))
@@ -356,13 +382,20 @@ void DetailedContainer::onThemeChanged(const std::shared_ptr<ThemeData>& theme)
 	loadIfThemed(&mKidGame, theme, "md_kidgame", false, true);
 	loadIfThemed(&mNotKidGame, theme, "md_notkidgame", false, true);
 
+	loadIfThemed(&mCheevos, theme, "md_cheevos", false, true);
+	loadIfThemed(&mNotCheevos, theme, "md_notcheevos", false, true);
+	
 	loadIfThemed(&mFavorite, theme, "md_favorite", false, true);
 	loadIfThemed(&mNotFavorite, theme, "md_notfavorite", false, true);
 	
 	loadIfThemed(&mHidden, theme, "md_hidden", false, true);
 	loadIfThemed(&mManual, theme, "md_manual", false, true);
-	loadIfThemed(&mNoManual, theme, "md_nomanual", false, true);
-	
+	loadIfThemed(&mNoManual, theme, "md_nomanual", false, true);	
+	loadIfThemed(&mMap, theme, "md_map", false, true);
+	loadIfThemed(&mNoMap, theme, "md_nomap", false, true);
+	loadIfThemed(&mSaveState, theme, "md_savestate", false, true);
+	loadIfThemed(&mNoSaveState, theme, "md_nosavestate", false, true);	
+
 	initMDLabels();
 
 	for (auto ctrl : getMetaComponents())
@@ -406,33 +439,8 @@ Vector3f DetailedContainer::getLaunchTarget()
 
 void DetailedContainer::updateControls(FileData* file, bool isClearing)
 {
-	bool fadingOut;
-	if (file == NULL)
-	{
-		if (mVideo != nullptr)
-		{
-			mVideo->setVideo("");
-			mVideo->setImage("");
-		}
-
-		if (mImage != nullptr && mViewType == DetailedContainerType::GridView)
-			mImage->setImage("");
-
-		for (auto& md : mdImages)
-			if (md.component != nullptr)
-				md.component->setImage("");
-
-		if (mManual != nullptr) mManual->setVisible(false);
-		if (mNoManual != nullptr) mNoManual->setVisible(false);		
-		if (mKidGame != nullptr) mKidGame->setVisible(false);
-		if (mNotKidGame != nullptr) mNotKidGame->setVisible(false);		
-		if (mFavorite != nullptr) mFavorite->setVisible(false);
-		if (mNotFavorite != nullptr) mNotFavorite->setVisible(false);
-		if (mHidden != nullptr) mHidden->setVisible(false);
-
-		fadingOut = true;
-	}
-	else
+	bool state = (file != NULL);
+	if (state)
 	{
 		std::string imagePath = file->getImagePath().empty() ? file->getThumbnailPath() : file->getImagePath();
 
@@ -522,11 +530,43 @@ void DetailedContainer::updateControls(FileData* file, bool isClearing)
 		if (mNoManual != nullptr)
 			mNoManual->setVisible(!Utils::FileSystem::exists(file->getMetadata(MetaDataId::Manual)));
 
+		if (mMap != nullptr)
+			mMap->setVisible(Utils::FileSystem::exists(file->getMetadata(MetaDataId::Map)));
+
+		if (mNoMap != nullptr)
+			mNoMap->setVisible(!Utils::FileSystem::exists(file->getMetadata(MetaDataId::Map)));
+
+		// Save states
+		bool hasSaveState = false;
+		bool systemSupportsSaveStates = SaveStateRepository::isEnabled(file);
+
+		if (systemSupportsSaveStates && (mSaveState != nullptr || mNoSaveState != nullptr))
+			hasSaveState = file->getSourceFileData()->getSystem()->getSaveStateRepository()->hasSaveStates(file);
+
+		if (mSaveState != nullptr)
+			mSaveState->setVisible(systemSupportsSaveStates && hasSaveState);
+
+		if (mNoSaveState != nullptr)
+			mNoSaveState->setVisible(systemSupportsSaveStates && !hasSaveState);
+
+		// Kid game
 		if (mKidGame != nullptr)
 			mKidGame->setVisible(file->getKidGame());
 
 		if (mNotKidGame != nullptr)
 			mNotKidGame->setVisible(!file->getKidGame());
+
+		bool systemHasCheevos = 
+			file->getSourceFileData()->getSystem()->isCheevosSupported() || 
+			file->getSystem()->isCollection() || 
+			file->getSystem()->isGroupSystem(); // Fake cheevos supported if the game is in a collection cuz there are lot of games from different systems
+
+		// Cheevos
+		if (mCheevos != nullptr)
+			mCheevos->setVisible(systemHasCheevos && file->hasCheevos());
+
+		if (mNotCheevos != nullptr)
+			mNotCheevos->setVisible(systemHasCheevos && !file->hasCheevos());
 
 		if (mFavorite != nullptr)
 			mFavorite->setVisible(file->getFavorite());
@@ -581,13 +621,16 @@ void DetailedContainer::updateControls(FileData* file, bool isClearing)
 			mPlayCount.setValue(file->getMetadata(MetaDataId::PlayCount));
 			mGameTime.setValue(Utils::Time::secondsToString(atol(file->getMetadata(MetaDataId::GameTime).c_str())));
 		}
-
-		fadingOut = false;
 	}
 
 	// We're clearing / populating : don't setup fade animations
-	if (file == nullptr && isClearing) //mList.getObjects().size() == 0 && mList.getCursorIndex() == 0 && mList.getScrollingVelocity() == 0)
+	if (file == nullptr && isClearing)
 		return;
+
+	if (state == mState)
+		return;
+
+	mState = state;
 
 	std::vector<GuiComponent*> comps;
 
@@ -601,8 +644,14 @@ void DetailedContainer::updateControls(FileData* file, bool isClearing)
 	if (mFlag != nullptr) comps.push_back(mFlag);
 	if (mManual != nullptr) comps.push_back(mManual);
 	if (mNoManual != nullptr) comps.push_back(mNoManual);
+	if (mMap != nullptr) comps.push_back(mMap);
+	if (mNoMap != nullptr) comps.push_back(mNoMap);
+	if (mSaveState != nullptr) comps.push_back(mSaveState);
+	if (mNoSaveState != nullptr) comps.push_back(mNoSaveState);	
 	if (mKidGame != nullptr) comps.push_back(mKidGame);
 	if (mNotKidGame != nullptr) comps.push_back(mNotKidGame);	
+	if (mCheevos != nullptr) comps.push_back(mCheevos);
+	if (mNotCheevos != nullptr) comps.push_back(mNotCheevos);	
 	if (mFavorite != nullptr) comps.push_back(mFavorite);
 	if (mNotFavorite != nullptr) comps.push_back(mNotFavorite);	
 	if (mHidden != nullptr) comps.push_back(mHidden);
@@ -619,44 +668,43 @@ void DetailedContainer::updateControls(FileData* file, bool isClearing)
 		if (lbl.label != nullptr)
 			comps.push_back(lbl.label);
 
-	for (auto it = comps.cbegin(); it != comps.cend(); it++)
-	{
-		GuiComponent* comp = *it;
-		// an animation is playing
-		//   then animate if reverse != fadingOut
-		// an animation is not playing
-		//   then animate if opacity != our target opacity
-		if ((comp->isAnimationPlaying(0) && comp->isAnimationReversed(0) != fadingOut) ||
-			(!comp->isAnimationPlaying(0) && comp->getOpacity() != (fadingOut ? 0 : 255)))
-		{
-			auto func = [comp](float t)
-			{
-				comp->setOpacity((unsigned char)(Math::lerp(0.0f, 1.0f, t) * 255));
-			};
+	bool fadeOut = !state;
 
-			bool isFadeOut = fadingOut;
-			comp->setAnimation(new LambdaAnimation(func, 150), 0, [this, isFadeOut, file]
+	for (auto comp : comps)
+	{
+		auto func = [comp](float t) 
+		{ 
+			comp->setOpacity((unsigned char)(Math::lerp(0.0f, 1.0f, t) * 255)); 
+		};
+	
+		comp->cancelAnimation(0);
+		comp->setAnimation(new LambdaAnimation(func, 250), 0, [this, comp, fadeOut, file]
+		{			
+			if (fadeOut)
 			{
-				if (isFadeOut)
-				{
-					if (mVideo != nullptr) mVideo->setImage("");
-					if (mImage != nullptr) mImage->setImage("");
-					if (mThumbnail != nullptr) mThumbnail->setImage("");
-					if (mFlag != nullptr) mFlag->setImage("");
-					if (mManual != nullptr) mManual->setVisible(false);
-					if (mNoManual != nullptr) mNoManual->setVisible(false);
-					if (mKidGame != nullptr) mKidGame->setVisible(false);
-					if (mNotKidGame != nullptr) mNotKidGame->setVisible(false);
-					if (mFavorite != nullptr) mFavorite->setVisible(false);
-					if (mNotFavorite != nullptr) mNotFavorite->setVisible(false);					
-					if (mHidden != nullptr) mHidden->setVisible(false);
+				if (mVideo == comp) mVideo->setImage("");
+				if (mImage == comp) mImage->setImage("");
+				if (mThumbnail == comp) mThumbnail->setImage("");
+				if (mFlag == comp) mFlag->setImage("");
+				if (mManual == comp) mManual->setVisible(false);
+				if (mNoManual == comp) mNoManual->setVisible(false);
+				if (mMap == comp) mMap->setVisible(false);
+				if (mNoMap == comp) mNoMap->setVisible(false);
+				if (mSaveState == comp) mSaveState->setVisible(false);
+				if (mNoSaveState == comp) mNoSaveState->setVisible(false);
+				if (mKidGame == comp) mKidGame->setVisible(false);
+				if (mNotKidGame == comp) mNotKidGame->setVisible(false);
+				if (mCheevos == comp) mCheevos->setVisible(false);
+				if (mNotCheevos == comp) mNotCheevos->setVisible(false);
+				if (mFavorite == comp) mFavorite->setVisible(false);
+				if (mNotFavorite == comp) mNotFavorite->setVisible(false);
+				if (mHidden == comp) mHidden->setVisible(false);
 					
-					for (auto& md : mdImages)
-						if (md.component != nullptr)
-							md.component->setImage("");
-				}
-			}, fadingOut);
-		}
+				for (auto& md : mdImages)
+					if (md.component == comp)
+						md.component->setImage("");
+			}
+		}, fadeOut);
 	}
 
 	Utils::FileSystem::removeFile(getTitlePath());

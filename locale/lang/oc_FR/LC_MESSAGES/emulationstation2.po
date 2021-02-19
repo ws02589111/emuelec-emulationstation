@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-02 08:20+0100\n"
+"POT-Creation-Date: 2021-02-18 08:04+0100\n"
 "PO-Revision-Date: 2020-08-15 15:32+0200\n"
 "Last-Translator: Quentin PAGÈS\n"
 "Language-Team: \n"
@@ -104,6 +104,12 @@ msgid "Alt BoxArt"
 msgstr ""
 
 msgid "enter path to alt boxart"
+msgstr ""
+
+msgid "Box backside"
+msgstr ""
+
+msgid "enter path to box background"
 msgstr ""
 
 msgid "Wheel"
@@ -214,6 +220,18 @@ msgstr "Lengas"
 msgid "Region"
 msgstr "Region"
 
+msgid "Cheevos Hash"
+msgstr ""
+
+msgid "Cheevos checksum"
+msgstr ""
+
+msgid "Cheevos Game ID"
+msgstr ""
+
+msgid "Screenscraper Game ID"
+msgstr ""
+
 msgid "all games"
 msgstr "totes los jòcs"
 
@@ -232,19 +250,17 @@ msgstr "4 jogaires"
 msgid "never played"
 msgstr "pas jamai jogat"
 
+msgid "retroachievements"
+msgstr ""
+
 msgid "arcade"
+msgstr ""
+
+msgid "vertical arcade"
 msgstr ""
 
 msgid "collections"
 msgstr "colleccions"
-
-#, c-format
-msgid "Editing the '%s' Collection. Add/remove games with Y."
-msgstr ""
-
-#, c-format
-msgid "Finished editing the '%s' Collection."
-msgstr ""
 
 #, c-format
 msgid "Added '%s' to '%s'"
@@ -417,9 +433,6 @@ msgstr ""
 msgid "UPDATE GAMES LISTS"
 msgstr "ACTUALIZAR LA LISTA DE JÒCS"
 
-msgid "FINISH EDITING COLLECTION"
-msgstr "FINIR L'EDICION DE LA COLLECCION"
-
 msgid "Loading..."
 msgstr "Cargament..."
 
@@ -447,14 +460,33 @@ msgstr "COLLECCIONS PERSONALIZADAS"
 msgid "PLEASE WAIT"
 msgstr "ESPERATZ"
 
+#, c-format
+msgid "%d%% (%d of %d)"
+msgstr ""
+
 msgid "RETROACHIEVEMENTS"
 msgstr "RETROACHIEVEMENTS"
+
+msgid "Points"
+msgstr ""
+
+msgid "Rank"
+msgstr ""
+
+msgid "VIEW DETAILS"
+msgstr ""
+
+msgid "LAUNCH"
+msgstr "LANÇAR"
+
+msgid "FINISHED"
+msgstr ""
 
 msgid "OK"
 msgstr "D'ACÒRDI"
 
-msgid "FINISHED"
-msgstr ""
+msgid "VIEW OPTIONS"
+msgstr "VEIRE OPCIONS"
 
 msgid "go back"
 msgstr "precedent"
@@ -462,26 +494,17 @@ msgstr "precedent"
 msgid "NAVIGATION"
 msgstr "NAVEGACION"
 
-msgid "JUMP TO..."
-msgstr "SAUTAR A..."
+msgid "JUMP TO LETTER"
+msgstr ""
+
+msgid "SELECT RANDOM GAME"
+msgstr ""
 
 msgid "SORT GAMES BY"
 msgstr "TRIAR PER JÒC"
 
 msgid "OTHER FILTERS"
 msgstr "AUTRES FICHIÈRS"
-
-msgid "FIND SIMILAR GAMES..."
-msgstr ""
-
-msgid "GAME MEDIAS"
-msgstr "MÈDIAS JÒC"
-
-msgid "VIEW GAME MANUAL"
-msgstr "VEIRE MANUAL DEL JÒC"
-
-msgid "VIEW GAME MAP"
-msgstr "VEIRE LA MAPA DEL JÒC"
 
 msgid "COLLECTION"
 msgstr "COLLECCION"
@@ -495,40 +518,13 @@ msgstr "ESTIL DE LISTA DE JÒCS"
 msgid "automatic"
 msgstr "automatic"
 
-msgid "VIEW OPTIONS"
-msgstr "VEIRE OPCIONS"
-
 msgid "VIEW CUSTOMISATION"
 msgstr "VEIRE PERSONALIZACION"
-
-msgid "COLLECTION MANAGEMENT"
-msgstr "GESTION DE COLLECCION"
-
-msgid "ADD/REMOVE GAMES TO THIS GAME COLLECTION"
-msgstr ""
 
 msgid "GAME OPTIONS"
 msgstr "OPCIONS DE JÒCS"
 
 msgid "ADVANCED SYSTEM OPTIONS"
-msgstr ""
-
-msgid "ADVANCED GAME OPTIONS"
-msgstr ""
-
-msgid "EDIT PAD TO KEYBOARD CONFIGURATION"
-msgstr ""
-
-msgid "CREATE PAD TO KEYBOARD CONFIGURATION"
-msgstr ""
-
-msgid "EDIT FOLDER METADATA"
-msgstr ""
-
-msgid "EDIT THIS GAME'S METADATA"
-msgstr "MODIFICAR LAS DONADAS D’AQUESTE JÒC"
-
-msgid "VIEW PAD TO KEYBOARD INFORMATION"
 msgstr ""
 
 msgid "RESET FILTERS"
@@ -567,9 +563,6 @@ msgstr "ACTUALIZAR"
 msgid "FAILED"
 msgstr "FRACÀS"
 
-msgid "LAUNCH"
-msgstr "LANÇAR"
-
 msgid "UNKNOWN ROM VERSION"
 msgstr ""
 
@@ -606,39 +599,6 @@ msgstr "CAP DE RET WIFI PAS TROBAT"
 msgid "SEARCHING WIFI NETWORKS"
 msgstr "RECÈRCA DE RET WIFI"
 
-msgid "THE BEZEL PROJECT"
-msgstr ""
-
-msgid "SELECT BEZELS TO INSTALL / REMOVE"
-msgstr ""
-
-msgid "UPDATE"
-msgstr "ACTUALIZAR"
-
-#, c-format
-msgid "'%s' ADDED TO DOWNLOAD QUEUE"
-msgstr "« %s » AJUSTAT A LA FILA DE TELECARGAMENT"
-
-msgid "REMOVE"
-msgstr "SUPRIMIR"
-
-msgid "INSTALL"
-msgstr "INSTALLAR"
-
-#, c-format
-msgid "CURRENTLY IN DOWNLOAD QUEUE"
-msgstr "ACTUALAMENT DINS LA FILA DE TELECARGAMENT"
-
-msgid "THEMES DOWNLOADER"
-msgstr "TELECARGAMENT DE TÈMAS"
-
-msgid "SELECT THEMES TO INSTALL / REMOVE"
-msgstr "CAUSISSÈTZ TÈMAS D'INSTALLAR / SUPRIMIR"
-
-#, c-format
-msgid "CURRENT THEME"
-msgstr "TÈMA ACTUALA"
-
 msgid "FORGET A BLUETOOTH CONTROLLER"
 msgstr "OBLIDAR UNA MANETA BLUETOOTH"
 
@@ -672,8 +632,25 @@ msgstr ""
 msgid "MISC"
 msgstr ""
 
+msgid "UPDATE"
+msgstr "ACTUALIZAR"
+
+#, c-format
+msgid "'%s' ADDED TO DOWNLOAD QUEUE"
+msgstr "« %s » AJUSTAT A LA FILA DE TELECARGAMENT"
+
+msgid "REMOVE"
+msgstr "SUPRIMIR"
+
 msgid "UNINSTALL ADDED TO QUEUE"
 msgstr ""
+
+msgid "INSTALL"
+msgstr "INSTALLAR"
+
+#, c-format
+msgid "CURRENTLY IN DOWNLOAD QUEUE"
+msgstr "ACTUALAMENT DINS LA FILA DE TELECARGAMENT"
 
 msgid "NO MISSING BIOS"
 msgstr ""
@@ -807,6 +784,12 @@ msgstr ""
 msgid "PLAYER 2"
 msgstr ""
 
+msgid "PLAYER 3"
+msgstr ""
+
+msgid "PLAYER 4"
+msgstr ""
+
 msgid "COMBINATIONS"
 msgstr ""
 
@@ -873,48 +856,123 @@ msgstr ""
 msgid "INVALID PARAMETERS"
 msgstr ""
 
-msgid "SCRAPING IN PROGRESS"
+msgid "GAME MEDIAS"
+msgstr "MÈDIAS JÒC"
+
+msgid "VIEW GAME MANUAL"
+msgstr "VEIRE MANUAL DEL JÒC"
+
+msgid "VIEW GAME MAP"
+msgstr "VEIRE LA MAPA DEL JÒC"
+
+msgid "CURRENT CORE IS NOT COMPATIBLE"
 msgstr ""
 
-msgid "SYSTEM"
-msgstr "SISTÈMA"
+msgid "REQUIRED CORE"
+msgstr ""
 
-msgid "subtitle text"
-msgstr "tèxte sostítol"
+msgid "VIEW GAME ACHIEVEMENTS"
+msgstr ""
 
-msgid "search"
-msgstr "cercar"
+msgid "GAME"
+msgstr ""
 
-msgid "SKIP"
-msgstr "IGNORAR"
+msgid "SAVE SNAPSHOTS"
+msgstr ""
 
-msgid "STOP"
-msgstr "ARRESTAR"
+msgid "START NETPLAY HOST"
+msgstr ""
 
-msgid "stop (progress saved)"
-msgstr "arrestar (progression salvada)"
+msgid "NETPLAY"
+msgstr "NETPLAY"
 
-#, c-format
-msgid "GAME %i OF %i"
-msgstr "JÒC %i SUS %i"
+msgid "START GAME"
+msgstr ""
 
-msgid ""
-"WE CAN'T FIND ANY SYSTEMS!\n"
-"CHECK THAT YOUR PATHS ARE CORRECT IN THE SYSTEMS CONFIGURATION FILE, AND "
-"YOUR GAME DIRECTORY HAS AT LEAST ONE GAME WITH THE CORRECT EXTENSION."
+msgid "YOU ARE NOT CONNECTED TO A NETWORK"
+msgstr ""
+
+msgid "SET PLAYER PASSWORD"
+msgstr ""
+
+msgid "SET VIEWER PASSWORD"
+msgstr ""
+
+msgid "FIND SIMILAR GAMES..."
+msgstr ""
+
+msgid "COLLECTIONS"
 msgstr ""
 
 #, c-format
-msgid "%i GAME SUCCESSFULLY SCRAPED!"
-msgid_plural "%i GAMES SUCCESSFULLY SCRAPED!"
-msgstr[0] ""
-msgstr[1] ""
+msgid "REMOVE FROM %s"
+msgstr ""
 
 #, c-format
-msgid "%i GAME SKIPPED."
-msgid_plural "%i GAMES SKIPPED."
-msgstr[0] "%i JÒC SAUTAT."
-msgstr[1] "%i JÒCS SAUTATS."
+msgid "ADD TO %s"
+msgstr ""
+
+msgid "FAVORITES"
+msgstr "FAVORITS"
+
+msgid "SCRAPE"
+msgstr "RECUPERAR INFO"
+
+msgid "EDIT PAD TO KEYBOARD CONFIGURATION"
+msgstr ""
+
+msgid "CREATE PAD TO KEYBOARD CONFIGURATION"
+msgstr ""
+
+msgid "ADVANCED GAME OPTIONS"
+msgstr ""
+
+msgid "EDIT FOLDER METADATA"
+msgstr ""
+
+msgid "EDIT THIS GAME'S METADATA"
+msgstr "MODIFICAR LAS DONADAS D’AQUESTE JÒC"
+
+msgid "VIEW PAD TO KEYBOARD INFORMATION"
+msgstr ""
+
+msgid "THEMES DOWNLOADER"
+msgstr "TELECARGAMENT DE TÈMAS"
+
+msgid "SELECT THEMES TO INSTALL / REMOVE"
+msgstr "CAUSISSÈTZ TÈMAS D'INSTALLAR / SUPRIMIR"
+
+#, c-format
+msgid "CURRENT THEME"
+msgstr "TÈMA ACTUALA"
+
+msgid "Unlocked on"
+msgstr ""
+
+msgid "THIS GAME HAS NO ACHIEVEMENT YET"
+msgstr ""
+
+msgid "Achievements won"
+msgstr ""
+
+#, c-format
+msgid "%d%% complete"
+msgstr ""
+
+msgid "AUTO SAVE"
+msgstr ""
+
+msgid "SLOT"
+msgstr ""
+
+msgid "START NEW GAME"
+msgstr ""
+
+msgid "START AUTO SAVE"
+msgstr ""
+
+msgid "COPY TO FREE SLOT"
+msgstr ""
 
 msgid "SCRAPE NOW"
 msgstr "RECUPERAR ARA"
@@ -934,9 +992,6 @@ msgstr "FILTRAR"
 msgid "SCRAPE THESE SYSTEMS"
 msgstr ""
 
-msgid "USER DECIDES ON CONFLICTS"
-msgstr "L’UTILIZAIRE DECIDÍS PELS CONFLICTES"
-
 msgid "START"
 msgstr "COMENÇAR"
 
@@ -950,6 +1005,12 @@ msgid "SCRAPING IS RUNNING. DO YOU WANT TO STOP IT ?"
 msgstr ""
 
 msgid "NO GAMES FIT THAT CRITERIA."
+msgstr ""
+
+msgid "THE BEZEL PROJECT"
+msgstr ""
+
+msgid "SELECT BEZELS TO INSTALL / REMOVE"
 msgstr ""
 
 msgid "fade"
@@ -1009,6 +1070,9 @@ msgstr ""
 msgid "FLATTEN-GLOW"
 msgstr ""
 
+msgid "RGA SCALING"
+msgstr ""
+
 msgid "MAIN MENU"
 msgstr "MENÚ PRINCIPAL"
 
@@ -1035,9 +1099,6 @@ msgstr "CONFIGURAR ENTRADA"
 
 msgid "EMULATOR SETTINGS"
 msgstr "PARAMÈTRES EMULATOR"
-
-msgid "SCRAPE"
-msgstr "RECUPERAR INFO"
 
 msgid "UPDATES & DOWNLOADS"
 msgstr "MESAS A JORN E TELECARGAMENTS"
@@ -1103,6 +1164,12 @@ msgid "SCRAPE VIDEOS"
 msgstr ""
 
 msgid "SCRAPE FANART"
+msgstr ""
+
+msgid "SCRAPE BOX BACKSIDE"
+msgstr ""
+
+msgid "SCRAPE MAP"
 msgstr ""
 
 msgid "SCRAPE MANUAL"
@@ -1192,10 +1259,19 @@ msgstr ""
 msgid "CLEAR CACHES"
 msgstr ""
 
+msgid "BUILD IMAGE CACHE"
+msgstr ""
+
+msgid "Building image cache"
+msgstr ""
+
 msgid "RESET FILE EXTENSIONS"
 msgstr ""
 
 msgid "REDETECT GAMES LANG/REGION"
+msgstr ""
+
+msgid "FIND ALL GAMES WITH NETPLAY/ACHIEVEMENTS"
 msgstr ""
 
 msgid "DATA MANAGEMENT"
@@ -1217,6 +1293,9 @@ msgid "UI"
 msgstr ""
 
 msgid "CAROUSEL TRANSITIONS"
+msgstr ""
+
+msgid "QUICK SYSTEM SELECT"
 msgstr ""
 
 msgid "ON SCREEN KEYBOARD"
@@ -1282,8 +1361,8 @@ msgstr "LANÇAR MESA A JORN"
 msgid "UPDATE IS ALREADY RUNNING"
 msgstr "LA MESA A JORN ES JA EN CORS"
 
-msgid "YOU ARE NOT CONNECTED TO A NETWORK"
-msgstr ""
+msgid "SYSTEM"
+msgstr "SISTÈMA"
 
 msgid "LANGUAGE"
 msgstr "LENGA"
@@ -1399,8 +1478,26 @@ msgstr ""
 msgid "AUTOMATIC SCREENSHOT"
 msgstr "CAPTURA D'ECRAN AUTOMATICA"
 
+msgid "RETROACHIEVEMENTS UNLOCK SOUND"
+msgstr ""
+
+msgid "UNLOCK SOUND"
+msgstr ""
+
 msgid "SHOW IN MAIN MENU"
 msgstr "MOSTRAR AL MENÚ PRINCIPAL"
+
+msgid "GAME INDEXES"
+msgstr ""
+
+msgid "FIND ALL GAMES"
+msgstr ""
+
+msgid "FIND NEW GAMES"
+msgstr ""
+
+msgid "UNABLE TO ACTIVATE RETROACHIEVEMENTS :"
+msgstr ""
 
 msgid "ENABLE NETPLAY"
 msgstr "ACTIVAR NETPLAY"
@@ -1414,16 +1511,7 @@ msgstr "PÒRT"
 msgid "USE RELAY SERVER"
 msgstr ""
 
-msgid "GAME INDEXES"
-msgstr ""
-
 msgid "CHECK MISSING INDEXES AT STARTUP"
-msgstr ""
-
-msgid "REINDEX ALL GAMES"
-msgstr ""
-
-msgid "INDEX MISSING GAMES"
 msgstr ""
 
 msgid "DEFAULT SETTINGS"
@@ -1441,13 +1529,16 @@ msgstr ""
 msgid "REWIND"
 msgstr "RECULAR"
 
+msgid "INTEGER SCALE (PIXEL PERFECT)"
+msgstr ""
+
 msgid "AUTO SAVE/LOAD"
 msgstr "SALVAGARDA/CARGAMENT AUTO"
 
-msgid "SHADERS SET"
+msgid "SHOW SAVE SNAPSHOTS"
 msgstr ""
 
-msgid "INTEGER SCALE (PIXEL PERFECT)"
+msgid "SHADERS SET"
 msgstr ""
 
 msgid "DECORATION"
@@ -1549,10 +1640,13 @@ msgstr ""
 msgid "SHOW '..' PARENT FOLDER"
 msgstr ""
 
+msgid "SHOW FILENAMES IN LISTS"
+msgstr ""
+
 msgid "FILE EXTENSIONS"
 msgstr ""
 
-msgid "RESET GAMELIST CUSTOMISATIONS"
+msgid "RESET CUSTOMISATIONS"
 msgstr ""
 
 msgid "APPEARENCE"
@@ -1589,9 +1683,6 @@ msgid "ICON"
 msgstr ""
 
 msgid "ICON AND TEXT"
-msgstr ""
-
-msgid "SHOW FILENAMES IN LISTS"
 msgstr ""
 
 msgid "VOLUME"
@@ -1666,15 +1757,6 @@ msgstr "WIFI ACTIVAT"
 msgid "WIFI CONFIGURATION ERROR"
 msgstr "ERROR DE CONFIGURACION WIFI"
 
-msgid "AUTOMATIC SCRAPER"
-msgstr ""
-
-msgid "REALLY SCRAPE?"
-msgstr ""
-
-msgid "MANUAL SCRAPER"
-msgstr ""
-
 msgid "QUICK ACCESS"
 msgstr ""
 
@@ -1738,6 +1820,9 @@ msgstr ""
 msgid "INTERNAL RESOLUTION"
 msgstr ""
 
+msgid "AUTOCONFIGURE CONTROLLERS"
+msgstr ""
+
 msgid "FORMAT DEVICE"
 msgstr ""
 
@@ -1767,6 +1852,18 @@ msgstr ""
 msgid "NO DEVICE FOUND"
 msgstr ""
 
+msgid "ZOOM-"
+msgstr ""
+
+msgid "ZOOM+"
+msgstr ""
+
+msgid "MOVE"
+msgstr ""
+
+msgid "ZOOM"
+msgstr ""
+
 msgid "SYSTEM INFO"
 msgstr ""
 
@@ -1777,9 +1874,6 @@ msgid "QUICK SEARCH"
 msgstr ""
 
 msgid "GO TO LETTER"
-msgstr ""
-
-msgid "COLLECTIONS"
 msgstr ""
 
 msgid "GO TO MANUFACTURER"
@@ -1811,9 +1905,6 @@ msgid "%i GAME"
 msgid_plural "%i GAMES"
 msgstr[0] "%i JÒC"
 msgstr[1] "%i JÒcs"
-
-msgid "NETPLAY"
-msgstr "NETPLAY"
 
 msgid "RANDOM"
 msgstr "ALEATÒRI"
@@ -1861,22 +1952,12 @@ msgstr "Temps jogat"
 msgid "No Entries Found"
 msgstr ""
 
-msgid "Favorites"
-msgstr "Favorits"
-
-msgid "START GAME"
-msgstr ""
-
-msgid "START NETPLAY HOST"
-msgstr ""
-
-msgid "SET PLAYER PASSWORD"
-msgstr ""
-
-msgid "SET VIEWER PASSWORD"
-msgstr ""
-
 msgid "Games similar to"
+msgstr ""
+
+msgid ""
+"A valid account is required. Please register an account on https://"
+"retroachievements.org"
 msgstr ""
 
 msgid "Searching"
@@ -1885,11 +1966,11 @@ msgstr "Recèrca"
 msgid "NO GAMES FOUND - SKIP"
 msgstr "CAP DE JÒC PAS TROBAT - PASSAR"
 
-msgid "AN ERROR HAS OCCURED"
-msgstr "UNA ERROR S'ES PRODUCHA"
-
 msgid "RETRY"
 msgstr "TORNAR ENSAJAR"
+
+msgid "SKIP"
+msgstr "IGNORAR"
 
 msgid "Downloading"
 msgstr "Telecargament"
@@ -1984,11 +2065,17 @@ msgstr ""
 msgid "Extracting"
 msgstr "Extraccion"
 
-msgid "HASHING GAMES"
+msgid "SEARCHING RETROACHIEVEMENTS"
 msgstr ""
 
-msgid "FAVORITES"
-msgstr "FAVORITS"
+msgid "SEARCHING NETPLAY GAMES"
+msgstr ""
+
+msgid "INDEXING COMPLETED"
+msgstr ""
+
+msgid "UPDATE GAMES LISTS TO APPLY CHANGES."
+msgstr ""
 
 msgid "GENRE"
 msgstr "GENRE"
@@ -2014,13 +2101,27 @@ msgstr ""
 msgid "ALREADY PLAYED"
 msgstr ""
 
+msgid "HAS ACHIEVEMENTS"
+msgstr ""
+
+msgid "VERTICAL"
+msgstr ""
+
 msgid "SCRAPING"
 msgstr "RECUPERACION EN CORS"
 
 msgid "SCRAPE FAILED"
 msgstr ""
 
-msgid "SCRAPING FINISHED. REFRESH UPDATE GAMES LISTS TO APPLY CHANGES."
+msgid "SCRAPING FINISHED"
+msgstr ""
+
+#, c-format
+msgid "%s connected"
+msgstr ""
+
+#, c-format
+msgid "%s disconnected"
 msgstr ""
 
 msgid "SHIFTS FOR UPPER,LOWER, AND SPECIAL"
@@ -2200,6 +2301,44 @@ msgstr ""
 #, c-format
 msgid "%d s"
 msgstr ""
+
+#~ msgid "subtitle text"
+#~ msgstr "tèxte sostítol"
+
+#~ msgid "search"
+#~ msgstr "cercar"
+
+#~ msgid "STOP"
+#~ msgstr "ARRESTAR"
+
+#~ msgid "stop (progress saved)"
+#~ msgstr "arrestar (progression salvada)"
+
+#~ msgid "GAME %i OF %i"
+#~ msgstr "JÒC %i SUS %i"
+
+#~ msgid "%i GAME SKIPPED."
+#~ msgid_plural "%i GAMES SKIPPED."
+#~ msgstr[0] "%i JÒC SAUTAT."
+#~ msgstr[1] "%i JÒCS SAUTATS."
+
+#~ msgid "Favorites"
+#~ msgstr "Favorits"
+
+#~ msgid "AN ERROR HAS OCCURED"
+#~ msgstr "UNA ERROR S'ES PRODUCHA"
+
+#~ msgid "USER DECIDES ON CONFLICTS"
+#~ msgstr "L’UTILIZAIRE DECIDÍS PELS CONFLICTES"
+
+#~ msgid "FINISH EDITING COLLECTION"
+#~ msgstr "FINIR L'EDICION DE LA COLLECCION"
+
+#~ msgid "JUMP TO..."
+#~ msgstr "SAUTAR A..."
+
+#~ msgid "COLLECTION MANAGEMENT"
+#~ msgstr "GESTION DE COLLECCION"
 
 #~ msgid "START KODI WITH X"
 #~ msgstr "AVIAR KODI AMB X"

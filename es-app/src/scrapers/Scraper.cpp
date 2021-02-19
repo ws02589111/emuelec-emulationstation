@@ -1,6 +1,7 @@
 #include "scrapers/Scraper.h"
 
 #include "FileData.h"
+#include "ArcadeDBJSONScraper.h"
 #include "GamesDBJSONScraper.h"
 #include "ScreenScraper.h"
 #include "Log.h"
@@ -13,19 +14,22 @@
 #include <thread>
 #include <SDL_timer.h>
 
-std::map<std::string, Scraper*> Scraper::scrapers
+std::vector<std::pair<std::string, Scraper*>> Scraper::scrapers
 {
 	{ "ScreenScraper", new ScreenScraperScraper() },
-	{ "TheGamesDB", new TheGamesDBScraper() }
+	{ "TheGamesDB", new TheGamesDBScraper() },
+	{ "ArcadeDB", new ArcadeDBScraper() }
 };
 
-Scraper* Scraper::getScraper()
-{
-	auto name = Settings::getInstance()->getString("Scraper");
-
-	auto it = Scraper::scrapers.find(name);
-	if (it != Scraper::scrapers.end())
-		return it->second;
+Scraper* Scraper::getScraper(const std::string name)
+{	
+	auto scraper = name;
+	if(scraper.empty())
+		scraper = Settings::getInstance()->getString("Scraper");
+	
+	for (auto scrap : Scraper::scrapers)
+		if (scrap.first == scraper)
+			return scrap.second;
 
 	return nullptr;
 }
@@ -33,6 +37,11 @@ Scraper* Scraper::getScraper()
 bool Scraper::isValidConfiguredScraper()
 {
 	return getScraper() != nullptr;
+}
+
+bool Scraper::hasMissingMedia(FileData* file)
+{
+	return !Utils::FileSystem::exists(file->getMetadata(MetaDataId::Image));
 }
 
 std::unique_ptr<ScraperSearchHandle> Scraper::search(const ScraperSearchParams& params)
@@ -206,16 +215,21 @@ MDResolveHandle::MDResolveHandle(const ScraperSearchResult& result, const Scrape
 			continue;
 		}
 
+		bool resize = true;
+
 		std::string suffix = "image";
 		switch (url.first)
 		{
 		case MetaDataId::Thumbnail: suffix = "thumb"; break;
 		case MetaDataId::Marquee: suffix = "marquee"; break;
-		case MetaDataId::Video: suffix = "video"; break;
-		case MetaDataId::FanArt: suffix = "fanart"; break;
+		case MetaDataId::Video: suffix = "video";  resize = false; break;
+		case MetaDataId::FanArt: suffix = "fanart"; resize = false; break;
+		case MetaDataId::BoxBack: suffix = "boxback"; resize = false; break;
+		case MetaDataId::BoxArt: suffix = "box"; resize = false; break;
+		case MetaDataId::Wheel: suffix = "wheel"; resize = false; break;		
 		case MetaDataId::TitleShot: suffix = "titleshot"; break;
-		case MetaDataId::Manual: suffix = "manual"; break;
-		case MetaDataId::Map: suffix = "map"; break;
+		case MetaDataId::Manual: suffix = "manual"; resize = false;  break;
+		case MetaDataId::Map: suffix = "map"; resize = false; break;
 		case MetaDataId::Cartridge: suffix = "cartridge"; break;
 		}
 
@@ -234,13 +248,18 @@ MDResolveHandle::MDResolveHandle(const ScraperSearchResult& result, const Scrape
 		else
 		{
 			mFuncs.push_back(new ResolvePair(
-				[this, url, resourcePath] { return downloadImageAsync(url.second.url, resourcePath); },
-				[this, url, resourcePath]
-			{
-				mResult.mdl.set(url.first, resourcePath);
-				if (mResult.urls.find(url.first) != mResult.urls.cend())
-					mResult.urls[url.first].url = "";
-			},
+				[this, url, resourcePath, resize] 
+				{ 
+					return downloadImageAsync(url.second.url, resourcePath, resize); 
+				},
+				[this, url](ImageDownloadHandle* result)
+				{
+					auto finalFile = result->getImageFileName();
+					mResult.mdl.set(url.first, finalFile);
+
+					if (mResult.urls.find(url.first) != mResult.urls.cend())
+						mResult.urls[url.first].url = "";
+				},
 				suffix, result.mdl.getName())); // "thumbnail"
 		}
 	}
@@ -282,8 +301,8 @@ void MDResolveHandle::update()
 		return;
 	}
 	else if (pPair->handle->status() == ASYNC_DONE)
-	{
-		pPair->onFinished();
+	{		
+		pPair->onFinished(pPair->handle.get());
 		mFuncs.erase(it);
 		delete pPair;
 
@@ -300,12 +319,13 @@ void MDResolveHandle::update()
 		setStatus(ASYNC_DONE);
 }
 
-std::unique_ptr<ImageDownloadHandle> MDResolveHandle::downloadImageAsync(const std::string& url, const std::string& saveAs)
+std::unique_ptr<ImageDownloadHandle> MDResolveHandle::downloadImageAsync(const std::string& url, const std::string& saveAs, bool resize)
 {
 	LOG(LogDebug) << "downloadImageAsync : " << url << " -> " << saveAs;
 
 	return std::unique_ptr<ImageDownloadHandle>(new ImageDownloadHandle(url, saveAs, 
-		Settings::getInstance()->getInt("ScraperResizeWidth"), Settings::getInstance()->getInt("ScraperResizeHeight")));
+		resize ? Settings::getInstance()->getInt("ScraperResizeWidth") : 0,
+		resize ? Settings::getInstance()->getInt("ScraperResizeHeight") : 0));
 }
 
 ImageDownloadHandle::ImageDownloadHandle(const std::string& url, const std::string& path, int maxWidth, int maxHeight) : 
@@ -398,8 +418,41 @@ void ImageDownloadHandle::update()
 
 	if (status == HttpReq::REQ_SUCCESS && mStatus == ASYNC_IN_PROGRESS)
 	{
-		// It's an image ?
 		std::string ext = Utils::String::toLower(Utils::FileSystem::getExtension(mSavePath));
+
+		// Make sure extension is the good one, according to the response 'content-type'
+		std::string contentType = mRequest->getResponseContentType();
+		if (!contentType.empty())
+		{
+			std::string trueExtension;
+			if (Utils::String::startsWith(contentType, "image/"))
+			{
+				trueExtension = "." + contentType.substr(6);
+				if (trueExtension == ".jpeg")
+					trueExtension = ".jpg";
+				else if (trueExtension == ".svg+xml")
+					trueExtension = ".svg";
+
+			}
+			else if (Utils::String::startsWith(contentType, "video/"))
+			{
+				trueExtension = "." + contentType.substr(6);
+				if (trueExtension == ".quicktime")
+					trueExtension = ".mov";
+			}
+
+			if (!trueExtension.empty() && trueExtension != ext)
+			{
+				auto newFileName = Utils::FileSystem::changeExtension(mSavePath, trueExtension);
+				if (Utils::FileSystem::renameFile(mSavePath, newFileName))
+				{
+					mSavePath = newFileName;
+					ext = trueExtension;
+				}
+			}
+		}
+
+		// It's an image ?
 		if (mSavePath.find("-fanart") == std::string::npos && mSavePath.find("-map") == std::string::npos && (ext == ".jpg" || ext == ".jpeg" || ext == ".png" || ext == ".bmp" || ext == ".gif"))
 		{
 			try { resizeImage(mSavePath, mMaxWidth, mMaxHeight); }

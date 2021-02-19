@@ -114,6 +114,10 @@ bool GridGameListView::input(InputConfig* config, Input input)
 {
 	if (!UIModeController::getInstance()->isUIModeKid() && config->isMappedTo("select", input) && input.value)
 	{
+		auto idx = mRoot->getSystem()->getIndex(false);
+		if (idx != nullptr && idx->hasRelevency())
+			return true;
+
 		Sound::getFromTheme(mTheme, getName(), "menuOpen")->play();
 		mWindow->pushGui(new GuiGamelistOptions(mWindow, this, this->mRoot->getSystem(), true));
 		return true;
@@ -210,7 +214,7 @@ void GridGameListView::populateList(const std::vector<FileData*>& files)
 			if (showParentFolder)
 			{
 				FileData* placeholder = new FileData(PLACEHOLDER, "..", this->mRoot->getSystem());
-				mGrid.add(". .", imagePath, "", "", false, true, displayAsVirtualFolder && !imagePath.empty(), placeholder);
+				mGrid.add(". .", imagePath, "", "", false, true, false, displayAsVirtualFolder && !imagePath.empty(), placeholder);
 			}
 		}
 
@@ -231,7 +235,7 @@ void GridGameListView::populateList(const std::vector<FileData*>& files)
 			for (auto file : files)
 			{
 				if (file->getFavorite() && showFavoriteIcon)
-					mGrid.add(_U("\uF006 ") + file->getName(), getImagePath(file), file->getVideoPath(), file->getMarqueePath(), true, file->getType() != GAME, isVirtualFolder(file), file);
+					mGrid.add(_U("\uF006 ") + file->getName(), getImagePath(file), file->getVideoPath(), file->getMarqueePath(), true, file->hasCheevos(), file->getType() != GAME, isVirtualFolder(file), file);
 			}
 		}
 
@@ -244,15 +248,15 @@ void GridGameListView::populateList(const std::vector<FileData*>& files)
 
 				if (showFavoriteIcon)
 				{
-					mGrid.add(_U("\uF006 ") + file->getName(), getImagePath(file), file->getVideoPath(), file->getMarqueePath(), true, file->getType() != GAME, isVirtualFolder(file), file);
+					mGrid.add(_U("\uF006 ") + file->getName(), getImagePath(file), file->getVideoPath(), file->getMarqueePath(), true, file->hasCheevos(), file->getType() != GAME, isVirtualFolder(file), file);
 					continue;
 				}
 			}
 
 			if (file->getType() == FOLDER && Utils::FileSystem::exists(getImagePath(file)))
-				mGrid.add(_U("\uF07C ") + file->getName(), getImagePath(file), file->getVideoPath(), file->getMarqueePath(), file->getFavorite(), file->getType() != GAME, isVirtualFolder(file), file);
+				mGrid.add(_U("\uF07C ") + file->getName(), getImagePath(file), file->getVideoPath(), file->getMarqueePath(), file->getFavorite(), file->hasCheevos(), file->getType() != GAME, isVirtualFolder(file), file);
 			else
-				mGrid.add(file->getName(), getImagePath(file), file->getVideoPath(), file->getMarqueePath(), file->getFavorite(), file->getType() != GAME, isVirtualFolder(file), file);
+				mGrid.add(file->getName(), getImagePath(file), file->getVideoPath(), file->getMarqueePath(), file->getFavorite(), file->hasCheevos(), file->getType() != GAME, isVirtualFolder(file), file);
 		}
 
 		// if we have the ".." PLACEHOLDER, then select the first game instead of the placeholder
@@ -272,17 +276,16 @@ void GridGameListView::onThemeChanged(const std::shared_ptr<ThemeData>& theme)
 {
 	ISimpleGameListView::onThemeChanged(theme);
 
-	using namespace ThemeFlags;
-
-	mGrid.applyTheme(theme, getName(), "gamegrid", ALL);
+	mGrid.applyTheme(theme, getName(), "gamegrid", ThemeFlags::ALL);
 	mDetails.onThemeChanged(theme);
-	
-	sortChildren();
 	updateInfoPanel();
 }
 
 void GridGameListView::updateInfoPanel()
 {
+	if (!mShowing)
+		return;
+
 	if (mRoot->getSystem()->isCollection())
 		updateHelpPrompts();
 
@@ -295,7 +298,7 @@ void GridGameListView::addPlaceholder()
 {
 	// empty grid - add a placeholder
 	FileData* placeholder = new FileData(PLACEHOLDER, "<" + _("No Entries Found") + ">", mRoot->getSystem());
-	mGrid.add(placeholder->getName(), "", "", "", false, false, false, placeholder);
+	mGrid.add(placeholder->getName(), "", "", "", false, false,false,false, placeholder);
 }
 
 void GridGameListView::launch(FileData* game)
@@ -343,16 +346,28 @@ std::vector<HelpPrompt> GridGameListView::getHelpPrompts()
 {
 	std::vector<HelpPrompt> prompts;
 
-	if(Settings::getInstance()->getBool("QuickSystemSelect"))
-		prompts.push_back(HelpPrompt("lr", _("SYSTEM"))); // batocera
+	if (Renderer::getScreenProportion() > 1.4)
+	{
+		if(mPopupSelfReference == nullptr && Settings::getInstance()->getBool("QuickSystemSelect"))
+			prompts.push_back(HelpPrompt("lr", _("SYSTEM")));
+			
+		prompts.push_back(HelpPrompt("up/down/left/right", _("CHOOSE")));
+	}
+	
 
-	prompts.push_back(HelpPrompt("up/down/left/right", _("CHOOSE"))); // batocera
 	prompts.push_back(HelpPrompt(BUTTON_OK, _("LAUNCH")));
 	prompts.push_back(HelpPrompt(BUTTON_BACK, _("BACK")));
 
-	if(!UIModeController::getInstance()->isUIModeKid())
-		prompts.push_back(HelpPrompt("select", _("OPTIONS"))); // batocera
-
+	if (!UIModeController::getInstance()->isUIModeKid())
+		prompts.push_back(HelpPrompt("select", _("VIEW OPTIONS")));
+#ifndef _ENABLEEMUELEC	
+    prompts.push_back(HelpPrompt("x", _("GAME OPTIONS")));
+	prompts.push_back(HelpPrompt("y", _("SEARCH")));
+#else
+	prompts.push_back(HelpPrompt("y", _("GAME OPTIONS")));
+	prompts.push_back(HelpPrompt("x", _("RANDOM/FAVORITE")));
+#endif
+	/*
 	FileData* cursor = getCursor();
 	if (cursor != nullptr && cursor->isNetplaySupported())
 		prompts.push_back(HelpPrompt("x", _("NETPLAY"))); // batocera
@@ -367,7 +382,7 @@ std::vector<HelpPrompt> GridGameListView::getHelpPrompts()
 			prompts.push_back(HelpPrompt("y", _("Favorites")));
 		else
 			prompts.push_back(HelpPrompt("y", prompt));
-	}
+	}*/
 	return prompts;
 }
 

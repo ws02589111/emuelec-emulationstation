@@ -67,23 +67,30 @@ int runSystemCommand(const std::string& cmd_utf8, const std::string& name, Windo
 	Utils::FileSystem::splitCommand(command, &exe, &args);
 	exe = Utils::FileSystem::getPreferredPath(exe);
 
-	SHELLEXECUTEINFO lpExecInfo;
-	lpExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
-	lpExecInfo.lpFile = exe.c_str();
+	std::wstring wexe = Utils::String::convertToWideString(exe);
+	std::wstring wargs = Utils::String::convertToWideString(args);
+	std::wstring wpath;
+
+	std::wstring wcommand = Utils::String::convertToWideString(command);
+	SHELLEXECUTEINFOW lpExecInfo;
+	lpExecInfo.cbSize = sizeof(SHELLEXECUTEINFOW);
+	lpExecInfo.lpFile = wexe.c_str();
 	lpExecInfo.fMask = SEE_MASK_DOENVSUBST | SEE_MASK_NOCLOSEPROCESS;
 	lpExecInfo.hwnd = NULL;
-	lpExecInfo.lpVerb = "open"; // to open  program
-
+	lpExecInfo.lpVerb = L"open"; // to open  program
 	lpExecInfo.lpDirectory = NULL;
 	lpExecInfo.nShow = SW_SHOW;  // show command prompt with normal window size 
 	lpExecInfo.hInstApp = (HINSTANCE)SE_ERR_DDEFAIL;   //WINSHELLAPI BOOL WINAPI result;
-	lpExecInfo.lpParameters = args.c_str(); //  file name as an argument	
+	lpExecInfo.lpParameters = wargs.c_str(); //  file name as an argument	
 
 	// Don't set directory for relative paths
 	if (!Utils::String::startsWith(exe, ".") && !Utils::String::startsWith(exe, "/") && !Utils::String::startsWith(exe, "\\"))
-		lpExecInfo.lpDirectory = Utils::FileSystem::getAbsolutePath(Utils::FileSystem::getParent(exe)).c_str();
+	{
+		wpath = Utils::String::convertToWideString(Utils::FileSystem::getAbsolutePath(Utils::FileSystem::getParent(exe)));
+		lpExecInfo.lpDirectory = wpath.c_str();
+	}
 
-	ShellExecuteEx(&lpExecInfo);
+	ShellExecuteExW(&lpExecInfo);
 
 	if (lpExecInfo.hProcess != NULL)
 	{
@@ -240,7 +247,8 @@ std::string queryIPAdress()
 			char addressBuffer[INET_ADDRSTRLEN];
 			inet_ntop(AF_INET, tmpAddrPtr, addressBuffer, INET_ADDRSTRLEN);
 			
-			if (std::string(ifa->ifa_name).find("eth") != std::string::npos || std::string(ifa->ifa_name).find("wlan") != std::string::npos) 
+			std::string ifName = ifa->ifa_name;
+			if (ifName.find("eth") != std::string::npos || ifName.find("wlan") != std::string::npos || ifName.find("en") != std::string::npos || ifName.find("wl") != std::string::npos || ifName.find("p2p") != std::string::npos)
 			{
 				result = std::string(addressBuffer);
 				break;
@@ -261,9 +269,9 @@ std::string queryIPAdress()
 				tmpAddrPtr = &((struct sockaddr_in6 *) ifa->ifa_addr)->sin6_addr;
 				char addressBuffer[INET6_ADDRSTRLEN];
 				inet_ntop(AF_INET6, tmpAddrPtr, addressBuffer, INET6_ADDRSTRLEN);
-				printf("%s IP Address %s\n", ifa->ifa_name, addressBuffer);
 
-				if (std::string(ifa->ifa_name).find("eth") != std::string::npos || std::string(ifa->ifa_name).find("wlan") != std::string::npos)
+				std::string ifName = ifa->ifa_name;
+				if (ifName.find("eth") != std::string::npos || ifName.find("wlan") != std::string::npos || ifName.find("en") != std::string::npos || ifName.find("wl") != std::string::npos || ifName.find("p2p") != std::string::npos)
 				{
 					result = std::string(addressBuffer);
 					break;

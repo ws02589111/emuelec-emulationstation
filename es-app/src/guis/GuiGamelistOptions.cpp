@@ -21,6 +21,9 @@
 #include "ApiSystem.h"
 #include "guis/GuiImageViewer.h"
 #include "views/SystemView.h"
+#include "GuiGameAchievements.h"
+#include "guis/GuiGameOptions.h"
+#include "views/gamelist/ISimpleGameListView.h"
 
 std::vector<std::string> GuiGamelistOptions::gridSizes {
 	"automatic", "1x1",
@@ -33,7 +36,7 @@ std::vector<std::string> GuiGamelistOptions::gridSizes {
 };
 
 GuiGamelistOptions::GuiGamelistOptions(Window* window, IGameListView* gamelist, SystemData* system, bool showGridFeatures) : GuiComponent(window),
-	mSystem(system), mMenu(window, "OPTIONS"), fromPlaceholder(false), mFiltersChanged(false), mReloadAll(false), mGamelist(nullptr)
+	mSystem(system), mMenu(window, _("VIEW OPTIONS")), fromPlaceholder(false), mFiltersChanged(false), mReloadAll(false), mGamelist(nullptr)
 {
 	auto idx = system->getIndex(false);
 
@@ -74,7 +77,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, IGameListView* gamelist, 
 			std::vector<std::string> letters = getGamelist()->getEntriesLetters();
 			if (!letters.empty())
 			{
-				mJumpToLetterList = std::make_shared<LetterList>(mWindow, _("JUMP TO..."), false); // batocera
+				mJumpToLetterList = std::make_shared<LetterList>(mWindow, _("JUMP TO LETTER"), false); // batocera
 
 				char curChar = (char)toupper(getGamelist()->getCursor()->getName()[0]);
 
@@ -84,7 +87,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, IGameListView* gamelist, 
 				for (auto letter : letters)
 					mJumpToLetterList->add(letter, letter[0], letter[0] == curChar);
 
-				row.addElement(std::make_shared<TextComponent>(mWindow, _("JUMP TO..."), theme->Text.font, theme->Text.color), true); // batocera
+				row.addElement(std::make_shared<TextComponent>(mWindow, _("JUMP TO LETTER"), theme->Text.font, theme->Text.color), true); // batocera
 				row.addElement(mJumpToLetterList, false);
 				row.input_handler = [&](InputConfig* config, Input input)
 				{
@@ -101,6 +104,16 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, IGameListView* gamelist, 
 				};
 				mMenu.addRow(row);
 			}
+		}
+				
+		ISimpleGameListView* simpleView = dynamic_cast<ISimpleGameListView*>(getGamelist());
+		if (simpleView != nullptr)
+		{
+			mMenu.addEntry(_("SELECT RANDOM GAME"), false, [this, simpleView]
+			{
+				simpleView->moveToRandomGame();
+				delete this;
+			});
 		}
 
 		// sort list by
@@ -123,7 +136,7 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, IGameListView* gamelist, 
 			if (customCollection == customCollections.cend() || customCollection->second.filteredIndex == nullptr)
 				mMenu.addEntry(_("OTHER FILTERS"), true, std::bind(&GuiGamelistOptions::openGamelistFilter, this));
 		}
-
+		/*
 		SystemData* all = SystemData::getSystem("all");
 		if (all != nullptr && file != nullptr && file->getType() != FOLDER)
 		{
@@ -147,14 +160,17 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, IGameListView* gamelist, 
 
 				delete this;
 			});
-		}
+		}*/
 	}
 
+
+	/*
 	// Game medias
 	bool hasManual = ApiSystem::getInstance()->isScriptingSupported(ApiSystem::ScriptId::PDFEXTRACTION) && Utils::FileSystem::exists(file->getMetadata(MetaDataId::Manual));
 	bool hasMap = Utils::FileSystem::exists(file->getMetadata(MetaDataId::Map));
+	bool hasCheevos = file->hasCheevos();
 
-	if (hasManual || hasMap)
+	if (hasManual || hasMap || hasCheevos)
 	{
 		mMenu.addGroup(_("GAME MEDIAS"));
 
@@ -171,20 +187,49 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, IGameListView* gamelist, 
 		{
 			mMenu.addEntry(_("VIEW GAME MAP"), false, [window, file, this]
 			{
-				GuiImageViewer::showImage(window, file->getMetadata(MetaDataId::Map));
+				auto imagePath = file->getMetadata(MetaDataId::Map);				
+				GuiImageViewer::showImage(window, imagePath, Utils::String::toLower(Utils::FileSystem::getExtension(imagePath)) != ".pdf");
 				delete this;
 			});
 		}
+
+		if (hasCheevos)
+		{
+			if (!file->isFeatureSupported(EmulatorFeatures::cheevos))
+			{				
+				std::string coreList = file->getSourceFileData()->getSystem()->getCompatibleCoreNames(EmulatorFeatures::cheevos);
+				std::string msg = _U("\uF06A  ");
+				msg += _("CURRENT CORE IS NOT COMPATIBLE") + " : " + Utils::String::toUpper(file->getCore(true));
+				if (!coreList.empty())
+				{
+					msg += _U("\r\n\uF05A  ");
+					msg += _("REQUIRED CORE") + " : " + Utils::String::toUpper(coreList);
+				}
+
+				mMenu.addWithDescription(_("VIEW GAME ACHIEVEMENTS"), msg, nullptr, [window, file, this]
+				{
+					GuiGameAchievements::show(window, Utils::String::toInteger(file->getMetadata(MetaDataId::CheevosId)));
+				});
+			}
+			else
+			{
+				mMenu.addEntry(_("VIEW GAME ACHIEVEMENTS"), false, [window, file, this]
+				{
+					GuiGameAchievements::show(window, Utils::String::toInteger(file->getMetadata(MetaDataId::CheevosId)));
+				});
+			}
+		}
 	}
-
-
-
+	*/
 	if (!isInRelevancyMode)
 	{
-		if (customCollection != customCollections.cend() && customCollection->second.filteredIndex != nullptr)
+		if (customCollection != customCollections.cend())
 		{
 			mMenu.addGroup(_("COLLECTION"));
-			mMenu.addEntry(_("EDIT DYNAMIC COLLECTION FILTERS"), false, std::bind(&GuiGamelistOptions::editCollectionFilters, this));
+
+			if (customCollection->second.filteredIndex != nullptr)
+				mMenu.addEntry(_("EDIT DYNAMIC COLLECTION FILTERS"), false, std::bind(&GuiGamelistOptions::editCollectionFilters, this));
+
 			mMenu.addEntry(_("DELETE COLLECTION"), false, std::bind(&GuiGamelistOptions::deleteCollection, this));
 		}
 		else if ((!mSystem->isCollection() || mSystem->getName() == "all") && mSystem->getIndex(false) != nullptr)
@@ -242,22 +287,6 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, IGameListView* gamelist, 
 			{
 				GuiMenu::openThemeConfiguration(mWindow, this, nullptr, system->getThemeFolder());
 			});
-
-			if ((customCollection != customCollections.cend() && customCollection->second.filteredIndex == nullptr) || CollectionSystemManager::get()->isEditing())
-			{
-				mMenu.addGroup(_("COLLECTION MANAGEMENT"));
-
-				if (customCollection != customCollections.cend())
-				{
-					mMenu.addEntry(_("ADD/REMOVE GAMES TO THIS GAME COLLECTION"), false, std::bind(&GuiGamelistOptions::startEditMode, this));
-
-					if (mSystem->getName() != CollectionSystemManager::get()->getCustomCollectionsBundle()->getName())
-						mMenu.addEntry(_("DELETE COLLECTION"), false, std::bind(&GuiGamelistOptions::deleteCollection, this));
-				}
-
-				if (CollectionSystemManager::get()->isEditing())
-					mMenu.addEntry(_("FINISH EDITING COLLECTION") + " : " + Utils::String::toUpper(CollectionSystemManager::get()->getEditingCollection()), false, std::bind(&GuiGamelistOptions::exitEditMode, this));
-			}
 		}
 
 		if (file->getType() == FOLDER && ((FolderData*) file)->isVirtualStorage())
@@ -267,40 +296,30 @@ GuiGamelistOptions::GuiGamelistOptions(Window* window, IGameListView* gamelist, 
 		
 		if (!fromPlaceholder)
 		{
-			mMenu.addGroup(_("GAME OPTIONS"));
+			auto srcSystem = file->getSourceFileData()->getSystem();
+			auto sysOptions = mSystem->isGroupSystem() ? srcSystem : mSystem;
 
-			if (ApiSystem::getInstance()->isScriptingSupported(ApiSystem::GAMESETTINGS))
+			bool showSystemOptions = ApiSystem::getInstance()->isScriptingSupported(ApiSystem::GAMESETTINGS) && (sysOptions->hasFeatures() || sysOptions->hasEmulatorSelection());
+			bool showGameOptions = (file != nullptr && file->getType() != FOLDER);
+
+			if (showGameOptions || showSystemOptions)
+				mMenu.addGroup(_("OPTIONS"));
+
+			if (showGameOptions)
 			{
-				auto srcSystem = file->getSourceFileData()->getSystem();
-				auto sysOptions = mSystem->isGroupSystem() ? srcSystem : mSystem;
-
-				if (sysOptions->hasFeatures() || sysOptions->hasEmulatorSelection())
-					mMenu.addEntry(_("ADVANCED SYSTEM OPTIONS"), true, [this, sysOptions] { GuiMenu::popSystemConfigurationGui(mWindow, sysOptions); });
-
-				if (file->getType() != FOLDER)
+				mMenu.addEntry(_("GAME OPTIONS"), true, [this, file] 
 				{
-					if (srcSystem->hasFeatures() || srcSystem->hasEmulatorSelection())
-						mMenu.addEntry(_("ADVANCED GAME OPTIONS"), true, [this, file] { GuiMenu::popGameConfigurationGui(mWindow, file); });
-				}
+					Window* window = mWindow;
+					window->pushGui(new GuiGameOptions(window, file));
+					delete this;
+				});
 			}
 
-			if (ApiSystem::getInstance()->isScriptingSupported(ApiSystem::ScriptId::EVMAPY) && file->getType() != FOLDER)
-			{
-				if (file->hasKeyboardMapping())
-					mMenu.addEntry(_("EDIT PAD TO KEYBOARD CONFIGURATION"), true, [this, file] { GuiMenu::editKeyboardMappings(mWindow, file); });
-				else if (file->isFeatureSupported(EmulatorFeatures::Features::padTokeyboard))
-					mMenu.addEntry(_("CREATE PAD TO KEYBOARD CONFIGURATION"), true, [this, file] { GuiMenu::editKeyboardMappings(mWindow, file); });
-			}
-
-			if (file->getType() == FOLDER)
-				mMenu.addEntry(_("EDIT FOLDER METADATA"), true, std::bind(&GuiGamelistOptions::openMetaDataEd, this));
-			else
-				mMenu.addEntry(_("EDIT THIS GAME'S METADATA"), true, std::bind(&GuiGamelistOptions::openMetaDataEd, this));
+			if (showSystemOptions)
+				mMenu.addEntry(_("ADVANCED SYSTEM OPTIONS"), true, [this, sysOptions] { GuiMenu::popSystemConfigurationGui(mWindow, sysOptions); });
 		}
 	}
-	else if (file->hasKeyboardMapping())
-		mMenu.addEntry(_("VIEW PAD TO KEYBOARD INFORMATION"), true, [this, file] { GuiMenu::editKeyboardMappings(mWindow, file); });
-	
+
 	mMenu.setMaxHeight(Renderer::getScreenHeight() * 0.85f);
 	// center the menu
 	setSize((float)Renderer::getScreenWidth(), (float)Renderer::getScreenHeight());
@@ -478,18 +497,6 @@ std::string GuiGamelistOptions::getCustomCollectionName()
 	}
 
 	return editingSystem;
-}
-
-void GuiGamelistOptions::startEditMode()
-{
-	CollectionSystemManager::get()->setEditMode(getCustomCollectionName());
-	delete this;
-}
-
-void GuiGamelistOptions::exitEditMode()
-{
-	CollectionSystemManager::get()->exitEditMode();
-	delete this;
 }
 
 void GuiGamelistOptions::openMetaDataEd()

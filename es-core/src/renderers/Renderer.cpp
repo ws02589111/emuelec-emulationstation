@@ -181,6 +181,19 @@ namespace Renderer
 	{
 		SDL_RestoreWindow(sdlWindow);
 		SDL_RaiseWindow(sdlWindow);
+
+		if (Settings::getInstance()->getBool("Windowed"))
+		{
+			int h; int w;
+			SDL_GetWindowSize(sdlWindow, &w, &h);
+
+			SDL_DisplayMode DM;
+			SDL_GetCurrentDisplayMode(0, &DM);
+
+			if (w == DM.w && h == DM.h)
+				SDL_SetWindowPosition(sdlWindow, 0, 0);
+		}
+		
 		SDL_SetWindowInputFocus(sdlWindow);		
 	}
 
@@ -344,9 +357,17 @@ namespace Renderer
 	int         getScreenOffsetY() { return screenOffsetY; }
 	int         getScreenRotate()  { return screenRotate; }
 
+	float		getScreenProportion() 
+	{ 
+		if (screenHeight == 0)
+			return 1.0;
+
+		return screenWidth / screenHeight;
+	}
+
 	bool        isSmallScreen()    
 	{ 		
-		return screenWidth < 400 || screenHeight < 400; 
+		return screenWidth <= 480 || screenHeight <= 480; 
 	};
 
 	bool isClippingEnabled() { return !clipStack.empty(); }
@@ -397,7 +418,6 @@ namespace Renderer
 		return rectOverlap(screen, box);
 	}
 
-
 	unsigned int mixColors(unsigned int first, unsigned int second, float percent)
 	{
 		unsigned char alpha0 = (first >> 24) & 0xFF;
@@ -417,5 +437,64 @@ namespace Renderer
 
 		return (alpha << 24) | (blue << 16) | (green << 8) | red;
 	}
+
+#define ROUNDING_PIECES 8.0f
+
+	static void addRoundCorner(float x, float y, double sa, double arc, float r, unsigned int color, float pieces, std::vector<Vertex> &vertex)
+	{
+		// centre of the arc, for clockwise sense
+		float cent_x = x + r * Math::cosf(sa + ES_PI / 2.0f);
+		float cent_y = y + r * Math::sinf(sa + ES_PI / 2.0f);
+
+		// build up piecemeal including end of the arc
+		int n = ceil(pieces * arc / ES_PI * 2.0f);
+
+		float step = arc / (float)n;
+
+		Vertex vx;
+		vx.tex = Vector2f::Zero();
+		vx.col = color;
+
+		for (int i = 0; i <= n; i++)
+		{
+			float ang = sa + step * (float)i;
+
+			// compute the next point
+			float next_x = cent_x + r * Math::sinf(ang);
+			float next_y = cent_y - r * Math::cosf(ang);
+
+			vx.pos[0] = next_x;
+			vx.pos[1] = next_y;
+			vertex.push_back(vx);
+		}
+	}
+
+	std::vector<Vertex> createRoundRect(float x, float y, float width, float height, float radius, unsigned int color)
+	{
+		auto finalColor = convertColor(color);
+		float pieces = Math::min(3.0f, Math::max(radius / 3.0f, ROUNDING_PIECES));
+
+		std::vector<Vertex> vertex;
+		addRoundCorner(x, y + radius, 3.0f * ES_PI / 2.0f, ES_PI / 2.0f, radius, finalColor, pieces, vertex);
+		addRoundCorner(x + width - radius, y, 0.0, ES_PI / 2.0f, radius, finalColor, pieces, vertex);
+		addRoundCorner(x + width, y + height - radius, ES_PI / 2.0f, ES_PI / 2.0f, radius, finalColor, pieces, vertex);
+		addRoundCorner(x + radius, y + height, ES_PI, ES_PI / 2.0f, radius, finalColor, pieces, vertex);
+		return vertex;
+	}
+	
+	void drawRoundRect(float x, float y, float width, float height, float radius, unsigned int color, const Blend::Factor _srcBlendFactor, const Blend::Factor _dstBlendFactor)
+	{
+		bindTexture(0);
+
+		std::vector<Vertex> vertex = createRoundRect(x, y, width, height, radius, color);
+		drawTriangleFan(vertex.data(), vertex.size(), _srcBlendFactor, _dstBlendFactor);
+	}
+
+	void enableRoundCornerStencil(float x, float y, float width, float height, float radius)
+	{
+		std::vector<Vertex> vertex = createRoundRect(x, y, width, height, radius);
+		setStencil(vertex.data(), vertex.size());
+	}
+
 
 } // Renderer::

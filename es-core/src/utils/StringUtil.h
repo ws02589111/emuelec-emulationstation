@@ -22,8 +22,7 @@ namespace Utils
 		std::string  replace            (const std::string& _string, const std::string& _replace, const std::string& _with);
 		bool         startsWith         (const std::string& _string, const std::string& _start);
 		bool         endsWith           (const std::string& _string, const std::string& _end);
-		std::string  removeParenthesis  (const std::string& _string);
-		stringVector commaStringToVector(const std::string& _string);
+		std::string  removeParenthesis  (const std::string& _string);		
 		std::string  vectorToCommaString(stringVector _vector);
 		std::string  format             (const char* _string, ...);      
 		std::string  scramble           (const std::string& _input, const std::string& key);
@@ -43,6 +42,8 @@ namespace Utils
 		float		toFloat(const std::string& string);
 
 		std::string decodeXmlString(const std::string& string);
+		std::string toHexString(unsigned int color);
+		unsigned int fromHexString(const std::string& string);
 
 #if defined(_WIN32)
 		const std::string convertFromWideString(const std::wstring wstring);

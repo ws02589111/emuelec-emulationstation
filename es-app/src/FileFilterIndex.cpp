@@ -33,9 +33,8 @@ FileFilterIndex::FileFilterIndex()
 		{ REGION_FILTER, 	&regionIndexAllKeys,    &filterByRegion,	&regionIndexFilteredKeys, 	"region",		false,				"",				_("REGION") },
 		{ KIDGAME_FILTER, 	&kidGameIndexAllKeys, 	&filterByKidGame,	&kidGameIndexFilteredKeys, 	"kidgame",		false,				"",				_("KIDGAME") },
 		{ PLAYED_FILTER, 	&playedIndexAllKeys,    &filterByPlayed,	&playedIndexFilteredKeys, 	"played",		false,				"",				_("ALREADY PLAYED") },
-#ifdef _ENABLEEMUELEC
-        { CHEEVOS_FILTER, 	&cheevosIndexAllKeys,   &filterByCheevos,	&cheevosIndexFilteredKeys, 	"cheevos",		false,				"",				_("HAS ACHIEVEMENTS") }
-#endif
+		{ CHEEVOS_FILTER, 	&cheevosIndexAllKeys,   &filterByCheevos,	&cheevosIndexFilteredKeys, 	"cheevos",		false,				"",				_("HAS ACHIEVEMENTS") },
+		{ VERTICAL_FILTER, 	&verticalIndexAllKeys,  &filterByVertical,	&verticalIndexFilteredKeys, "vertical",		false,				"",				_("VERTICAL") }
 	};
 
 	std::vector<FilterDataDecl> filterDataDecl = std::vector<FilterDataDecl>(filterDecls, filterDecls + sizeof(filterDecls) / sizeof(filterDecls[0]));
@@ -103,10 +102,9 @@ void FileFilterIndex::importIndex(FileFilterIndex* indexToImport)
 		{ &langIndexAllKeys, &(indexToImport->langIndexAllKeys) },
 		{ &regionIndexAllKeys, &(indexToImport->regionIndexAllKeys) },
 		{ &kidGameIndexAllKeys, &(indexToImport->kidGameIndexAllKeys) },
-#ifdef _ENABLEEMUELEC
 		{ &cheevosIndexAllKeys, &(indexToImport->cheevosIndexAllKeys) },
-#endif
-        { &playedIndexAllKeys, &(indexToImport->playedIndexAllKeys) }
+		{ &verticalIndexAllKeys, &(indexToImport->verticalIndexAllKeys) },
+		{ &playedIndexAllKeys, &(indexToImport->playedIndexAllKeys) }
 
 	};
 
@@ -145,9 +143,8 @@ void FileFilterIndex::resetIndex()
 
 	clearIndex(langIndexAllKeys);
 	clearIndex(regionIndexAllKeys);
-#ifdef _ENABLEEMUELEC
 	clearIndex(cheevosIndexAllKeys);
-#endif
+	clearIndex(verticalIndexAllKeys);
 
 	manageIndexEntry(&favoritesIndexAllKeys, "FALSE", false);
 	manageIndexEntry(&favoritesIndexAllKeys, "TRUE", false);
@@ -157,136 +154,150 @@ void FileFilterIndex::resetIndex()
 
 	manageIndexEntry(&playedIndexAllKeys, "FALSE", false);
 	manageIndexEntry(&playedIndexAllKeys, "TRUE", false);
-#ifdef _ENABLEEMUELEC
+
 	manageIndexEntry(&cheevosIndexAllKeys, "FALSE", false);
 	manageIndexEntry(&cheevosIndexAllKeys, "TRUE", false);
-#endif
+
+	manageIndexEntry(&verticalIndexAllKeys, "FALSE", false);
+	manageIndexEntry(&verticalIndexAllKeys, "TRUE", false);
+
+	manageIndexEntry(&ratingsIndexAllKeys, "1 STAR", false);
+	manageIndexEntry(&ratingsIndexAllKeys, "2 STARS", false);
+	manageIndexEntry(&ratingsIndexAllKeys, "3 STARS", false);
+	manageIndexEntry(&ratingsIndexAllKeys, "4 STARS", false);
+	manageIndexEntry(&ratingsIndexAllKeys, "5 STARS", false);
 }
 
 std::string FileFilterIndex::getIndexableKey(FileData* game, FilterIndexType type, bool getSecondary)
 {
 	std::string key;
-	switch(type)
+	switch (type)
 	{
-		case LANG_FILTER:
-		{
-			if (getSecondary)
-				break;
-
-			key = game->getMetadata(MetaDataId::Language);
+	case LANG_FILTER:
+	{
+		if (getSecondary)
 			break;
-		}
-		
-		case REGION_FILTER:
-		{
-			if (getSecondary)
-				break;
 
-			key = game->getMetadata(MetaDataId::Region);
-			break;
-		}
-
-		case GENRE_FILTER:
-		{
-			key = game->getMetadata(MetaDataId::Genre);
-			if (!key.empty())
-			{
-				auto idx = key.find('/');
-
-				if (!getSecondary && idx != std::string::npos)
-					key = Utils::String::trim(key.substr(0, idx));
-				else if (getSecondary && idx == std::string::npos)
-					key = "";
-			}
-			break;
-		}
-
-		case PLAYER_FILTER:
-		{
-			if (getSecondary)
-				break;
-
-			key = game->getMetadata(MetaDataId::Players);
-			break;
-		}
-
-		case PUBDEV_FILTER:
-		{
-			key = game->getMetadata(MetaDataId::Publisher);
-
-			if ((getSecondary && !key.empty()) || (!getSecondary && key.empty()))
-				key = game->getMetadata(MetaDataId::Developer);
-		
-			break;
-		}
-
-		case RATINGS_FILTER:
-		{
-			int ratingNumber = 0;
-			if (!getSecondary)
-			{
-				std::string ratingString = game->getMetadata(MetaDataId::Rating);
-				if (!ratingString.empty()) 
-				{
-					float rating = Utils::String::toFloat(ratingString);
-					if (rating > 0.0f)
-					{
-						if (rating > 1.0f)
-							rating = 1.0f;
-
-						ratingNumber = (int)Math::round(rating * 5);
-						key = std::to_string(ratingNumber) + " STARS";
-					}
-				}
-			}
-			break;
-		}
-
-		case FAVORITES_FILTER:
-		{
-			if (game->getType() != GAME)
-				return "FALSE";
-
-			key = game->getMetadata(MetaDataId::Favorite);
-			break;
-		}
-
-		case KIDGAME_FILTER:
-		{
-			if (game->getType() != GAME)
-				return "FALSE";
-
-			key = game->getMetadata(MetaDataId::KidGame);
-			break;
-		}
-
-		case PLAYED_FILTER:
-		{
-			key = Utils::String::toInteger(game->getMetadata(MetaDataId::PlayCount)) == 0 ? "FALSE" : "TRUE";
-			break;
-		}
-
-		case YEAR_FILTER:
-		{
-			key = game->getMetadata(MetaDataId::ReleaseDate);
-			key = (key.length() >= 4 && key[0] >= '1' && key[0] <= '2') ? key.substr(0, 4) : "";
-			break;
-		}
-#ifdef _ENABLEEMUELEC
-		case CHEEVOS_FILTER:
-		{
-			if (getSecondary)
-				break;
-
-			key = game->getMetadata(MetaDataId::Cheevos);
-			break;
-		}
-#endif
+		key = game->getMetadata(MetaDataId::Language);
+		break;
 	}
+
+	case REGION_FILTER:
+	{
+		if (getSecondary)
+			break;
+
+		key = game->getMetadata(MetaDataId::Region);
+		break;
+	}
+
+	case GENRE_FILTER:
+	{
+		key = game->getMetadata(MetaDataId::Genre);
+		if (!key.empty())
+		{
+			auto idx = key.find('/');
+
+			if (!getSecondary && idx != std::string::npos)
+				key = Utils::String::trim(key.substr(0, idx));
+			else if (getSecondary && idx == std::string::npos)
+				key = "";
+		}
+		break;
+	}
+
+	case PLAYER_FILTER:
+	{
+		if (getSecondary)
+			break;
+
+		key = game->getMetadata(MetaDataId::Players);
+		break;
+	}
+
+	case PUBDEV_FILTER:
+	{
+		key = game->getMetadata(MetaDataId::Publisher);
+
+		if ((getSecondary && !key.empty()) || (!getSecondary && key.empty()))
+			key = game->getMetadata(MetaDataId::Developer);
+
+		break;
+	}
+
+	case RATINGS_FILTER:
+	{
+		int ratingNumber = 0;
+		if (getSecondary)
+			return UNKNOWN_LABEL;
 		
-	if (key.empty() || (type == RATINGS_FILTER && key == "0 STARS")) 
+		std::string ratingString = game->getMetadata(MetaDataId::Rating);
+		if (ratingString.empty())
+			return UNKNOWN_LABEL;
+
+		float rating = Utils::String::toFloat(ratingString);
+		if (rating <= 0.0f)
+			return UNKNOWN_LABEL;
+			
+		if (rating > 1.0f)
+			rating = 1.0f;
+
+		ratingNumber = (int)Math::round(rating * 5);
+		return std::to_string(ratingNumber) + " STARS";					
+	}
+
+	case FAVORITES_FILTER:
+	{
+		if (game->getType() != GAME)
+			return "FALSE";
+
+		key = game->getMetadata(MetaDataId::Favorite);
+		break;
+	}
+
+	case KIDGAME_FILTER:
+	{
+		if (game->getType() != GAME)
+			return "FALSE";
+
+		key = game->getMetadata(MetaDataId::KidGame);
+		break;
+	}
+
+	case PLAYED_FILTER:
+		return Utils::String::toInteger(game->getMetadata(MetaDataId::PlayCount)) == 0 ? "FALSE" : "TRUE";		
+
+	case YEAR_FILTER:
+		key = game->getMetadata(MetaDataId::ReleaseDate);
+		key = (key.length() >= 4 && key[0] >= '1' && key[0] <= '2') ? key.substr(0, 4) : "";
+		return key;
+
+	case CHEEVOS_FILTER:
+	{
+		if (getSecondary)
+			break;
+
+		if (game->getType() != GAME)
+			return "FALSE";
+
+		return game->hasCheevos() ? "TRUE" : "FALSE";		
+	}
+
+	case VERTICAL_FILTER:
+	{
+		if (getSecondary)
+			break;
+
+		if (game->getType() != GAME)
+			return "FALSE";
+
+		return game->isVerticalArcadeGame() ? "TRUE" : "FALSE";		
+	}
+	}
+
+	if (key.empty() || (type == RATINGS_FILTER && key == "0 STARS"))
 		return UNKNOWN_LABEL;
-	
+
 	return Utils::String::toUpper(key);
 }
 
@@ -296,22 +307,20 @@ void FileFilterIndex::addToIndex(FileData* game)
 
 	manageGenreEntryInIndex(game);
 	managePlayerEntryInIndex(game);
-	managePubDevEntryInIndex(game);
-	manageRatingsEntryInIndex(game);
+	managePubDevEntryInIndex(game);	
 	manageYearEntryInIndex(game);
 	manageLangEntryInIndex(game);
-	manageRegionEntryInIndex(game);	
+	manageRegionEntryInIndex(game);		
 }
 
 void FileFilterIndex::removeFromIndex(FileData* game)
 {
 	manageGenreEntryInIndex(game, true);
 	managePlayerEntryInIndex(game, true);
-	managePubDevEntryInIndex(game, true);
-	manageRatingsEntryInIndex(game, true);
+	managePubDevEntryInIndex(game, true);	
 	manageYearEntryInIndex(game, true);
 	manageLangEntryInIndex(game, true);
-	manageRegionEntryInIndex(game, true);
+	manageRegionEntryInIndex(game, true);	
 }
 
 void FileFilterIndex::setFilter(FilterIndexType type, std::vector<std::string>* values)
@@ -776,35 +785,12 @@ void FileFilterIndex::managePubDevEntryInIndex(FileData* game, bool remove)
 	}
 }
 
-void FileFilterIndex::manageRatingsEntryInIndex(FileData* game, bool remove)
-{
-	std::string key = getIndexableKey(game, RATINGS_FILTER, false);
-
-	// flag for including unknowns
-	bool includeUnknown = INCLUDE_UNKNOWN;
-
-	if (!includeUnknown && key == UNKNOWN_LABEL) {
-		// no valid rating info found
-		return;
-	}
-
-	manageIndexEntry(&ratingsIndexAllKeys, key, remove);
-}
-
 void FileFilterIndex::manageYearEntryInIndex(FileData* game, bool remove)
 {
-	std::string key = getIndexableKey(game, YEAR_FILTER, false);
-
-	// flag for including unknowns
-	bool includeUnknown = INCLUDE_UNKNOWN;
-
-	if (!includeUnknown && key == UNKNOWN_LABEL)
-		return;
-
-	manageIndexEntry(&yearIndexAllKeys, key, remove);
+	manageIndexEntry(&yearIndexAllKeys, getIndexableKey(game, YEAR_FILTER, false), remove);
 }
 
-void FileFilterIndex::manageIndexEntry(std::map<std::string, int>* index, std::string key, bool remove, bool forceUnknown)
+void FileFilterIndex::manageIndexEntry(std::map<std::string, int>* index, const std::string& key, bool remove, bool forceUnknown)
 {
 	bool includeUnknown = INCLUDE_UNKNOWN;
 	if (!includeUnknown && key == UNKNOWN_LABEL && !forceUnknown)
@@ -935,10 +921,10 @@ bool CollectionFilter::load(const std::string file)
 			langIndexFilteredKeys.insert(node.text().as_string());
 		else if (name == "region")
 			regionIndexFilteredKeys.insert(node.text().as_string());
-#ifdef _ENABLEEMUELEC
 		else if (name == "cheevos")
 			cheevosIndexFilteredKeys.insert(node.text().as_string());
-#endif
+		else if (name == "vertical")
+			verticalIndexFilteredKeys.insert(node.text().as_string());
 	}
 
 	for (auto& it : mFilterDecl)
@@ -992,10 +978,11 @@ bool CollectionFilter::save()
 	for (auto key : regionIndexFilteredKeys)
 		root.append_child("region").text().set(key.c_str());
 
-#ifdef _ENABLEEMUELEC
 	for (auto key : cheevosIndexFilteredKeys)
 		root.append_child("cheevos").text().set(key.c_str());
-#endif
+
+	for (auto key : verticalIndexFilteredKeys)
+		root.append_child("vertical").text().set(key.c_str());
 
 	if (!doc.save_file(mPath.c_str()))
 	{

@@ -27,6 +27,7 @@ namespace PlatformIds
 		ATARI_XE,
 		COLECOVISION,
 		COMMODORE_64,
+		COMMODORE_VIC20,
 		INTELLIVISION,
 		MAC_OS,
 		XBOX,
@@ -100,6 +101,8 @@ namespace PlatformIds
 		SUFAMITURBO,
 		ZX81,
 		TIC80,
+		MODEL3,
+		IMAGEVIEWER,
 
 		// Windows Specific
 		VISUALPINBALL,
@@ -117,6 +120,9 @@ namespace PlatformIds
 		PALMOS,
 		DAPHNE,
 		SOLARUS,
+
+		VIC20,
+		TI99,
 
 		PLATFORM_IGNORE, // do not allow scraping for this system
 		PLATFORM_COUNT

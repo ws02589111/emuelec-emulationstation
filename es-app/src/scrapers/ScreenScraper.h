@@ -14,7 +14,9 @@ public:
 		std::queue<std::unique_ptr<ScraperRequest>>& requests,
 		std::vector<ScraperSearchResult>& results) override;
 
-	int getThreadCount() override;
+	bool isSupportedPlatform(SystemData* system) override;
+	bool hasMissingMedia(FileData* file) override;
+	int getThreadCount(std::string &result) override;
 };
 
 struct ScreenScraperUser

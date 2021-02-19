@@ -12,6 +12,7 @@
 #include <algorithm>
 #include "LocaleES.h"
 #include "components/ScrollbarComponent.h"
+#include <set>
 
 #define EXTRAITEMS 2
 #define ALLOWANIMATIONS (Settings::getInstance()->getString("TransitionStyle") != "instant")
@@ -44,6 +45,7 @@ struct ImageGridData
 	std::string marqueePath;
 	std::string videoPath;
 	bool		favorite;
+	bool		cheevos;
 	bool		folder;
 	bool		virtualFolder;
 };
@@ -70,9 +72,10 @@ public:
 
 	ImageGridComponent(Window* window);
 
-	void add(const std::string& name, const std::string& imagePath, const std::string& videoPath, const std::string& marqueePath, bool favorite, bool folder, bool virtualFolder, const T& obj);
+	void add(const std::string& name, const std::string& imagePath, const std::string& videoPath, const std::string& marqueePath, bool favorite, bool cheevos, bool folder, bool virtualFolder, const T& obj);
 	
 	void setImage(const std::string& imagePath, const T& obj);
+	std::string getImage(const T& obj);
 
 	bool input(InputConfig* config, Input input) override;
 	void update(int deltaTime) override;
@@ -137,6 +140,7 @@ private:
 
 	std::shared_ptr<ThemeData> mTheme;
 	std::vector< std::shared_ptr<GridTileComponent> > mTiles;
+	// std::set<std::shared_ptr<TextureResource>> mTextures;
 
 	std::string mName;
 
@@ -202,7 +206,7 @@ ImageGridComponent<T>::ImageGridComponent(Window* window) : IList<ImageGridData,
 }
 
 template<typename T>
-void ImageGridComponent<T>::add(const std::string& name, const std::string& imagePath, const std::string& videoPath, const std::string& marqueePath, bool favorite, bool folder, bool virtualFolder, const T& obj)
+void ImageGridComponent<T>::add(const std::string& name, const std::string& imagePath, const std::string& videoPath, const std::string& marqueePath, bool favorite, bool cheevos, bool folder, bool virtualFolder, const T& obj)
 {
 	typename IList<ImageGridData, T>::Entry entry;
 	entry.name = name;
@@ -211,11 +215,23 @@ void ImageGridComponent<T>::add(const std::string& name, const std::string& imag
 	entry.data.videoPath = videoPath;
 	entry.data.marqueePath = marqueePath;
 	entry.data.favorite = favorite;
+	entry.data.cheevos = cheevos;
 	entry.data.folder = folder;
 	entry.data.virtualFolder = virtualFolder;
 
 	static_cast<IList< ImageGridData, T >*>(this)->add(entry);
 	mEntriesDirty = true;
+}
+
+template<typename T>
+std::string ImageGridComponent<T>::getImage(const T& obj)
+{
+	IList<ImageGridData, T>* list = static_cast<IList< ImageGridData, T >*>(this);
+	auto entry = list->findEntry(obj);
+	if (entry != list->end())
+		return (*entry).data.texturePath;
+
+	return "";
 }
 
 template<typename T>
@@ -225,7 +241,7 @@ void ImageGridComponent<T>::setImage(const std::string& imagePath, const T& obj)
 	auto entry = list->findEntry(obj);
 	if (entry != list->end())
 	{
-		(*entry)->data.texturePath = imagePath;
+		(*entry).data.texturePath = imagePath;
 		mEntriesDirty = true;
 	}
 }
@@ -409,7 +425,7 @@ void ImageGridComponent<T>::render(const Transform4x4f& parentTrans)
 	if (!Renderer::isVisibleOnScreen(trans.translation().x(), trans.translation().y(), mSize.x(), mSize.y()))
 		return;
 
-	if (Settings::getInstance()->getBool("DebugGrid"))
+	if (Settings::DebugGrid)
 	{
 		Renderer::setMatrix(trans);
 		Renderer::drawRect(0.0f, 0.0f, mSize.x(), mSize.y(), 0xFF000033);
@@ -421,7 +437,7 @@ void ImageGridComponent<T>::render(const Transform4x4f& parentTrans)
 	
 	tileTrans.translate(Vector3f(offsetX, offsetY, 0.0));
 
-	if (mEntriesDirty)
+	if (mEntriesDirty && !(((GuiComponent*)this)->isAnimationPlaying(2)))
 	{
 		updateTiles();
 		mEntriesDirty = false;
@@ -434,7 +450,7 @@ void ImageGridComponent<T>::render(const Transform4x4f& parentTrans)
 	Vector2i pos((int)Math::round(trans.translation()[0]), (int)Math::round(trans.translation()[1]));
 	Vector2i size((int)Math::round(mSize.x() * scaleX), (int)Math::round(mSize.y() * scaleY));
 
-	if (Settings::getInstance()->getBool("DebugGrid"))
+	if (Settings::DebugGrid)
 	{
 		for (auto it = mTiles.begin(); it != mTiles.end(); it++)
 		{
@@ -550,6 +566,14 @@ void ImageGridComponent<T>::applyTheme(const std::shared_ptr<ThemeData>& theme, 
 			mAutoLayout = elem->get<Vector2f>("autoLayout");
 
 			float screenProportion = (float)Renderer::getScreenWidth() / (float)Renderer::getScreenHeight();
+
+			if (properties & ThemeFlags::SIZE && elem->has("size"))
+			{
+				Vector2f scale = GuiComponent::getParent() ? GuiComponent::getParent()->getSize() : Vector2f((float)Renderer::getScreenWidth(), (float)Renderer::getScreenHeight());
+				auto size = elem->get<Vector2f>("size") * scale;
+				if (size.y() != 0)
+					screenProportion = size.x() / size.y();
+			}
 
 			float cellProportion = 1;
 			if (elem->has("cellProportion"))
@@ -723,6 +747,9 @@ template<typename T>
 void ImageGridComponent<T>::onSizeChanged()
 {
 	if (mTheme == nullptr)
+		return;
+
+	if (mSize.x() <= 0 || mSize.y() <= 0)
 		return;
 
 	buildTiles();
@@ -935,6 +962,9 @@ void ImageGridComponent<T>::updateTiles(bool allowAnimation, bool updateSelected
 	{
 		previousTextures.push_back(mTiles.at(ti)->getTexture(true));
 		previousTextures.push_back(mTiles.at(ti)->getTexture(false));
+
+		// mTextures.insert(mTiles.at(ti)->getTexture(true));
+		// mTextures.insert(mTiles.at(ti)->getTexture(false));		
 	}
 
 	int i = 0;
@@ -955,8 +985,11 @@ void ImageGridComponent<T>::updateTiles(bool allowAnimation, bool updateSelected
 	{
 		newTextures.push_back(mTiles.at(ti)->getTexture(true));
 		newTextures.push_back(mTiles.at(ti)->getTexture(false));
-	}
 
+		//mTextures.insert(mTiles.at(ti)->getTexture(true));
+		//mTextures.insert(mTiles.at(ti)->getTexture(false));
+	}
+	
 	// Compare old texture with new textures -> Remove missing from async queue if existing
 	for (auto tex : previousTextures)
 	{
@@ -966,7 +999,7 @@ void ImageGridComponent<T>::updateTiles(bool allowAnimation, bool updateSelected
 		if (std::find(newTextures.cbegin(), newTextures.cend(), tex) == newTextures.cend())
 			TextureResource::cancelAsync(tex);
 	}
-
+	
 	if (updateSelectedState)
 		mLastCursor = mCursor;
 
@@ -1048,7 +1081,7 @@ void ImageGridComponent<T>::updateTileAtPos(int tilePos, int imgPos, bool allowA
 					setMarquee = false;
 				}
 				else
-					tile->setImage(imagePath, true);				
+					tile->setImage(imagePath, true);
 			}
 			else
 				tile->setImage(imagePath, false);
@@ -1084,6 +1117,7 @@ void ImageGridComponent<T>::updateTileAtPos(int tilePos, int imgPos, bool allowA
 		}
 
 		tile->setFavorite(mEntries.at(imgPos).data.favorite);
+		tile->setCheevos(mEntries.at(imgPos).data.cheevos);
 
 		// Video
 		if (mAllowVideo && imgPos == mCursor)
@@ -1127,6 +1161,11 @@ void ImageGridComponent<T>::buildTiles()
 {
 	if (mGridSizeOverride.x() != 0 && mGridSizeOverride.y() != 0)
 		mAutoLayout = mGridSizeOverride;
+
+	// temporary keep references to tiles to avoid shared fonts & shared textures destructors
+	std::vector<std::shared_ptr<GridTileComponent>> oldTiles;
+	for (auto tile : mTiles)
+		oldTiles.push_back(tile);
 
 	mStartPosition = 0;
 	mTiles.clear();

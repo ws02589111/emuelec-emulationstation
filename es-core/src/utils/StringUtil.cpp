@@ -324,26 +324,29 @@ namespace Utils
 			return result;
 
 		} // moveCursor
-
-		static std::string changeUnicodeCasing(const std::string& _string, bool toUpper)
+		
+		std::string toLower(const std::string& _string) 
 		{
 			std::string text = _string;
 
 			size_t i = 0;
 			while (i < text.length())
-			{				
-				if ((text[i] & 0x80) == 0)
+			{
+				char c = text[i];
+				if ((c & 0x80) == 0)
 				{
-					text[i] = toUpper ? toupper(text[i]) : tolower(text[i]);
+					if (c >= 'A' && c <= 'Z')
+						text[i] = c + 0x20;
+
 					i++;
 					continue;
 				}
 
 				int pos = i;
 				wchar_t character = (wchar_t)chars2Unicode(text, i);
-				wchar_t unicode = toUpper ? toupperUnicode(character) : tolowerUnicode(character);				
+				wchar_t unicode = tolowerUnicode(character);
 				if (unicode != character)
-				{					
+				{
 					int charSize = i - pos;
 					if (charSize == 2)
 					{
@@ -357,14 +360,51 @@ namespace Utils
 						text[pos + 2] += (char)((unicode & 0x3F) | 0x80);
 
 					}
-				}			
+				}
 			}
 
 			return text;
 		}
 
-		std::string toLower(const std::string& _string) { return changeUnicodeCasing(_string, false); }
-		std::string toUpper(const std::string& _string) { return changeUnicodeCasing(_string, true); }
+		std::string toUpper(const std::string& _string) 
+		{
+			std::string text = _string;
+
+			size_t i = 0;
+			while (i < text.length())
+			{
+				char c = text[i];
+				if ((c & 0x80) == 0)
+				{
+					if (c >= 'a' && c <= 'z')
+						text[i] = c - 0x20;
+
+					i++;
+					continue;
+				}
+
+				int pos = i;
+				wchar_t character = (wchar_t)chars2Unicode(text, i);
+				wchar_t unicode = toupperUnicode(character);
+				if (unicode != character)
+				{
+					int charSize = i - pos;
+					if (charSize == 2)
+					{
+						text[pos] = (char)(((unicode >> 6) & 0xFF) | 0xC0);
+						text[pos + 1] = (char)((unicode & 0x3F) | 0x80);
+					}
+					else if (charSize == 3)
+					{
+						text[pos] += (char)(((unicode >> 12) & 0xFF) | 0xE0);
+						text[pos + 1] += (char)(((unicode >> 6) & 0x3F) | 0x80);
+						text[pos + 2] += (char)((unicode & 0x3F) | 0x80);
+					}
+				}
+			}
+
+			return text;
+		}
 
 		std::string trim(const std::string& _string)
 		{
@@ -402,7 +442,7 @@ namespace Utils
 		bool endsWith(const std::string& _string, const std::string& _end)
 		{
 			if (_end.size() > _string.size()) return false;
-			return std::equal(_end.rbegin(), _end.rend(), _string.rbegin());
+			return (_string.rfind(_end) == (_string.size() - _end.size()));
 		} // endsWith
 
 		std::string removeParenthesis(const std::string& _string)
@@ -433,26 +473,6 @@ namespace Utils
 			return trim(string);
 
 		} // removeParenthesis
-
-		stringVector commaStringToVector(const std::string& _string)
-		{
-			stringVector vector;
-			size_t       start = 0;
-			size_t       comma = _string.find(",");
-
-			while(comma != std::string::npos)
-			{
-				vector.push_back(_string.substr(start, comma - start));
-				start = comma + 1;
-				comma = _string.find(",", start);
-			}
-
-			vector.push_back(_string.substr(start));
-			std::sort(vector.begin(), vector.end());
-
-			return vector;
-
-		} // commaStringToVector
 
 		std::string vectorToCommaString(stringVector _vector)
 		{
@@ -512,21 +532,19 @@ namespace Utils
 
 			if (s.empty())
 				return output;
+			
+			const char* src = s.c_str();
 
-			std::string::size_type prev_pos = 0, pos = 0;
-			while ((pos = s.find(seperator, pos)) != std::string::npos)
+			while (true) 
 			{
-				std::string substring(s.substr(prev_pos, pos - prev_pos));
+				const char* d = strchr(src, seperator);
+				size_t len = (d) ? d - src : strlen(src);
 
-				if (!removeEmptyEntries || !substring.empty())
-					output.push_back(substring);
+				if (len || !removeEmptyEntries)
+					output.push_back(std::string(src, len)); // capture token
 
-				prev_pos = ++pos;
+				if (d) src += len + 1; else break;
 			}
-
-			std::string lastLine = s.substr(prev_pos, pos - prev_pos);
-			if (!removeEmptyEntries || !lastLine.empty())
-				output.push_back(lastLine); // Last word
 
 			return output;
 		}
@@ -535,20 +553,26 @@ namespace Utils
 		{
 			std::vector<std::string> output;
 
-			char* str = new char[s.length() + 1];
-			std::strcpy(str, s.c_str());
-			
-			char* pch = strtok(str, seperator.c_str());
-			while (pch != NULL)
+			unsigned prev_pos = 0;
+			auto pos = s.find_first_of(seperator);
+			while (pos != std::string::npos)
 			{
-				if (!removeEmptyEntries || pch[0] != 0)
-					output.push_back(pch);
+				std::string token = s.substr(prev_pos, pos - prev_pos);
+				if (!removeEmptyEntries || !token.empty())
+					output.push_back(token);
 
-				pch = strtok(NULL, seperator.c_str());
+				pos++;
+				prev_pos = pos;
+				pos = s.find_first_of(seperator, pos);
 			}
 
-			delete str;
-		
+			if (prev_pos < s.length())
+			{
+				std::string token = s.substr(prev_pos);
+				if (!removeEmptyEntries || !token.empty())
+					output.push_back(token); // Last word
+			}
+
 			return output;
 		}
 
@@ -618,19 +642,39 @@ namespace Utils
 
 		int compareIgnoreCase(const std::string& name1, const std::string& name2)
 		{
-			auto makeUp = [](unsigned int c)
-			{
-				if ((c & 0x80) == 0) return toupper(c);
-				return (int)toupperUnicode(c);
-			};
-
 			size_t p1 = 0;
 			size_t p2 = 0;
 
+			int u1, u2;
+			char c1, c2;
+
 			while (true)
 			{
-				int u1 = makeUp(chars2Unicode(name1, p1));
-				int u2 = makeUp(chars2Unicode(name2, p2));
+				c1 = name1[p1];
+				if ((c1 & 0x80) == 0)
+				{
+					if (c1 >= 'a' && c1 <= 'z')
+						u1 = c1 - 0x20;
+					else
+						u1 = c1;
+
+					p1++;
+				}
+				else 
+					u1 = toupperUnicode(chars2Unicode(name1, p1));
+
+				c2 = name2[p2];
+				if ((c2 & 0x80) == 0)
+				{
+					if (c2 >= 'a' && c2 <= 'z')
+						u2 = c2 - 0x20;
+					else
+						u2 = c2;
+
+					p2++;
+				}
+				else
+					u2 = toupperUnicode(chars2Unicode(name2, p2));
 
 				if (u1 == 0 && u2 != 0)
 					return -1;
@@ -688,14 +732,118 @@ namespace Utils
 			return trim(text);
 		}
 
+		unsigned int fromHexString(const std::string& string)
+		{
+			if (string.empty())
+				return 0;
+
+			unsigned int value = 0;
+
+			int dec = 0;
+			for (int i = string.length() - 1; i >= 0; i--)
+			{
+				char c = string[i];
+				if (c == ' ')
+					continue;
+
+				if (c == 'x' || c == 'X')
+					return value;
+
+				if (c >= '0' && c <= '9')
+					value += (c - '0') << dec;
+				else if (c >= 'A' && c <= 'F')
+					value += (c - 'A' + 10) << dec;
+				else if (c >= 'a' && c <= 'f')
+					value += (c - 'a' + 10) << dec;
+				else
+					return 0;
+
+				dec += 4;
+			}
+
+			return value;
+		}
+
 		int	toInteger(const std::string& string)
 		{
-			return atoi(string.c_str());
+			if (string.empty())
+				return 0;
+
+			const char* str = string.c_str();
+			while (*str == ' ')
+				str++;
+
+			bool neg = false;
+			if (*str == '-')
+			{
+				neg = true;
+				++str;
+			}
+			else if (*str == '+')
+				++str;
+
+			int64_t value = 0;
+			for (; *str && *str != '.' && *str != ' '; str++)
+			{
+				if (*str < '0' || *str > '9')
+					return 0;
+
+				value *= 10;
+				value += *str - '0';
+			}
+
+			return neg ? -value : value;
 		}
 
 		float toFloat(const std::string& string)
 		{
-			return atof(string.c_str());
+			if (string.empty())
+				return 0.0f;
+
+			const char* str = string.c_str();
+			while (*str == ' ')
+				str++;
+
+			bool neg = false;
+			if (*str == '-') 
+			{
+				neg = true;
+				++str;
+			}
+			else if (*str == '+')
+				++str;
+			
+			int64_t value = 0;
+			for (; *str && *str != '.' && *str != ' '; str++)
+			{
+				if (*str < '0' || *str > '9')
+					return 0;
+
+				value *= 10;
+				value += *str - '0';
+			}
+
+			if (*str == '.')
+			{
+				str++;
+
+				int64_t decimal = 0, weight = 1;
+
+				for (; *str && *str != ' '; str++)
+				{
+					if (*str < '0' || *str > '9')
+						return 0;
+
+					decimal *= 10;
+					decimal += *str - '0';
+					weight *= 10;
+				}
+
+				float ret = value + (decimal / (float)weight);
+				return neg ? -ret : ret;
+			}
+
+			return neg ? -value : value;
 		}
 
 		std::string decodeXmlString(const std::string& string)
@@ -712,14 +860,21 @@ namespace Utils
 			return ret;
 		}
 
+		std::string toHexString(unsigned int color)
+		{
+			char hex[10];
+			hex[0] = 0;
+			auto len = snprintf(hex, sizeof(hex) - 1, "%08X", color);
+			hex[len] = 0;
+			return hex;
+		}
 
 #if defined(_WIN32)
 		const std::string convertFromWideString(const std::wstring wstring)
 		{
 			int numBytes = WideCharToMultiByte(CP_UTF8, 0, wstring.c_str(), (int)wstring.length(), nullptr, 0, nullptr, nullptr);
 
-			std::string string;
-			string.resize(numBytes);
+			std::string string(numBytes, 0);			
 			WideCharToMultiByte(CP_UTF8, 0, wstring.c_str(), (int)wstring.length(), (char*)string.c_str(), numBytes, nullptr, nullptr);
 
 			return string;
@@ -729,8 +884,7 @@ namespace Utils
 		{
 			int numBytes = MultiByteToWideChar(CP_UTF8, 0, string.c_str(), (int)string.length(), nullptr, 0);
 
-			std::wstring wstring;
-			wstring.resize(numBytes);
+			std::wstring wstring(numBytes, 0);			
 			MultiByteToWideChar(CP_UTF8, 0, string.c_str(), (int)string.length(), (WCHAR*)wstring.c_str(), numBytes);
 
 			return wstring;

@@ -25,26 +25,25 @@
 #include <algorithm>
 #include "LangParser.h"
 #include "resources/ResourceManager.h"
+#include "RetroAchievements.h"
+#include "SaveStateRepository.h"
 
 FileData::FileData(FileType type, const std::string& path, SystemData* system)
-	: mType(type), mSystem(system), mParent(NULL), mMetadata(type == GAME ? GAME_METADATA : FOLDER_METADATA) // metadata is REALLY set in the constructor!
+	: mPath(path), mType(type), mSystem(system), mParent(NULL), mMetadata(type == GAME ? GAME_METADATA : FOLDER_METADATA) // metadata is REALLY set in the constructor!
 {
-	mPath = Utils::FileSystem::createRelativePath(path, getSystemEnvData()->mStartPath, false);
-	
 	// metadata needs at least a name field (since that's what getName() will return)
 	if (mMetadata.get(MetaDataId::Name).empty())
 		mMetadata.set(MetaDataId::Name, getDisplayName());
 	
 	mMetadata.resetChangedFlag();
-
 }
 
 const std::string FileData::getPath() const
-{ 	
+{
 	if (mPath.empty())
 		return getSystemEnvData()->mStartPath;
 
-	return Utils::FileSystem::resolveRelativePath(mPath, getSystemEnvData()->mStartPath, true);	
+	return mPath;
 }
 
 const std::string FileData::getBreadCrumbPath()
@@ -83,9 +82,6 @@ const std::string FileData::getConfigurationName()
 	std::string gameConf = Utils::FileSystem::getFileName(getPath());
 	gameConf = Utils::String::replace(gameConf, "=", "");
 	gameConf = Utils::String::replace(gameConf, "#", "");
-#ifdef _ENABLEEMUELEC
-	gameConf = Utils::String::replace(gameConf, "'", "'\\''");
-#endif
 	gameConf = getSourceFileData()->getSystem()->getName() + std::string("[\"") + gameConf + std::string("\"]");
 	return gameConf;
 }
@@ -141,7 +137,7 @@ const std::string FileData::getThumbnailPath()
 					std::string path = getSystemEnvData()->mStartPath + "/images/" + getDisplayName() + "-thumb" + extList[i];
 					if (Utils::FileSystem::exists(path))
 					{
-						setMetadata("thumbnail", path);
+						setMetadata(MetaDataId::Thumbnail, path);
 						thumbnail = path;
 					}
 				}
@@ -169,15 +165,20 @@ const std::string FileData::getThumbnailPath()
 			}
 		}
 
-		if (thumbnail.empty() && getSystemName() == "imageviewer")
+		if (thumbnail.empty() && getType() == GAME && getSourceFileData()->getSystem()->hasPlatformId(PlatformIds::IMAGEVIEWER))
 		{
-			auto ext = Utils::String::toLower(Utils::FileSystem::getExtension(getPath()));
-			if (ext == ".pdf" && ResourceManager::getInstance()->fileExists(":/pdf.jpg"))
-				return ":/pdf.jpg";
-			else if ((ext == ".mp4" || ext == ".avi" || ext == ".mkv") && ResourceManager::getInstance()->fileExists(":/vid.jpg"))
-				return ":/vid.jpg";
+			if (getType() == FOLDER && ((FolderData*)this)->mChildren.size())
+				return ((FolderData*)this)->mChildren[0]->getThumbnailPath();
+			else if (getType() == GAME)
+			{
+				thumbnail = getPath();
 
-			return getPath();
+				auto ext = Utils::String::toLower(Utils::FileSystem::getExtension(thumbnail));
+				if (ext == ".pdf" && ResourceManager::getInstance()->fileExists(":/pdf.jpg"))
+					return ":/pdf.jpg";
+				else if ((ext == ".mp4" || ext == ".avi" || ext == ".mkv") && ResourceManager::getInstance()->fileExists(":/vid.jpg"))
+					return ":/vid.jpg";
+			}
 		}
 
 	}
@@ -201,22 +202,24 @@ const bool FileData::getKidGame()
 	return data != "false" && !data.empty();
 }
 
-static std::shared_ptr<bool> showFilenames;
+const bool FileData::hasCheevos()
+{
+	if (Utils::String::toInteger(getMetadata(MetaDataId::CheevosId)) > 0)
+		return getSourceFileData()->getSystem()->isCheevosSupported();
+
+	return false;
+}
+
 static std::shared_ptr<bool> collectionShowSystemInfo;
 
 void FileData::resetSettings() 
 {
-	showFilenames = nullptr;
 	collectionShowSystemInfo = nullptr;
 }
 
 const std::string FileData::getName()
 {
-	if (showFilenames == nullptr)
-		showFilenames = std::make_shared<bool>(Settings::getInstance()->getBool("ShowFilenames"));
-
-	// Faster than accessing map each time
-	if (*showFilenames)
+	if (mSystem != nullptr && mSystem->getShowFilenames())
 	{
 		if (mSystem != nullptr && !mSystem->hasPlatformId(PlatformIds::ARCADE) && !mSystem->hasPlatformId(PlatformIds::NEOGEO))
 			return Utils::FileSystem::getStem(getPath());
@@ -237,7 +240,7 @@ const std::string FileData::getVideoPath()
 		std::string path = getSystemEnvData()->mStartPath + "/images/" + getDisplayName() + "-video.mp4";
 		if (Utils::FileSystem::exists(path))
 		{
-			setMetadata("video", path);
+			setMetadata(MetaDataId::Video, path);
 			video = path;
 		}
 	}
@@ -260,7 +263,7 @@ const std::string FileData::getMarqueePath()
 				std::string path = getSystemEnvData()->mStartPath + "/images/" + getDisplayName() + "-marquee" + extList[i];
 				if (Utils::FileSystem::exists(path))
 				{
-					setMetadata("marquee", path);
+					setMetadata(MetaDataId::Marquee, path);
 					marquee = path;
 				}
 			}
@@ -290,22 +293,27 @@ const std::string FileData::getImagePath()
 
 					if (Utils::FileSystem::exists(path))
 					{
-						setMetadata("image", path);
+						setMetadata(MetaDataId::Image, path);
 						image = path;
 					}
 				}
 			}
 		}
 
-		if (image.empty() && getSystemName() == "imageviewer")
+		if (image.empty() && getSourceFileData()->getSystem()->hasPlatformId(PlatformIds::IMAGEVIEWER))
 		{
-			image = getPath();
+			if (getType() == FOLDER && ((FolderData*)this)->mChildren.size())
+				return ((FolderData*)this)->mChildren[0]->getImagePath();
+			else if (getType() == GAME)
+			{
+				image = getPath();
 
-			auto ext = Utils::String::toLower(Utils::FileSystem::getExtension(image));
-			if (ext == ".pdf" && ResourceManager::getInstance()->fileExists(":/pdf.jpg"))
-				return ":/pdf.jpg";
-			else if ((ext == ".mp4" || ext == ".avi" || ext == ".mkv") && ResourceManager::getInstance()->fileExists(":/vid.jpg"))
-				return ":/vid.jpg";
+				auto ext = Utils::String::toLower(Utils::FileSystem::getExtension(image));
+				if (ext == ".pdf" && ResourceManager::getInstance()->fileExists(":/pdf.jpg"))
+					return ":/pdf.jpg";
+				else if ((ext == ".mp4" || ext == ".avi" || ext == ".mkv") && ResourceManager::getInstance()->fileExists(":/vid.jpg"))
+					return ":/vid.jpg";
+			}
 		}
 	}
 
@@ -322,6 +330,17 @@ const bool FileData::isArcadeAsset()
 	{	
 		const std::string stem = Utils::FileSystem::getStem(getPath());
 		return MameNames::getInstance()->isBios(stem) || MameNames::getInstance()->isDevice(stem);		
+	}
+
+	return false;
+}
+
+const bool FileData::isVerticalArcadeGame()
+{
+	if (mSystem && mSystem->hasPlatformId(PlatformIds::ARCADE))
+	{
+		const std::string stem = Utils::FileSystem::getStem(getPath());
+		return MameNames::getInstance()->isVertical(stem);
 	}
 
 	return false;
@@ -448,6 +467,9 @@ bool FileData::launchGame(Window* window, LaunchGameOptions options)
 	int monitorId = Settings::getInstance()->getInt("MonitorID");
 	if (monitorId >= 0 && command.find(" -system ") != std::string::npos)
 		command = command + " -monitor " + std::to_string(monitorId);
+	
+	if (SaveStateRepository::isEnabled(this))
+		command = options.saveStateInfo.setupSaveState(this, command);
 
 	Scripting::fireEvent("game-start", rom, basename);
 
@@ -460,6 +482,12 @@ bool FileData::launchGame(Window* window, LaunchGameOptions options)
 	int exitCode = runSystemCommand(command, getDisplayName(), hideWindow ? NULL : window);
 	if (exitCode != 0)
 		LOG(LogWarning) << "...launch terminated with nonzero exit code " << exitCode << "!";
+
+	if (SaveStateRepository::isEnabled(this))
+	{
+		options.saveStateInfo.onGameEnded();
+		getSourceFileData()->getSystem()->getSaveStateRepository()->refresh();
+	}
 
 	if (!p2kConv.empty()) // delete .keys file if it has been converted from p2k
 		Utils::FileSystem::removeFile(p2kConv);
@@ -477,34 +505,32 @@ bool FileData::launchGame(Window* window, LaunchGameOptions options)
 		window->init(hideWindow);
 
 	VolumeControl::getInstance()->init();
+	AudioManager::getInstance()->init();
 
-	// mSystem can be NULL
-	//AudioManager::getInstance()->setName(mSystem->getName()); // batocera system-specific music
-	AudioManager::getInstance()->init(); // batocera
 	window->normalizeNextUpdate();
 
 	//update number of times the game has been launched
 	if (exitCode == 0)
 	{
-		int timesPlayed = gameToUpdate->getMetadata().getInt("playcount") + 1;
-		gameToUpdate->setMetadata("playcount", std::to_string(static_cast<long long>(timesPlayed)));
+		int timesPlayed = gameToUpdate->getMetadata().getInt(MetaDataId::PlayCount) + 1;
+		gameToUpdate->setMetadata(MetaDataId::PlayCount, std::to_string(static_cast<long long>(timesPlayed)));
 
 		// Batocera 5.25: how long have you played that game? (more than 10 seconds, otherwise
 		// you might have experienced a loading problem)
 		time_t tend = time(NULL);
 		long elapsedSeconds = difftime(tend, tstart);
-		long gameTime = gameToUpdate->getMetadata().getInt("gametime") + elapsedSeconds;
+		long gameTime = gameToUpdate->getMetadata().getInt(MetaDataId::GameTime) + elapsedSeconds;
 		if (elapsedSeconds >= 10)
-			gameToUpdate->setMetadata("gametime", std::to_string(static_cast<long>(gameTime)));
+			gameToUpdate->setMetadata(MetaDataId::GameTime, std::to_string(static_cast<long>(gameTime)));
 
 		//update last played time
-		gameToUpdate->setMetadata("lastplayed", Utils::Time::DateTime(Utils::Time::now()));
+		gameToUpdate->setMetadata(MetaDataId::LastPlayed, Utils::Time::DateTime(Utils::Time::now()));
 		CollectionSystemManager::get()->refreshCollectionSystems(gameToUpdate);
 		saveToGamelistRecovery(gameToUpdate);
 	} else {
-		// show error message
+		// show emuelec error message
 		LOG(LogWarning) << "...Show Error message! exit code " << exitCode << "!";
-		ApiSystem::getInstance()->launchErrorWindow(window);
+        // ApiSystem::getInstance()->launchErrorWindow(window);
 	}
 
 	window->reactivateGui();
@@ -654,7 +680,7 @@ const std::vector<FileData*> FolderData::getChildrenListToDisplay()
 		if (!showHiddenFiles && (*it)->getHidden())
 			continue;
 
-		if (filterKidGame && !(*it)->getKidGame())
+		if (filterKidGame && (*it)->getType() == GAME && !(*it)->getKidGame())
 			continue;
 
 		if (hiddenExts.size() > 0 && (*it)->getType() == GAME)
@@ -933,11 +959,7 @@ const std::string FileData::getCore(bool resolveDefault)
 #if WIN32 && !_DEBUG
 	std::string core = getMetadata(MetaDataId::Core);
 #else
-#ifndef _ENABLEEMUELEC	
 	std::string core = SystemConf::getInstance()->get(getConfigurationName() + ".core"); 
-#else
-	std::string core = getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + getConfigurationName() + ".core'");
-#endif
 #endif
 
 	if (core == "auto")
@@ -987,11 +1009,7 @@ const std::string FileData::getEmulator(bool resolveDefault)
 #if WIN32 && !_DEBUG
 	std::string emulator = getMetadata(MetaDataId::Emulator);
 #else
-#ifndef _ENABLEEMUELEC	
 	std::string emulator = SystemConf::getInstance()->get(getConfigurationName() + ".emulator");
-#else
-	std::string emulator = getShOutput(R"(/emuelec/scripts/emuelec-utils setemu get ')" + getConfigurationName() + ".emulator'");
-#endif
 #endif
 
 	if (emulator == "auto")
@@ -1018,26 +1036,18 @@ const std::string FileData::getEmulator(bool resolveDefault)
 void FileData::setCore(const std::string value)
 {
 #if WIN32 && !_DEBUG
-	setMetadata("core", value == "auto" ? "" : value);
+	setMetadata(MetaDataId::Core, value == "auto" ? "" : value);
 #else
-#ifndef _ENABLEEMUELEC	
 	SystemConf::getInstance()->set(getConfigurationName() + ".core", value);
-#else
-	getShOutput(R"(/emuelec/scripts/emuelec-utils setemu set ')" + getConfigurationName() + ".core' " + value);
-#endif
 #endif
 }
 
 void FileData::setEmulator(const std::string value)
 {
 #if WIN32 && !_DEBUG
-	setMetadata("emulator", value == "auto" ? "" : value);
+	setMetadata(MetaDataId::Emulator, value == "auto" ? "" : value);
 #else
-#ifndef _ENABLEEMUELEC
 	SystemConf::getInstance()->set(getConfigurationName() + ".emulator", value);
-#else
-	getShOutput(R"(/emuelec/scripts/emuelec-utils setemu set ')" + getConfigurationName() + ".emulator' " + value);
-#endif
 #endif
 }
 
@@ -1083,9 +1093,9 @@ void FileData::detectLanguageAndRegion(bool overWrite)
 
 	auto info = LangInfo::parse(getSourceFileData()->getPath(), getSourceFileData()->getSystem());
 	if (info.languages.size() > 0)
-		mMetadata.set("lang", info.getLanguageString());
+		mMetadata.set(MetaDataId::Language, info.getLanguageString());
 	if (!info.region.empty())
-		mMetadata.set("region", info.region);
+		mMetadata.set(MetaDataId::Region, info.region);
 }
 
 void FolderData::removeVirtualFolders()
@@ -1109,7 +1119,7 @@ void FolderData::removeVirtualFolders()
 
 void FileData::checkCrc32(bool force)
 {
-	if (getSourceFileData() != this)
+	if (getSourceFileData() != this && getSourceFileData() != nullptr)
 	{
 		getSourceFileData()->checkCrc32(force);
 		return;
@@ -1119,22 +1129,59 @@ void FileData::checkCrc32(bool force)
 		return;
 
 	SystemData* system = getSystem();
+	if (system == nullptr)
+		return;
 
-	bool unpackZip =
-		!system->hasPlatformId(PlatformIds::ARCADE) &&
-		!system->hasPlatformId(PlatformIds::NEOGEO) &&
-		!system->hasPlatformId(PlatformIds::DAPHNE) &&
-		!system->hasPlatformId(PlatformIds::LUTRO) &&
-		!system->hasPlatformId(PlatformIds::SEGA_DREAMCAST) &&
-		!system->hasPlatformId(PlatformIds::ATOMISWAVE) &&
-		!system->hasPlatformId(PlatformIds::NAOMI);
-
-	auto crc = ApiSystem::getInstance()->getCRC32(getPath(), unpackZip);
+	auto crc = ApiSystem::getInstance()->getCRC32(getPath(), system->shouldExtractHashesFromArchives());
 	if (!crc.empty())
 	{
 		getMetadata().set(MetaDataId::Crc32, Utils::String::toUpper(crc));
 		saveToGamelistRecovery(this);
 	}
+}
+
+void FileData::checkMd5(bool force)
+{
+	if (getSourceFileData() != this && getSourceFileData() != nullptr)
+	{
+		getSourceFileData()->checkMd5(force);
+		return;
+	}
+
+	if (!force && !getMetadata(MetaDataId::Md5).empty())
+		return;
+
+	SystemData* system = getSystem();
+	if (system == nullptr)
+		return;
+
+	auto crc = ApiSystem::getInstance()->getMD5(getPath(), system->shouldExtractHashesFromArchives());
+	if (!crc.empty())
+	{
+		getMetadata().set(MetaDataId::Md5, Utils::String::toUpper(crc));
+		saveToGamelistRecovery(this);
+	}
+}
+
+
+void FileData::checkCheevosHash(bool force)
+{
+	if (getSourceFileData() != this)
+	{
+		getSourceFileData()->checkCheevosHash(force);
+		return;
+	}
+
+	if (!force && !getMetadata(MetaDataId::CheevosHash).empty())
+		return;
+
+	SystemData* system = getSystem();
+	if (system == nullptr)
+		return;
+
+	auto crc = RetroAchievements::getCheevosHash(system, getPath());
+	getMetadata().set(MetaDataId::CheevosHash, Utils::String::toUpper(crc));
+	saveToGamelistRecovery(this);
 }
 
 std::string FileData::getKeyboardMappingFilePath()
@@ -1260,6 +1307,28 @@ bool FileData::isExtensionCompatible()
 	return true;
 }
 
+FolderData::FolderData(const std::string& startpath, SystemData* system, bool ownsChildrens) : FileData(FOLDER, startpath, system)
+{
+	mIsDisplayableAsVirtualFolder = false;
+	mOwnsChildrens = ownsChildrens;
+}
+
+FolderData::~FolderData()
+{
+	clear();
+}
+
+void FolderData::clear()
+{
+	if (mOwnsChildrens)
+	{
+		for (int i = mChildren.size() - 1; i >= 0; i--)
+			delete mChildren.at(i);
+	}
+
+	mChildren.clear();
+}
+
 void FolderData::removeFromVirtualFolders(FileData* game)
 {
 	for (auto it = mChildren.begin(); it != mChildren.end(); ++it) 
@@ -1276,4 +1345,19 @@ void FolderData::removeFromVirtualFolders(FileData* game)
 			return;
 		}
 	}
+}
+
+std::string FileData::getCurrentGameSetting(const std::string& settingName)
+{
+	FileData* src = getSourceFileData();
+
+	std::string value = SystemConf::getInstance()->get(getConfigurationName() + "." + settingName);
+	if (!value.empty() && value != "auto")
+		return value;
+
+	value = SystemConf::getInstance()->get(src->getSystem()->getName() + "." + settingName);
+	if (!value.empty() && value != "auto")
+		return value;
+
+	return Settings::getInstance()->getString("global." + settingName);
 }

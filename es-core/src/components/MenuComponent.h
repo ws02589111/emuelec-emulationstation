@@ -27,11 +27,13 @@ public:
 
 	void onSizeChanged() override;
 
+	inline void setUpdateType(ComponentListFlags::UpdateType updateType) { mList->setUpdateType(updateType); }
+
 	inline void addRow(const ComponentListRow& row, bool setCursorHere = false, bool doUpdateSize = true) { mList->addRow(row, setCursorHere); if (doUpdateSize) updateSize(); }
 	inline void clear() { mList->clear(); }
 
 	void addWithLabel(const std::string& label, const std::shared_ptr<GuiComponent>& comp, const std::function<void()>& func = nullptr, const std::string iconName = "", bool setCursorHere = false, bool invert_when_selected = true);
-	void addWithDescription(const std::string& label, const std::string& description, const std::shared_ptr<GuiComponent>& comp, const std::function<void()>& func = nullptr, const std::string iconName = "", bool setCursorHere = false, bool invert_when_selected = true);
+	void addWithDescription(const std::string& label, const std::string& description, const std::shared_ptr<GuiComponent>& comp, const std::function<void()>& func = nullptr, const std::string iconName = "", bool setCursorHere = false, bool invert_when_selected = true, bool multiLine = false);
 	void addEntry(const std::string name, bool add_arrow = false, const std::function<void()>& func = nullptr, const std::string iconName = "", bool setCursorHere = false, bool invert_when_selected = true, bool onButtonRelease = false);
 	void addGroup(const std::string& label, bool forceVisible = false, bool doUpdateSize = true) { mList->addGroup(label, forceVisible); if (doUpdateSize) updateSize(); }
 
@@ -39,7 +41,7 @@ public:
 
 	void setTitle(const std::string title, const std::shared_ptr<Font>& font = nullptr);
 	void setSubTitle(const std::string text);
-	void setTitleImage(std::shared_ptr<ImageComponent> titleImage);
+	void setTitleImage(std::shared_ptr<ImageComponent> titleImage, bool replaceTitle = false);
 
 	inline void setCursorToList() { mGrid.setCursorTo(mList); }
 	inline void setCursorToButtons() { assert(mButtonGrid); mGrid.setCursorTo(mButtonGrid); }
@@ -47,6 +49,8 @@ public:
 
 	virtual std::vector<HelpPrompt> getHelpPrompts() override;
 
+	float getHeaderGridHeight() const;
+	float getTitleHeight() const;
 	float getButtonGridHeight() const;
 
 	void setMaxHeight(float maxHeight) 
@@ -59,6 +63,9 @@ public:
 	}
 
 	void updateSize();
+	void clearButtons();
+
+	std::shared_ptr<ComponentList> getList() { return mList; };
 
 private:
 	void updateGrid();

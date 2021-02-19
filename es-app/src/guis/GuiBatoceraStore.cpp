@@ -19,7 +19,7 @@
 #include <unordered_set>
 #include <algorithm>
 
-#define WINDOW_WIDTH (float)Math::max((int)Renderer::getScreenHeight(), (int)(Renderer::getScreenWidth() * 0.73f))
+#define WINDOW_WIDTH (float)Math::min(Renderer::getScreenHeight() * 1.125f, Renderer::getScreenWidth() * 0.95f)
 
 GuiBatoceraStore::GuiBatoceraStore(Window* window)
 	: GuiComponent(window), mGrid(window, Vector2i(1, 4)), mBackground(window, ":/frame.png")
@@ -104,7 +104,7 @@ void GuiBatoceraStore::update(int deltaTime)
 				mPackages = queryPackages();
 
 			if (!restoreIndex)
-				mWindow->postToUiThread([this](Window* w) { loadList(false, false); });
+				mWindow->postToUiThread([this]() { loadList(false, false); });
 			else 
 				loadList(false, restoreIndex);
 		}
@@ -182,7 +182,7 @@ void GuiBatoceraStore::loadList(bool updatePackageList, bool restoreIndex)
 			if (mTabFilter != mTabs->getSelected())
 			{
 				mTabFilter = mTabs->getSelected();
-				mWindow->postToUiThread([this](Window* w) 
+				mWindow->postToUiThread([this]() 
 				{ 
 					mReloadList = 3;					
 				});
@@ -357,6 +357,8 @@ bool GuiBatoceraStore::input(InputConfig* config, Input input)
 		Window* window = mWindow;
 		while(window->peekGui() && window->peekGui() != ViewController::get())
 			delete window->peekGui();
+
+		return true;
 	}
 
 	if (config->isMappedTo("y", input) && input.value != 0)

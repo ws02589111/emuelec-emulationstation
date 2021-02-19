@@ -125,6 +125,7 @@ public:
 	void update() override;
 
 	virtual int getPercent();
+	std::string getImageFileName() { return mSavePath; }
 
 private:
 	HttpReq* mRequest;
@@ -158,7 +159,7 @@ public:
 		return mPercent;
 	}
 
-	std::unique_ptr<ImageDownloadHandle> downloadImageAsync(const std::string& url, const std::string& saveAs);
+	std::unique_ptr<ImageDownloadHandle> downloadImageAsync(const std::string& url, const std::string& saveAs, bool resize = true);
 
 private:
 	ScraperSearchResult mResult;
@@ -166,7 +167,7 @@ private:
 	class ResolvePair
 	{	
 	public:
-		ResolvePair(std::function<std::unique_ptr<AsyncHandle>()> _invoker, std::function<void()> _function, std::string _name, std::string _source)
+		ResolvePair(std::function<std::unique_ptr<ImageDownloadHandle>()> _invoker, std::function<void(ImageDownloadHandle* result)> _function, std::string _name, std::string _source)
 		{
 			func = _invoker;
 			onFinished = _function;
@@ -179,14 +180,14 @@ private:
 			handle = func();
 		}
 	
-		std::function<void()> onFinished;
+		std::function<void(ImageDownloadHandle* result)> onFinished;
 		std::string name;
 		std::string source;
 
-		std::unique_ptr<AsyncHandle> handle;
+		std::unique_ptr<ImageDownloadHandle> handle;
 
 	private:
-		std::function<std::unique_ptr<AsyncHandle>()> func;
+		std::function<std::unique_ptr<ImageDownloadHandle>()> func;
 	};
 
 	std::vector<ResolvePair*> mFuncs;
@@ -200,14 +201,19 @@ private:
 class Scraper
 {
 public:
-	static std::map<std::string, Scraper*> scrapers;
-	static Scraper* getScraper();
+	static std::vector<std::pair<std::string, Scraper*>> scrapers;
+	
+	static Scraper* getScraper(const std::string name = "");
 	static std::vector<std::string> getScraperList();
 	static bool isValidConfiguredScraper();
 
+	virtual	bool isSupportedPlatform(SystemData* system) = 0;
+
+	virtual	bool hasMissingMedia(FileData* file);
+
 	std::unique_ptr<ScraperSearchHandle> search(const ScraperSearchParams& params);
 
-	virtual	int getThreadCount() {
+	virtual	int getThreadCount(std::string &result) {
 		return 1;
 	}
 

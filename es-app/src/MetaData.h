@@ -8,6 +8,7 @@
 #include <string>
 
 class SystemData;
+class FileData;
 
 namespace pugi { class xml_node; }
 
@@ -64,9 +65,10 @@ enum MetaDataId
 	BoxArt = 31,
 	Wheel = 32,
 	Mix = 33,
-#ifdef _ENABLEEMUELEC
-    Cheevos = 34
-#endif
+	CheevosHash = 34,
+	CheevosId = 35,
+	ScraperId = 36,
+	BoxBack = 37
 };
 
 namespace MetaDataImportType
@@ -82,8 +84,9 @@ namespace MetaDataImportType
 		MAP = 64,
 		CARTRIDGE = 128,
 		TITLESHOT = 256,
+		BOXBACK = 512,
 
-		ALL = IMAGE | THUMB | VIDEO | MARQUEE | FANART | MANUAL | MAP | CARTRIDGE | TITLESHOT
+		ALL = IMAGE | THUMB | VIDEO | MARQUEE | FANART | MANUAL | MAP | CARTRIDGE | TITLESHOT | BOXBACK
 	};
 }
 
@@ -97,8 +100,9 @@ struct MetaDataDecl
 	std::string  displayName; // displayed as this in editors
 	std::string  displayPrompt; // phrase displayed in editors when prompted to enter value (currently only for strings)
 	bool		 visibleForFolder;
+	bool		 isAttribute;
 
-	MetaDataDecl(MetaDataId id, std::string key, MetaDataType type, std::string defaultValue, bool isStatistic, std::string displayName, std::string displayPrompt, bool folderMetadata)
+	MetaDataDecl(MetaDataId id, std::string key, MetaDataType type, std::string defaultValue, bool isStatistic, std::string displayName, std::string displayPrompt, bool folderMetadata, bool isAttribute = false)
 	{
 		this->id = id;
 		this->key = key;
@@ -108,6 +112,7 @@ struct MetaDataDecl
 		this->displayName = displayName;
 		this->displayPrompt = displayPrompt;
 		this->visibleForFolder = folderMetadata;
+		this->isAttribute = isAttribute;
 	}
 };
 
@@ -125,16 +130,19 @@ public:
 	static MetaDataList createFromXML(MetaDataListType type, pugi::xml_node& node, SystemData* system);
 	void appendToXML(pugi::xml_node& parent, bool ignoreDefaults, const std::string& relativeTo) const;
 
+	void migrate(FileData* file, pugi::xml_node& node);
+
 	MetaDataList(MetaDataListType type);
 	
 	void set(MetaDataId id, const std::string& value);
-	void set(const std::string& key, const std::string& value);
 
 	const std::string get(MetaDataId id, bool resolveRelativePaths = true) const;
+	
+	void set(const std::string& key, const std::string& value);
 	const std::string get(const std::string& key, bool resolveRelativePaths = true) const;
 
-	int getInt(const std::string& key) const;
-	float getFloat(const std::string& key) const;
+	int getInt(MetaDataId id) const;
+	float getFloat(MetaDataId id) const;
 
 	MetaDataType getType(MetaDataId id) const;
 
@@ -164,6 +172,7 @@ private:
 
 	static std::vector<MetaDataDecl> mMetaDataDecls;
 
+	std::vector<std::tuple<std::string, std::string, bool>> mUnKnownElements;
 };
 
 #endif // ES_APP_META_DATA_H

@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: batocera-es.5.29\n"
+"Project-Id-Version: batocera-es v30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-02 08:20+0100\n"
-"PO-Revision-Date: 2020-12-03 08:03+0900\n"
+"POT-Creation-Date: 2021-02-18 08:04+0100\n"
+"PO-Revision-Date: 2021-01-25 20:51+0900\n"
 "Last-Translator: mikakunin\n"
 "Language-Team: mikakunin\n"
 "Language: ja\n"
@@ -99,6 +99,12 @@ msgstr "代替ボックスアート画像"
 
 msgid "enter path to alt boxart"
 msgstr "代替ボックスアート画像のパスを入力"
+
+msgid "Box backside"
+msgstr ""
+
+msgid "enter path to box background"
+msgstr ""
 
 msgid "Wheel"
 msgstr "ホイール"
@@ -208,6 +214,18 @@ msgstr "使用言語"
 msgid "Region"
 msgstr "リージョン"
 
+msgid "Cheevos Hash"
+msgstr "Cheevos　ハッシュ"
+
+msgid "Cheevos checksum"
+msgstr "Cheevos チェックサム"
+
+msgid "Cheevos Game ID"
+msgstr "Cheevos ゲーム ID"
+
+msgid "Screenscraper Game ID"
+msgstr "スクリーンスクレイパー ゲームID"
+
 msgid "all games"
 msgstr "すべてのゲーム"
 
@@ -226,19 +244,17 @@ msgstr "4 プレイヤー"
 msgid "never played"
 msgstr "未プレイ"
 
+msgid "retroachievements"
+msgstr "retroachievements"
+
 msgid "arcade"
 msgstr "アーケード"
 
+msgid "vertical arcade"
+msgstr "縦表示アーケード"
+
 msgid "collections"
 msgstr "コレクション"
-
-#, c-format
-msgid "Editing the '%s' Collection. Add/remove games with Y."
-msgstr "'%s' コレクションを編集。Yでゲームを追加/削除します。"
-
-#, c-format
-msgid "Finished editing the '%s' Collection."
-msgstr "'%s' コレクションの編集が完了しました。"
 
 #, c-format
 msgid "Added '%s' to '%s'"
@@ -411,9 +427,6 @@ msgstr "隠しシステム内にあるゲームをコレクションに表示"
 msgid "UPDATE GAMES LISTS"
 msgstr "ゲームリストを更新"
 
-msgid "FINISH EDITING COLLECTION"
-msgstr "コレクション編集を終了"
-
 msgid "Loading..."
 msgstr "読み込み中…"
 
@@ -441,14 +454,33 @@ msgstr "マイゲームコレクション"
 msgid "PLEASE WAIT"
 msgstr "お待ちください"
 
+#, c-format
+msgid "%d%% (%d of %d)"
+msgstr "%d%% (%d 中の %d)"
+
 msgid "RETROACHIEVEMENTS"
 msgstr "RetroAchievements 使用"
+
+msgid "Points"
+msgstr "ポイント"
+
+msgid "Rank"
+msgstr "ランク"
+
+msgid "VIEW DETAILS"
+msgstr "詳細を表示"
+
+msgid "LAUNCH"
+msgstr "起動"
+
+msgid "FINISHED"
+msgstr "完了"
 
 msgid "OK"
 msgstr "OK"
 
-msgid "FINISHED"
-msgstr "完了"
+msgid "VIEW OPTIONS"
+msgstr "表示設定"
 
 msgid "go back"
 msgstr "戻る"
@@ -456,26 +488,17 @@ msgstr "戻る"
 msgid "NAVIGATION"
 msgstr "ナビゲーション"
 
-msgid "JUMP TO..."
-msgstr "移動(英数字のみ有効)..."
+msgid "JUMP TO LETTER"
+msgstr "文字移動"
+
+msgid "SELECT RANDOM GAME"
+msgstr "ランダムにゲーム選択"
 
 msgid "SORT GAMES BY"
 msgstr "ゲーム別のソート"
 
 msgid "OTHER FILTERS"
 msgstr "その他のフィルタ"
-
-msgid "FIND SIMILAR GAMES..."
-msgstr "類似のゲームを探す..."
-
-msgid "GAME MEDIAS"
-msgstr "ゲームメディア"
-
-msgid "VIEW GAME MANUAL"
-msgstr "ゲームマニュアルを表示"
-
-msgid "VIEW GAME MAP"
-msgstr "ゲームマップを表示"
 
 msgid "COLLECTION"
 msgstr "コレクション"
@@ -489,41 +512,14 @@ msgstr "ゲームリスト表示スタイル"
 msgid "automatic"
 msgstr "自動"
 
-msgid "VIEW OPTIONS"
-msgstr "表示設定"
-
 msgid "VIEW CUSTOMISATION"
 msgstr "表示をカスタマイズ"
-
-msgid "COLLECTION MANAGEMENT"
-msgstr "コレクション管理"
-
-msgid "ADD/REMOVE GAMES TO THIS GAME COLLECTION"
-msgstr "ゲームコレクションへのゲームの追加/削除"
 
 msgid "GAME OPTIONS"
 msgstr "ゲーム設定"
 
 msgid "ADVANCED SYSTEM OPTIONS"
 msgstr "システム詳細設定"
-
-msgid "ADVANCED GAME OPTIONS"
-msgstr "ゲーム詳細設定"
-
-msgid "EDIT PAD TO KEYBOARD CONFIGURATION"
-msgstr "パッドをキーボードに割当て設定編集"
-
-msgid "CREATE PAD TO KEYBOARD CONFIGURATION"
-msgstr "パッドをキーボードに割当て設定作成"
-
-msgid "EDIT FOLDER METADATA"
-msgstr "フォルダのメタ情報を編集"
-
-msgid "EDIT THIS GAME'S METADATA"
-msgstr "このゲームのメタ情報を編集"
-
-msgid "VIEW PAD TO KEYBOARD INFORMATION"
-msgstr "パッドからキーボード情報を表示"
 
 msgid "RESET FILTERS"
 msgstr "フィルターのリセット"
@@ -561,9 +557,6 @@ msgstr "再読込"
 msgid "FAILED"
 msgstr "失敗"
 
-msgid "LAUNCH"
-msgstr "起動"
-
 msgid "UNKNOWN ROM VERSION"
 msgstr "不明なROMバージョン"
 
@@ -600,39 +593,6 @@ msgstr "WIFI ネットワークが見つかりません"
 msgid "SEARCHING WIFI NETWORKS"
 msgstr "WIFIネットワークの検索"
 
-msgid "THE BEZEL PROJECT"
-msgstr "ベゼルプロジェクト"
-
-msgid "SELECT BEZELS TO INSTALL / REMOVE"
-msgstr "インストール/削除するベゼルを選択"
-
-msgid "UPDATE"
-msgstr "更新"
-
-#, c-format
-msgid "'%s' ADDED TO DOWNLOAD QUEUE"
-msgstr "'%s' がダウンロード キューに追加されました"
-
-msgid "REMOVE"
-msgstr "削除"
-
-msgid "INSTALL"
-msgstr "インストール"
-
-#, c-format
-msgid "CURRENTLY IN DOWNLOAD QUEUE"
-msgstr "現在ダウンロードキューにあります"
-
-msgid "THEMES DOWNLOADER"
-msgstr "テーマダウンローダー"
-
-msgid "SELECT THEMES TO INSTALL / REMOVE"
-msgstr "インストール/削除するテーマを選択"
-
-#, c-format
-msgid "CURRENT THEME"
-msgstr "現在のテーマ"
-
 msgid "FORGET A BLUETOOTH CONTROLLER"
 msgstr "BLUETOOTH コントローラーを解除"
 
@@ -666,8 +626,25 @@ msgstr "項目が無いので表示できません"
 msgid "MISC"
 msgstr "その他"
 
+msgid "UPDATE"
+msgstr "更新"
+
+#, c-format
+msgid "'%s' ADDED TO DOWNLOAD QUEUE"
+msgstr "'%s' がダウンロード キューに追加されました"
+
+msgid "REMOVE"
+msgstr "削除"
+
 msgid "UNINSTALL ADDED TO QUEUE"
 msgstr "追加されたキューをアンインストール"
+
+msgid "INSTALL"
+msgstr "インストール"
+
+#, c-format
+msgid "CURRENTLY IN DOWNLOAD QUEUE"
+msgstr "現在ダウンロードキューにあります"
 
 msgid "NO MISSING BIOS"
 msgstr "BIOSは全てあります"
@@ -801,6 +778,12 @@ msgstr "プレイヤー 1"
 msgid "PLAYER 2"
 msgstr "プレイヤー 2"
 
+msgid "PLAYER 3"
+msgstr "プレイヤー3"
+
+msgid "PLAYER 4"
+msgstr "プレイヤー4"
+
 msgid "COMBINATIONS"
 msgstr "同時押しキー"
 
@@ -867,49 +850,123 @@ msgstr "ネットワーク接続が必要です"
 msgid "INVALID PARAMETERS"
 msgstr "無効なパラメーター"
 
-msgid "SCRAPING IN PROGRESS"
-msgstr "情報を取得中"
+msgid "GAME MEDIAS"
+msgstr "ゲームメディア"
 
-msgid "SYSTEM"
-msgstr "システム"
+msgid "VIEW GAME MANUAL"
+msgstr "ゲームマニュアルを表示"
 
-msgid "subtitle text"
-msgstr "字幕テキスト"
+msgid "VIEW GAME MAP"
+msgstr "ゲームマップを表示"
 
-msgid "search"
-msgstr "検索"
+msgid "CURRENT CORE IS NOT COMPATIBLE"
+msgstr "現在のコアと互換性がありません"
 
-msgid "SKIP"
-msgstr "スキップ"
+msgid "REQUIRED CORE"
+msgstr "必要なコア"
 
-msgid "STOP"
-msgstr "停止"
+msgid "VIEW GAME ACHIEVEMENTS"
+msgstr "ゲームの実績を表示"
 
-msgid "stop (progress saved)"
-msgstr "停止 (進捗は保存)"
+msgid "GAME"
+msgstr "ゲーム"
+
+msgid "SAVE SNAPSHOTS"
+msgstr "スナップショットを保存"
+
+msgid "START NETPLAY HOST"
+msgstr "ホスト(ネットプレイ)を開始"
+
+msgid "NETPLAY"
+msgstr "ネットプレイ"
+
+msgid "START GAME"
+msgstr "ゲームを開始"
+
+msgid "YOU ARE NOT CONNECTED TO A NETWORK"
+msgstr "ネットワークに接続されていません"
+
+msgid "SET PLAYER PASSWORD"
+msgstr "プレーヤーパスワードの設定"
+
+msgid "SET VIEWER PASSWORD"
+msgstr "ビューアパスワードの設定"
+
+msgid "FIND SIMILAR GAMES..."
+msgstr "類似のゲームを探す..."
+
+msgid "COLLECTIONS"
+msgstr "コレクション"
 
 #, c-format
-msgid "GAME %i OF %i"
-msgstr "ゲーム %i ／ %i"
-
-msgid ""
-"WE CAN'T FIND ANY SYSTEMS!\n"
-"CHECK THAT YOUR PATHS ARE CORRECT IN THE SYSTEMS CONFIGURATION FILE, AND "
-"YOUR GAME DIRECTORY HAS AT LEAST ONE GAME WITH THE CORRECT EXTENSION."
-msgstr ""
-"システムが見つかりません！\n"
-"システム設定ファイルに 正しいパスが設定されているか、 また、 ゲームディレクト"
-"リに 最低1つのゲームが 正しい拡張子で 格納されてあることを 確認してください。"
+msgid "REMOVE FROM %s"
+msgstr "%s から削除"
 
 #, c-format
-msgid "%i GAME SUCCESSFULLY SCRAPED!"
-msgid_plural "%i GAMES SUCCESSFULLY SCRAPED!"
-msgstr[0] "%i 個 のゲームの スクレイプに 成功しました！"
+msgid "ADD TO %s"
+msgstr "%s に追加"
+
+msgid "FAVORITES"
+msgstr "お気に入り"
+
+msgid "SCRAPE"
+msgstr "スクレイプ"
+
+msgid "EDIT PAD TO KEYBOARD CONFIGURATION"
+msgstr "パッドをキーボードに割当て設定編集"
+
+msgid "CREATE PAD TO KEYBOARD CONFIGURATION"
+msgstr "パッドをキーボードに割当て設定作成"
+
+msgid "ADVANCED GAME OPTIONS"
+msgstr "ゲーム詳細設定"
+
+msgid "EDIT FOLDER METADATA"
+msgstr "フォルダのメタ情報を編集"
+
+msgid "EDIT THIS GAME'S METADATA"
+msgstr "このゲームのメタ情報を編集"
+
+msgid "VIEW PAD TO KEYBOARD INFORMATION"
+msgstr "パッドからキーボード情報を表示"
+
+msgid "THEMES DOWNLOADER"
+msgstr "テーマダウンローダー"
+
+msgid "SELECT THEMES TO INSTALL / REMOVE"
+msgstr "インストール/削除するテーマを選択"
 
 #, c-format
-msgid "%i GAME SKIPPED."
-msgid_plural "%i GAMES SKIPPED."
-msgstr[0] "%i 個 のゲームを スキップしました。"
+msgid "CURRENT THEME"
+msgstr "現在のテーマ"
+
+msgid "Unlocked on"
+msgstr "ロック解除"
+
+msgid "THIS GAME HAS NO ACHIEVEMENT YET"
+msgstr "このゲームにはまだ実績がありません"
+
+msgid "Achievements won"
+msgstr "達成実績"
+
+#, c-format
+msgid "%d%% complete"
+msgstr "%d%% 完了"
+
+msgid "AUTO SAVE"
+msgstr "オートセーブ"
+
+msgid "SLOT"
+msgstr "スロット"
+
+msgid "START NEW GAME"
+msgstr "新しくゲームを開始"
+
+msgid "START AUTO SAVE"
+msgstr "オートセーブを開始"
+
+msgid "COPY TO FREE SLOT"
+msgstr "空スロットにコピー"
 
 msgid "SCRAPE NOW"
 msgstr "スクレイプ 実行"
@@ -929,9 +986,6 @@ msgstr "フィルター"
 msgid "SCRAPE THESE SYSTEMS"
 msgstr "選択したシステムをスクレイプ"
 
-msgid "USER DECIDES ON CONFLICTS"
-msgstr "ユーザーが手動で修正"
-
 msgid "START"
 msgstr "スタート"
 
@@ -949,6 +1003,12 @@ msgstr "スクレイプが実行されています。中止しますか?"
 
 msgid "NO GAMES FIT THAT CRITERIA."
 msgstr "適合する ゲームが 見つかりませんでした。"
+
+msgid "THE BEZEL PROJECT"
+msgstr "ベゼルプロジェクト"
+
+msgid "SELECT BEZELS TO INSTALL / REMOVE"
+msgstr "インストール/削除するベゼルを選択"
 
 msgid "fade"
 msgstr "フェード"
@@ -1007,6 +1067,9 @@ msgstr "ZFAST"
 msgid "FLATTEN-GLOW"
 msgstr "FLATTEN-GLOW"
 
+msgid "RGA SCALING"
+msgstr "RGAスケーリング"
+
 msgid "MAIN MENU"
 msgstr "メインメニュー"
 
@@ -1033,9 +1096,6 @@ msgstr "コントローラー設定"
 
 msgid "EMULATOR SETTINGS"
 msgstr "エミュレーター設定"
-
-msgid "SCRAPE"
-msgstr "スクレイプ"
 
 msgid "UPDATES & DOWNLOADS"
 msgstr "更新とダウンロード"
@@ -1102,6 +1162,12 @@ msgstr "ビデオをスクレイプ"
 
 msgid "SCRAPE FANART"
 msgstr "ファンアートをスクレイプ"
+
+msgid "SCRAPE BOX BACKSIDE"
+msgstr ""
+
+msgid "SCRAPE MAP"
+msgstr "マップをスクレイプ"
 
 msgid "SCRAPE MANUAL"
 msgstr "マニュアルをスクレイプ"
@@ -1192,11 +1258,20 @@ msgstr "クリーニング "
 msgid "CLEAR CACHES"
 msgstr "キャッシュをクリア"
 
+msgid "BUILD IMAGE CACHE"
+msgstr "イメージキャッシュのビルド"
+
+msgid "Building image cache"
+msgstr "イメージキャッシュのビルド中"
+
 msgid "RESET FILE EXTENSIONS"
 msgstr "ファイル拡張子設定をリセット"
 
 msgid "REDETECT GAMES LANG/REGION"
 msgstr "ゲームの言語/地域を再検出"
+
+msgid "FIND ALL GAMES WITH NETPLAY/ACHIEVEMENTS"
+msgstr "ネットプレイ/実績 ですべてのゲームを検索"
 
 msgid "DATA MANAGEMENT"
 msgstr "データ管理"
@@ -1219,11 +1294,14 @@ msgstr "UIモード"
 msgid "CAROUSEL TRANSITIONS"
 msgstr "メニュー回転(カルーセル)効果"
 
+msgid "QUICK SYSTEM SELECT"
+msgstr "クイックシステム選択"
+
 msgid "ON SCREEN KEYBOARD"
 msgstr "スクリーンキーボードを使用"
 
 msgid "HIDE WHEN RUNNING A GAME"
-msgstr "ゲーム実行中は非表示"
+msgstr "ゲーム開始時の画像、ゲーム名を非表示"
 
 msgid "COMPLETE QUIT MENU"
 msgstr "完全終了メニュー"
@@ -1282,14 +1360,14 @@ msgstr "更新 開始"
 msgid "UPDATE IS ALREADY RUNNING"
 msgstr "更新は既に実行中です"
 
-msgid "YOU ARE NOT CONNECTED TO A NETWORK"
-msgstr "ネットワークに接続されていません"
+msgid "SYSTEM"
+msgstr "システム"
 
 msgid "LANGUAGE"
 msgstr "言語"
 
 msgid "POWER SAVER MODES"
-msgstr "パワーセーブモード"
+msgstr "省電力モード(rpi用)"
 
 msgid "UI MODE"
 msgstr "UIモード"
@@ -1402,8 +1480,26 @@ msgstr "詳細な処理モード"
 msgid "AUTOMATIC SCREENSHOT"
 msgstr "自動スクリーンショット"
 
+msgid "RETROACHIEVEMENTS UNLOCK SOUND"
+msgstr "RETROACHIEVEMENTSサウンドのロック解除"
+
+msgid "UNLOCK SOUND"
+msgstr "サウンドのロック解除"
+
 msgid "SHOW IN MAIN MENU"
 msgstr "メインメニューに表示"
+
+msgid "GAME INDEXES"
+msgstr "ゲームインデックス"
+
+msgid "FIND ALL GAMES"
+msgstr "すべてのゲームを検索"
+
+msgid "FIND NEW GAMES"
+msgstr "新たなゲームを検索"
+
+msgid "UNABLE TO ACTIVATE RETROACHIEVEMENTS :"
+msgstr "RETROACHIEVEMENTSをアクティブ化できません :"
 
 msgid "ENABLE NETPLAY"
 msgstr "ネットプレイを有効"
@@ -1417,17 +1513,8 @@ msgstr "ポート"
 msgid "USE RELAY SERVER"
 msgstr "リレーサーバーを使用"
 
-msgid "GAME INDEXES"
-msgstr "ゲームインデックス"
-
 msgid "CHECK MISSING INDEXES AT STARTUP"
 msgstr "起動時に欠落インデックスを確認"
-
-msgid "REINDEX ALL GAMES"
-msgstr "すべてのゲームを再インデックス"
-
-msgid "INDEX MISSING GAMES"
-msgstr "プレイ不可ゲームのインデックス"
 
 msgid "DEFAULT SETTINGS"
 msgstr "既定の設定"
@@ -1444,14 +1531,17 @@ msgstr "スムージング"
 msgid "REWIND"
 msgstr "巻き戻し"
 
+msgid "INTEGER SCALE (PIXEL PERFECT)"
+msgstr "整数スケール (ピクセルを正方形表示)"
+
 msgid "AUTO SAVE/LOAD"
 msgstr "自動セーブ/ロード"
 
+msgid "SHOW SAVE SNAPSHOTS"
+msgstr ""
+
 msgid "SHADERS SET"
 msgstr "シェーダー設定"
-
-msgid "INTEGER SCALE (PIXEL PERFECT)"
-msgstr "整数スケール (ピクセルを正方形表示)"
 
 msgid "DECORATION"
 msgstr "アートワーク(ゲーム画面外背景表示)"
@@ -1557,11 +1647,14 @@ msgstr "ゲームがあるフォルダ"
 msgid "SHOW '..' PARENT FOLDER"
 msgstr "親フォルダ'..'を表示"
 
+msgid "SHOW FILENAMES IN LISTS"
+msgstr "リストにファイル名を表示"
+
 msgid "FILE EXTENSIONS"
 msgstr "ファイル拡張子設定"
 
-msgid "RESET GAMELIST CUSTOMISATIONS"
-msgstr "ゲームリストのカスタマイズをリセット"
+msgid "RESET CUSTOMISATIONS"
+msgstr ""
 
 msgid "APPEARENCE"
 msgstr "外観"
@@ -1599,9 +1692,6 @@ msgstr "アイコン"
 
 msgid "ICON AND TEXT"
 msgstr "アイコンと文字"
-
-msgid "SHOW FILENAMES IN LISTS"
-msgstr "リストにファイル名を表示"
 
 msgid "VOLUME"
 msgstr "音量"
@@ -1675,15 +1765,6 @@ msgstr "WIFI が有効になりました"
 msgid "WIFI CONFIGURATION ERROR"
 msgstr "WIFI 設定エラー"
 
-msgid "AUTOMATIC SCRAPER"
-msgstr "自動スクレイプ"
-
-msgid "REALLY SCRAPE?"
-msgstr "スクレイプしますか?"
-
-msgid "MANUAL SCRAPER"
-msgstr "手動スクレイプ"
-
 msgid "QUICK ACCESS"
 msgstr "クイック アクセス"
 
@@ -1747,6 +1828,9 @@ msgstr "横に並べる"
 msgid "INTERNAL RESOLUTION"
 msgstr "解像度"
 
+msgid "AUTOCONFIGURE CONTROLLERS"
+msgstr "自動コントローラー設定"
+
 msgid "FORMAT DEVICE"
 msgstr "フォーマット"
 
@@ -1778,20 +1862,29 @@ msgstr ""
 msgid "NO DEVICE FOUND"
 msgstr "デバイスが見つかりません"
 
+msgid "ZOOM-"
+msgstr "縮小-"
+
+msgid "ZOOM+"
+msgstr "拡大+"
+
+msgid "MOVE"
+msgstr "移動"
+
+msgid "ZOOM"
+msgstr "ズーム"
+
 msgid "SYSTEM INFO"
 msgstr "システム情報"
 
 msgid "ERROR: EVERY SYSTEM IS HIDDEN, RE-DISPLAYING ALL OF THEM NOW"
-msgstr "エラー：すべてのシステムが非表示になり、すべてが再表示されます"
+msgstr "エラー：すべてのシステムが非表示になり、その後再表示されます"
 
 msgid "QUICK SEARCH"
 msgstr "クイック検索"
 
 msgid "GO TO LETTER"
 msgstr "英数字に移動"
-
-msgid "COLLECTIONS"
-msgstr "コレクション"
 
 msgid "GO TO MANUFACTURER"
 msgstr "システムに移動"
@@ -1819,9 +1912,6 @@ msgstr[0] "%i 個 のゲーム"
 msgid "%i GAME"
 msgid_plural "%i GAMES"
 msgstr[0] "%i 個 のゲーム"
-
-msgid "NETPLAY"
-msgstr "ネットプレイ"
 
 msgid "RANDOM"
 msgstr "ランダム"
@@ -1874,23 +1964,15 @@ msgstr "プレイ回数"
 msgid "No Entries Found"
 msgstr "エントリが見つかりません"
 
-msgid "Favorites"
-msgstr "お気に入り"
-
-msgid "START GAME"
-msgstr "ゲームを開始"
-
-msgid "START NETPLAY HOST"
-msgstr "ホスト(ネットプレイ)を開始"
-
-msgid "SET PLAYER PASSWORD"
-msgstr "プレーヤーパスワードの設定"
-
-msgid "SET VIEWER PASSWORD"
-msgstr "ビューアパスワードの設定"
-
 msgid "Games similar to"
 msgstr "類似ゲーム→"
+
+msgid ""
+"A valid account is required. Please register an account on https://"
+"retroachievements.org"
+msgstr ""
+"有効なアカウントが必要です。 https://retroachievements.org でアカウントを登録"
+"してください"
 
 msgid "Searching"
 msgstr "検索中"
@@ -1898,11 +1980,11 @@ msgstr "検索中"
 msgid "NO GAMES FOUND - SKIP"
 msgstr "ゲームが見つかりません - スキップ"
 
-msgid "AN ERROR HAS OCCURED"
-msgstr "エラーが発生しました"
-
 msgid "RETRY"
 msgstr "再試行"
+
+msgid "SKIP"
+msgstr "スキップ"
 
 # Not reflected
 msgid "Downloading"
@@ -1998,11 +2080,17 @@ msgstr "プレイ時間, 降順"
 msgid "Extracting"
 msgstr "抽出"
 
-msgid "HASHING GAMES"
-msgstr "ゲームのハッシュ化"
+msgid "SEARCHING RETROACHIEVEMENTS"
+msgstr "RetroAchievements を検索する"
 
-msgid "FAVORITES"
-msgstr "お気に入り"
+msgid "SEARCHING NETPLAY GAMES"
+msgstr "ネットプレイゲームを検索しています"
+
+msgid "INDEXING COMPLETED"
+msgstr "インデックス作成が完了しました"
+
+msgid "UPDATE GAMES LISTS TO APPLY CHANGES."
+msgstr "変更を適用するには、ゲームリストを更新します。"
 
 msgid "GENRE"
 msgstr "ジャンル"
@@ -2028,14 +2116,28 @@ msgstr "子供向け"
 msgid "ALREADY PLAYED"
 msgstr "プレイ済み"
 
+msgid "HAS ACHIEVEMENTS"
+msgstr "ゲームの実績がある"
+
+msgid "VERTICAL"
+msgstr "縦表示"
+
 msgid "SCRAPING"
 msgstr "情報を取得中"
 
 msgid "SCRAPE FAILED"
 msgstr "スクレイプ失敗"
 
-msgid "SCRAPING FINISHED. REFRESH UPDATE GAMES LISTS TO APPLY CHANGES."
-msgstr "スクレイプが終了しました。 ゲームリストを更新して変更を適用します。"
+msgid "SCRAPING FINISHED"
+msgstr "スクレイプが終了しました"
+
+#, c-format
+msgid "%s connected"
+msgstr "%s に接続しました"
+
+#, c-format
+msgid "%s disconnected"
+msgstr "%s に切断されました"
 
 msgid "SHIFTS FOR UPPER,LOWER, AND SPECIAL"
 msgstr "大文字,小文字,特殊記号用の SHIFT"
@@ -2211,6 +2313,90 @@ msgstr "%d 分"
 msgid "%d s"
 msgstr "%d 秒"
 
+#~ msgid "RESET GAMELIST CUSTOMISATIONS"
+#~ msgstr "ゲームリストのカスタマイズをリセット"
+
+#~ msgid "SCRAPING IN PROGRESS"
+#~ msgstr "情報を取得中"
+
+#~ msgid "subtitle text"
+#~ msgstr "字幕テキスト"
+
+#~ msgid "search"
+#~ msgstr "検索"
+
+#~ msgid "STOP"
+#~ msgstr "停止"
+
+#~ msgid "stop (progress saved)"
+#~ msgstr "停止 (進捗は保存)"
+
+#~ msgid "GAME %i OF %i"
+#~ msgstr "ゲーム %i ／ %i"
+
+#~ msgid ""
+#~ "WE CAN'T FIND ANY SYSTEMS!\n"
+#~ "CHECK THAT YOUR PATHS ARE CORRECT IN THE SYSTEMS CONFIGURATION FILE, AND "
+#~ "YOUR GAME DIRECTORY HAS AT LEAST ONE GAME WITH THE CORRECT EXTENSION."
+#~ msgstr ""
+#~ "システムが見つかりません！\n"
+#~ "システム設定ファイルに 正しいパスが設定されているか、 また、 ゲームディレ"
+#~ "クトリに 最低1つのゲームが 正しい拡張子で 格納されてあることを 確認してく"
+#~ "ださい。"
+
+#~ msgid "%i GAME SUCCESSFULLY SCRAPED!"
+#~ msgid_plural "%i GAMES SUCCESSFULLY SCRAPED!"
+#~ msgstr[0] "%i 個 のゲームの スクレイプに 成功しました！"
+
+#~ msgid "%i GAME SKIPPED."
+#~ msgid_plural "%i GAMES SKIPPED."
+#~ msgstr[0] "%i 個 のゲームを スキップしました。"
+
+#~ msgid "AUTOMATIC SCRAPER"
+#~ msgstr "自動スクレイプ"
+
+#~ msgid "REALLY SCRAPE?"
+#~ msgstr "スクレイプしますか?"
+
+#~ msgid "MANUAL SCRAPER"
+#~ msgstr "手動スクレイプ"
+
+#~ msgid "Favorites"
+#~ msgstr "お気に入り"
+
+#~ msgid "AN ERROR HAS OCCURED"
+#~ msgstr "エラーが発生しました"
+
+#~ msgid "Editing the '%s' Collection. Add/remove games with Y."
+#~ msgstr "'%s' コレクションを編集。Yでゲームを追加/削除します。"
+
+#~ msgid "Finished editing the '%s' Collection."
+#~ msgstr "'%s' コレクションの編集が完了しました。"
+
+#~ msgid "FINISH EDITING COLLECTION"
+#~ msgstr "コレクション編集を終了"
+
+#~ msgid "JUMP TO..."
+#~ msgstr "移動(英数字のみ有効)..."
+
+#~ msgid "COLLECTION MANAGEMENT"
+#~ msgstr "コレクション管理"
+
+#~ msgid "ADD/REMOVE GAMES TO THIS GAME COLLECTION"
+#~ msgstr "ゲームコレクションへのゲームの追加/削除"
+
+#~ msgid "USER DECIDES ON CONFLICTS"
+#~ msgstr "ユーザーが手動で修正"
+
+#~ msgid "REINDEX ALL GAMES"
+#~ msgstr "すべてのゲームを再インデックス"
+
+#~ msgid "INDEX MISSING GAMES"
+#~ msgstr "プレイ不可ゲームのインデックス"
+
+#~ msgid "HASHING GAMES"
+#~ msgstr "ゲームのハッシュ化"
+
 #~ msgid "options"
 #~ msgstr "設定"
 
@@ -2382,9 +2568,6 @@ msgstr "%d 秒"
 
 #~ msgid "STARTUP SETTINGS"
 #~ msgstr "スタートアップ設定"
-
-#~ msgid "QUICK SYSTEM SELECT"
-#~ msgstr "クイックシステム選択"
 
 #~ msgid "SORT CUSTOM COLLECTIONS AND SYSTEMS"
 #~ msgstr "マイコレクションとシステムの並べ替え"

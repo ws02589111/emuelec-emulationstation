@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: emulationstation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-02 08:20+0100\n"
+"POT-Creation-Date: 2021-02-18 08:04+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: evoflash <evoflash@me.com>\n"
 "Language-Team: \n"
@@ -99,6 +99,12 @@ msgstr "Boite (Alt)"
 
 msgid "enter path to alt boxart"
 msgstr "entrer le chemin vers la boite (Alt)"
+
+msgid "Box backside"
+msgstr "Dos de la boite"
+
+msgid "enter path to box background"
+msgstr "entrer le chemin vers le dos de la boite"
 
 msgid "Wheel"
 msgstr "Logo"
@@ -208,6 +214,18 @@ msgstr "Langue"
 msgid "Region"
 msgstr "Région"
 
+msgid "Cheevos Hash"
+msgstr "Cheevos Hash"
+
+msgid "Cheevos checksum"
+msgstr "Cheevos checksum"
+
+msgid "Cheevos Game ID"
+msgstr "Cheevos Game ID"
+
+msgid "Screenscraper Game ID"
+msgstr "Screenscraper Game ID"
+
 msgid "all games"
 msgstr "tous les jeux"
 
@@ -226,19 +244,17 @@ msgstr "4 joueurs"
 msgid "never played"
 msgstr "jamais joué"
 
+msgid "retroachievements"
+msgstr "succès rétro"
+
 msgid "arcade"
 msgstr "arcade"
 
+msgid "vertical arcade"
+msgstr "arcade vertical"
+
 msgid "collections"
 msgstr "collections"
-
-#, c-format
-msgid "Editing the '%s' Collection. Add/remove games with Y."
-msgstr "Edition de la collection '%s'. Ajout/Suppression de jeux avec Y."
-
-#, c-format
-msgid "Finished editing the '%s' Collection."
-msgstr "Edition de la collection '%s' terminée"
 
 #, c-format
 msgid "Added '%s' to '%s'"
@@ -403,16 +419,13 @@ msgid "GROUP UNTHEMED CUSTOM COLLECTIONS"
 msgstr "GROUPER LES COLLECTIONS SANS THÈME"
 
 msgid "SHOW SYSTEM NAME IN COLLECTIONS"
-msgstr "AFFICHER LE SYSTÈME DANS LES COLLECTIONS"
+msgstr "AFFICHER LE NOM DU SYSTÈME DANS LES COLLECTIONS"
 
 msgid "SHOW GAMES OF HIDDEN SYSTEMS IN COLLECTIONS"
 msgstr "AFFICHER LES JEUX DES SYSTÈMES CACHÉS DANS LES COLLECTIONS"
 
 msgid "UPDATE GAMES LISTS"
 msgstr "METTRE À JOUR LES LISTES DE JEUX"
-
-msgid "FINISH EDITING COLLECTION"
-msgstr "FINIR L'ÉDITION DE LA COLLECTION"
 
 msgid "Loading..."
 msgstr "Chargement..."
@@ -441,14 +454,33 @@ msgstr "COLLECTIONS PERSONNALISÉES"
 msgid "PLEASE WAIT"
 msgstr "VEUILLEZ PATIENTER"
 
+#, c-format
+msgid "%d%% (%d of %d)"
+msgstr "%d%% (%d de %d)"
+
 msgid "RETROACHIEVEMENTS"
 msgstr "SUCCÈS RÉTRO"
+
+msgid "Points"
+msgstr "Points"
+
+msgid "Rank"
+msgstr "Rang"
+
+msgid "VIEW DETAILS"
+msgstr "VOIR LES DÉTAILS"
+
+msgid "LAUNCH"
+msgstr "LANCER"
+
+msgid "FINISHED"
+msgstr "TERMINÉ"
 
 msgid "OK"
 msgstr "OK"
 
-msgid "FINISHED"
-msgstr "TERMINÉ"
+msgid "VIEW OPTIONS"
+msgstr "OPTIONS D'AFFICHAGE"
 
 msgid "go back"
 msgstr "aller en arrière"
@@ -456,26 +488,17 @@ msgstr "aller en arrière"
 msgid "NAVIGATION"
 msgstr "NAVIGATION"
 
-msgid "JUMP TO..."
-msgstr "ALLER À..."
+msgid "JUMP TO LETTER"
+msgstr "ALLER À LA LETTRE"
+
+msgid "SELECT RANDOM GAME"
+msgstr "SÉLECTIONNER UN JEU ALÉATOIRE"
 
 msgid "SORT GAMES BY"
 msgstr "TRIER LES JEUX PAR"
 
 msgid "OTHER FILTERS"
 msgstr "AUTRES FILTRES"
-
-msgid "FIND SIMILAR GAMES..."
-msgstr "TROUVER LES JEUX SIMILAIRES…"
-
-msgid "GAME MEDIAS"
-msgstr "MEDIAS DU JEU"
-
-msgid "VIEW GAME MANUAL"
-msgstr "VOIR LE MANUEL DU JEU"
-
-msgid "VIEW GAME MAP"
-msgstr "VOIR LA CARTE DU JEU"
 
 msgid "COLLECTION"
 msgstr "COLLECTION"
@@ -489,41 +512,14 @@ msgstr "STYLE DE VUE DES LISTES DE JEUX"
 msgid "automatic"
 msgstr "automatique"
 
-msgid "VIEW OPTIONS"
-msgstr "OPTIONS D'AFFICHAGE"
-
 msgid "VIEW CUSTOMISATION"
 msgstr "VOIR LES PERSONNALISATIONS"
-
-msgid "COLLECTION MANAGEMENT"
-msgstr "GESTION DE LA COLLECTION"
-
-msgid "ADD/REMOVE GAMES TO THIS GAME COLLECTION"
-msgstr "AJOUTER/SUPPRIMER DES JEUX À CETTE COLLECTION"
 
 msgid "GAME OPTIONS"
 msgstr "OPTIONS DU JEU"
 
 msgid "ADVANCED SYSTEM OPTIONS"
 msgstr "CONFIGURATION AVANCÉE DU SYSTÈME"
-
-msgid "ADVANCED GAME OPTIONS"
-msgstr "CONFIGURATION AVANCÉE DU JEU"
-
-msgid "EDIT PAD TO KEYBOARD CONFIGURATION"
-msgstr "EDITER LA CONFIGURATION PADTOKEY"
-
-msgid "CREATE PAD TO KEYBOARD CONFIGURATION"
-msgstr "CRÉER UNE CONFIGURATION PADTOKEY"
-
-msgid "EDIT FOLDER METADATA"
-msgstr "ÉDITER LES MÉTADONNÉES DU DOSSIER"
-
-msgid "EDIT THIS GAME'S METADATA"
-msgstr "ÉDITER LES MÉTADONNÉES DU JEU"
-
-msgid "VIEW PAD TO KEYBOARD INFORMATION"
-msgstr "VOIR LA CONFIGURATION PADTOKEY"
 
 msgid "RESET FILTERS"
 msgstr "RAZ DES FILTRES"
@@ -561,9 +557,6 @@ msgstr "RAFRAICHIR"
 msgid "FAILED"
 msgstr "ÉCHEC"
 
-msgid "LAUNCH"
-msgstr "LANCER"
-
 msgid "UNKNOWN ROM VERSION"
 msgstr "VERSION DE ROM INCONNUE"
 
@@ -600,39 +593,6 @@ msgstr "PAS DE RÉSEAUX WIFI TROUVÉS"
 msgid "SEARCHING WIFI NETWORKS"
 msgstr "RECHERCHE DE RÉSEAUX WIFI"
 
-msgid "THE BEZEL PROJECT"
-msgstr "LE BEZEL PROJECT"
-
-msgid "SELECT BEZELS TO INSTALL / REMOVE"
-msgstr "SÉLECTIONNEZ LES BEZELS À INSTALLER / SUPPRIMER"
-
-msgid "UPDATE"
-msgstr "METTRE À JOUR"
-
-#, c-format
-msgid "'%s' ADDED TO DOWNLOAD QUEUE"
-msgstr "'%s' AJOUTÉ DANS LA LISTE DE TÉLÉCHARGEMENT"
-
-msgid "REMOVE"
-msgstr "SUPPRIMER"
-
-msgid "INSTALL"
-msgstr "INSTALLER"
-
-#, c-format
-msgid "CURRENTLY IN DOWNLOAD QUEUE"
-msgstr "ACTUELLEMENT EN FILE D’ATTENTE DE TÉLÉCHARGEMENT"
-
-msgid "THEMES DOWNLOADER"
-msgstr "TÉLÉCHARGEMENT DE THÈMES"
-
-msgid "SELECT THEMES TO INSTALL / REMOVE"
-msgstr "SÉLECTIONNEZ LES THÈMES À INSTALLER / SUPPRIMER"
-
-#, c-format
-msgid "CURRENT THEME"
-msgstr "THÈME ACTUEL"
-
 msgid "FORGET A BLUETOOTH CONTROLLER"
 msgstr "OUBLIER UNE MANETTE BLUETOOTH"
 
@@ -666,8 +626,25 @@ msgstr "Il n’y a pas d’éléments dans cette vue"
 msgid "MISC"
 msgstr "AUTRE"
 
+msgid "UPDATE"
+msgstr "METTRE À JOUR"
+
+#, c-format
+msgid "'%s' ADDED TO DOWNLOAD QUEUE"
+msgstr "'%s' AJOUTÉ DANS LA LISTE DE TÉLÉCHARGEMENT"
+
+msgid "REMOVE"
+msgstr "SUPPRIMER"
+
 msgid "UNINSTALL ADDED TO QUEUE"
 msgstr "SUPPRESSION AJOUTÉE A LA FILE D’ATTENTE"
+
+msgid "INSTALL"
+msgstr "INSTALLER"
+
+#, c-format
+msgid "CURRENTLY IN DOWNLOAD QUEUE"
+msgstr "ACTUELLEMENT EN FILE D’ATTENTE DE TÉLÉCHARGEMENT"
 
 msgid "NO MISSING BIOS"
 msgstr "AUCUN BIOS MANQUANT"
@@ -801,6 +778,12 @@ msgstr "JOUEUR 1"
 msgid "PLAYER 2"
 msgstr "JOUEUR 2"
 
+msgid "PLAYER 3"
+msgstr "JOUEUR 3"
+
+msgid "PLAYER 4"
+msgstr "JOUEUR 4"
+
 msgid "COMBINATIONS"
 msgstr "COMBINAISONS"
 
@@ -867,51 +850,123 @@ msgstr "CONNEXION RÉSEAU NÉCESSAIRE"
 msgid "INVALID PARAMETERS"
 msgstr "PARAMÈTRES INVALIDES"
 
-msgid "SCRAPING IN PROGRESS"
-msgstr "SCRAPE EN COURS"
+msgid "GAME MEDIAS"
+msgstr "MEDIAS DU JEU"
 
-msgid "SYSTEM"
-msgstr "SYSTÈME"
+msgid "VIEW GAME MANUAL"
+msgstr "VOIR LE MANUEL DU JEU"
 
-msgid "subtitle text"
-msgstr "sous-titre"
+msgid "VIEW GAME MAP"
+msgstr "VOIR LA CARTE DU JEU"
 
-msgid "search"
-msgstr "rechercher"
+msgid "CURRENT CORE IS NOT COMPATIBLE"
+msgstr "COEUR ACTUEL NON COMPATIBLE"
 
-msgid "SKIP"
-msgstr "PASSER"
+msgid "REQUIRED CORE"
+msgstr "COEUR NECESSAIRE"
 
-msgid "STOP"
-msgstr "ARRÊTER"
+msgid "VIEW GAME ACHIEVEMENTS"
+msgstr "VOIR LES SUCCÈS DU JEU"
 
-msgid "stop (progress saved)"
-msgstr "stop (avancement sauvegardé)"
+msgid "GAME"
+msgstr "JEU"
+
+msgid "SAVE SNAPSHOTS"
+msgstr "SAUVEGARDES INSTANTANÉES"
+
+msgid "START NETPLAY HOST"
+msgstr "DÉMARRER L’HÔTE PARTIES EN RÉSEAU"
+
+msgid "NETPLAY"
+msgstr "PARTIES EN RÉSEAU"
+
+msgid "START GAME"
+msgstr "DÉMARRER LE JEU"
+
+msgid "YOU ARE NOT CONNECTED TO A NETWORK"
+msgstr "VOUS N’ETES CONNECTÉ À AUCUN RÉSEAU"
+
+msgid "SET PLAYER PASSWORD"
+msgstr "DÉFINIR MOT DE PASSE JOUEUR"
+
+msgid "SET VIEWER PASSWORD"
+msgstr "DÉFINIR MOT DE PASSE SPECTATEUR"
+
+msgid "FIND SIMILAR GAMES..."
+msgstr "TROUVER LES JEUX SIMILAIRES…"
+
+msgid "COLLECTIONS"
+msgstr "COLLECTIONS"
 
 #, c-format
-msgid "GAME %i OF %i"
-msgstr "JEU %i DE %i"
-
-msgid ""
-"WE CAN'T FIND ANY SYSTEMS!\n"
-"CHECK THAT YOUR PATHS ARE CORRECT IN THE SYSTEMS CONFIGURATION FILE, AND "
-"YOUR GAME DIRECTORY HAS AT LEAST ONE GAME WITH THE CORRECT EXTENSION."
-msgstr ""
-"AUCUN SYSTÈME TROUVÉ !\n"
-"VÉRIFIEZ QUE VOS CHEMINS SONT CORRECTS DANS LA CONFIGURATION SYSTÈME, ET QUE "
-"VOTRE DOSSIER JEUX CONTIENT AU MOINS UN JEU AVEC L'EXTENSION CORRECTE."
+msgid "REMOVE FROM %s"
+msgstr "SUPPRIMER DE %s"
 
 #, c-format
-msgid "%i GAME SUCCESSFULLY SCRAPED!"
-msgid_plural "%i GAMES SUCCESSFULLY SCRAPED!"
-msgstr[0] "%i JEU SCRAPÉ"
-msgstr[1] "%i JEUX SCRAPÉS"
+msgid "ADD TO %s"
+msgstr "AJOUTER A %s"
+
+msgid "FAVORITES"
+msgstr "FAVORIS"
+
+msgid "SCRAPE"
+msgstr "SCRAPER"
+
+msgid "EDIT PAD TO KEYBOARD CONFIGURATION"
+msgstr "EDITER LA CONFIGURATION PADTOKEY"
+
+msgid "CREATE PAD TO KEYBOARD CONFIGURATION"
+msgstr "CRÉER UNE CONFIGURATION PADTOKEY"
+
+msgid "ADVANCED GAME OPTIONS"
+msgstr "CONFIGURATION AVANCÉE DU JEU"
+
+msgid "EDIT FOLDER METADATA"
+msgstr "ÉDITER LES MÉTADONNÉES DU DOSSIER"
+
+msgid "EDIT THIS GAME'S METADATA"
+msgstr "ÉDITER LES MÉTADONNÉES DU JEU"
+
+msgid "VIEW PAD TO KEYBOARD INFORMATION"
+msgstr "VOIR LA CONFIGURATION PADTOKEY"
+
+msgid "THEMES DOWNLOADER"
+msgstr "TÉLÉCHARGEMENT DE THÈMES"
+
+msgid "SELECT THEMES TO INSTALL / REMOVE"
+msgstr "SÉLECTIONNEZ LES THÈMES À INSTALLER / SUPPRIMER"
 
 #, c-format
-msgid "%i GAME SKIPPED."
-msgid_plural "%i GAMES SKIPPED."
-msgstr[0] "%i JEU PASSÉ"
-msgstr[1] "%i JEUX PASSÉS"
+msgid "CURRENT THEME"
+msgstr "THÈME ACTUEL"
+
+msgid "Unlocked on"
+msgstr "Déverrouillé le"
+
+msgid "THIS GAME HAS NO ACHIEVEMENT YET"
+msgstr "CE JEU N’A PAS ENCORE DE SUCCÈS"
+
+msgid "Achievements won"
+msgstr "Succès gagnés"
+
+#, c-format
+msgid "%d%% complete"
+msgstr "%d%% terminé"
+
+msgid "AUTO SAVE"
+msgstr "SAUVEGARDE AUTO"
+
+msgid "SLOT"
+msgstr "EMPLACEMENT"
+
+msgid "START NEW GAME"
+msgstr "NOUVELLE PARTIE"
+
+msgid "START AUTO SAVE"
+msgstr "LANCER SAUV. AUTO"
+
+msgid "COPY TO FREE SLOT"
+msgstr "COPIER VERS EMPLACEMENT LIBRE"
 
 msgid "SCRAPE NOW"
 msgstr "LANCER LE SCRAPE"
@@ -931,9 +986,6 @@ msgstr "FILTRE"
 msgid "SCRAPE THESE SYSTEMS"
 msgstr "SCRAPER CES SYSTÈMES"
 
-msgid "USER DECIDES ON CONFLICTS"
-msgstr "CHOISIR SI CONFLIT"
-
 msgid "START"
 msgstr "DÉMARRER"
 
@@ -951,6 +1003,12 @@ msgstr "UN SCRAPE EST EN COURS. VOULEZ-VOUS L'INTERROMPRE ?"
 
 msgid "NO GAMES FIT THAT CRITERIA."
 msgstr "AUCUN JEU NE CORRESPOND"
+
+msgid "THE BEZEL PROJECT"
+msgstr "LE BEZEL PROJECT"
+
+msgid "SELECT BEZELS TO INSTALL / REMOVE"
+msgstr "SÉLECTIONNEZ LES BEZELS À INSTALLER / SUPPRIMER"
 
 msgid "fade"
 msgstr "fondu"
@@ -1009,6 +1067,9 @@ msgstr "NID D'ABEILLE"
 msgid "FLATTEN-GLOW"
 msgstr "APPLATI ET BRILLANT"
 
+msgid "RGA SCALING"
+msgstr "RGA SCALING"
+
 msgid "MAIN MENU"
 msgstr "MENU PRINCIPAL"
 
@@ -1035,9 +1096,6 @@ msgstr "CONFIGURER LES MANETTES"
 
 msgid "EMULATOR SETTINGS"
 msgstr "PARAMÈTRES DES EMULATEURS"
-
-msgid "SCRAPE"
-msgstr "SCRAPER"
 
 msgid "UPDATES & DOWNLOADS"
 msgstr "MISES À JOUR ET TÉLÉCHARGEMENTS"
@@ -1104,6 +1162,12 @@ msgstr "SCRAPER LES VIDÉOS"
 
 msgid "SCRAPE FANART"
 msgstr "SCRAPER LES FANARTS"
+
+msgid "SCRAPE BOX BACKSIDE"
+msgstr "SCRAPER LE DOS DES BOITES"
+
+msgid "SCRAPE MAP"
+msgstr "SCRAPER LES CARTES"
 
 msgid "SCRAPE MANUAL"
 msgstr "SCRAPER LES MANUELS"
@@ -1192,11 +1256,20 @@ msgstr "Nettoyage "
 msgid "CLEAR CACHES"
 msgstr "EFFACER LES CACHES"
 
+msgid "BUILD IMAGE CACHE"
+msgstr "GÉNÉRER LE CACHE D’IMAGES"
+
+msgid "Building image cache"
+msgstr "Génération du cache d’images"
+
 msgid "RESET FILE EXTENSIONS"
 msgstr "RAZ DES EXTENSIONS DE FICHIER"
 
 msgid "REDETECT GAMES LANG/REGION"
 msgstr "REDÉTECTER LA LANGUE/RÉGION DES JEUX"
+
+msgid "FIND ALL GAMES WITH NETPLAY/ACHIEVEMENTS"
+msgstr "TROUVER TOUS LES JEUX AVEC PARTIES EN RÉSEAU/SUCCÈS"
 
 msgid "DATA MANAGEMENT"
 msgstr "GESTION DES DONNÉES"
@@ -1218,6 +1291,9 @@ msgstr "INTERFACE UTILISATEUR"
 
 msgid "CAROUSEL TRANSITIONS"
 msgstr "TRANSITION DU CARROUSEL"
+
+msgid "QUICK SYSTEM SELECT"
+msgstr "SÉLECTION RAPIDE DU SYSTÈME"
 
 msgid "ON SCREEN KEYBOARD"
 msgstr "CLAVIER VIRTUEL"
@@ -1271,7 +1347,7 @@ msgid "CHECK FOR UPDATES"
 msgstr "VÉRIFIER LES MISES À JOUR"
 
 msgid "UPDATE TYPE"
-msgstr "CANAL DE MISE À JOUR"
+msgstr "TYPE DE MISE À JOUR"
 
 msgid "APPLY UPDATE"
 msgstr "APPLIQUER LA MISE À JOUR"
@@ -1282,8 +1358,8 @@ msgstr "LANCER LA MISE À JOUR"
 msgid "UPDATE IS ALREADY RUNNING"
 msgstr "LA MISE À JOUR EST DÉJÀ EN COURS"
 
-msgid "YOU ARE NOT CONNECTED TO A NETWORK"
-msgstr "VOUS N’ETES CONNECTÉ À AUCUN RÉSEAU"
+msgid "SYSTEM"
+msgstr "SYSTÈME"
 
 msgid "LANGUAGE"
 msgstr "LANGUE"
@@ -1300,8 +1376,8 @@ msgid ""
 "To unlock and return to the full UI, enter this code:"
 msgstr ""
 "Vous allez restreindre le mode d’affichage :\n"
-"Cela va masquer la plupart des options de menus afin d’éviter des "
-"changements système.\n"
+"Cela masquera la plupart des options de menu pour empêcher les modifications "
+"du système.\n"
 "Pour déverrouiller le mode d’affichage, entrez le code suivant :"
 
 msgid "Do you want to proceed ?"
@@ -1335,7 +1411,7 @@ msgid "RETROACHIEVEMENTS SETTINGS"
 msgstr "PARAMÈTRES DES SUCCÈS RÉTRO"
 
 msgid "NETPLAY SETTINGS"
-msgstr "PARAMÈTRES DES PARTIES RÉSEAUX"
+msgstr "PARAMÈTRES DES PARTIES EN RÉSEAU"
 
 msgid "CHECK BIOSES BEFORE RUNNING A GAME"
 msgstr "VÉRIFIER LES BIOS AVANT DE LANCER UN JEU"
@@ -1398,16 +1474,34 @@ msgid "LEADERBOARDS"
 msgstr "TABLEAU DES SCORES"
 
 msgid "VERBOSE MODE"
-msgstr "MODE DÉTAILLÉ"
+msgstr "MODE VERBEUX"
 
 msgid "AUTOMATIC SCREENSHOT"
 msgstr "CAPTURE D'ÉCRAN AUTOMATIQUE"
 
+msgid "RETROACHIEVEMENTS UNLOCK SOUND"
+msgstr "SON DE DÉVERROUILLAGE DES SUCCÈS RÉTRO"
+
+msgid "UNLOCK SOUND"
+msgstr "SON DE DÉVERROUILLAGE"
+
 msgid "SHOW IN MAIN MENU"
 msgstr "AFFICHER DANS LE MENU PRINCIPAL"
 
+msgid "GAME INDEXES"
+msgstr "INDEXATION DES JEUX"
+
+msgid "FIND ALL GAMES"
+msgstr "TROUVER TOUS LES JEUX"
+
+msgid "FIND NEW GAMES"
+msgstr "TROUVER LES NOUVEAUX JEUX"
+
+msgid "UNABLE TO ACTIVATE RETROACHIEVEMENTS :"
+msgstr "IMPOSSIBLE D’ACTIVER LES SUCCÈS RÉTRO :"
+
 msgid "ENABLE NETPLAY"
-msgstr "ACTIVER LE JEU EN RÉSEAU"
+msgstr "ACTIVER LES PARTIES EN RÉSEAU"
 
 msgid "NICKNAME"
 msgstr "SURNOM"
@@ -1418,17 +1512,8 @@ msgstr "PORT"
 msgid "USE RELAY SERVER"
 msgstr "UTILISER UN SERVEUR RELAIS"
 
-msgid "GAME INDEXES"
-msgstr "INDEXATION DES JEUX"
-
 msgid "CHECK MISSING INDEXES AT STARTUP"
 msgstr "INDEXER AUTOMATIQUEMENT AU DÉMARRAGE"
-
-msgid "REINDEX ALL GAMES"
-msgstr "RÉINDEXER TOUS LES JEUX"
-
-msgid "INDEX MISSING GAMES"
-msgstr "INDEXER LES JEUX MANQUANTS"
 
 msgid "DEFAULT SETTINGS"
 msgstr "PARAMÈTRES PAR DÉFAUT"
@@ -1445,14 +1530,17 @@ msgstr "LISSER LES JEUX"
 msgid "REWIND"
 msgstr "REMBOBINAGE"
 
+msgid "INTEGER SCALE (PIXEL PERFECT)"
+msgstr "ECHELLE ENTIÈRE (PIXEL PARFAIT)"
+
 msgid "AUTO SAVE/LOAD"
-msgstr "SAUV./CHARG. AUTOMATIQUE"
+msgstr "SAUV./CHARG. AUTO"
+
+msgid "SHOW SAVE SNAPSHOTS"
+msgstr ""
 
 msgid "SHADERS SET"
 msgstr "FILTRES VIDÉO"
-
-msgid "INTEGER SCALE (PIXEL PERFECT)"
-msgstr "AFFICHAGE EN ÉCHELLE ENTIÈRE"
 
 msgid "DECORATION"
 msgstr "DÉCORATIONS"
@@ -1559,11 +1647,14 @@ msgstr "avec jeux multiples"
 msgid "SHOW '..' PARENT FOLDER"
 msgstr "AFFICHER LE DOSSIER PARENT ‘..’"
 
+msgid "SHOW FILENAMES IN LISTS"
+msgstr "AFFICHER LE NOM DES ROMS DANS LES LISTES"
+
 msgid "FILE EXTENSIONS"
 msgstr "EXTENSIONS DE FICHIERS"
 
-msgid "RESET GAMELIST CUSTOMISATIONS"
-msgstr "RAZ PERSONNALISATION DES LISTES DE JEUX"
+msgid "RESET CUSTOMISATIONS"
+msgstr ""
 
 msgid "APPEARENCE"
 msgstr "APPARENCE"
@@ -1601,11 +1692,8 @@ msgstr "ICÔNE"
 msgid "ICON AND TEXT"
 msgstr "ICÔNE ET TEXTE"
 
-msgid "SHOW FILENAMES IN LISTS"
-msgstr "AFFICHER LE NOM DES ROMS DANS LES LISTES"
-
 msgid "VOLUME"
-msgstr "VOLUME GÉNÉRAL"
+msgstr "VOLUME"
 
 msgid "SYSTEM VOLUME"
 msgstr "VOLUME GÉNÉRAL"
@@ -1676,15 +1764,6 @@ msgstr "WIFI ACTIVÉ"
 msgid "WIFI CONFIGURATION ERROR"
 msgstr "IMPOSSIBLE DE CONFIGURER LE WIFI"
 
-msgid "AUTOMATIC SCRAPER"
-msgstr "SCRAPE AUTOMATIQUE"
-
-msgid "REALLY SCRAPE?"
-msgstr "VOULEZ-VOUS VRAIMENT SCRAPER ?"
-
-msgid "MANUAL SCRAPER"
-msgstr "SCRAPE MANUEL"
-
 msgid "QUICK ACCESS"
 msgstr "ACCÈS RAPIDE"
 
@@ -1748,6 +1827,9 @@ msgstr "COTE À COTE"
 msgid "INTERNAL RESOLUTION"
 msgstr "RÉSOLUTION INTERNE"
 
+msgid "AUTOCONFIGURE CONTROLLERS"
+msgstr "AUTOCONFIGURER LES MANETTES"
+
 msgid "FORMAT DEVICE"
 msgstr "FORMATER UN PÉRIPHÉRIQUE"
 
@@ -1777,21 +1859,30 @@ msgstr "VOUS ALLEZ SUPPRIMER LE JEU ACTUEL. ETES-VOUS SUR(E) ?"
 msgid "NO DEVICE FOUND"
 msgstr "PAS DE PÉRIPHÉRIQUE TROUVÉ"
 
+msgid "ZOOM-"
+msgstr "ZOOM-"
+
+msgid "ZOOM+"
+msgstr "ZOOM+"
+
+msgid "MOVE"
+msgstr "DÉPLACER"
+
+msgid "ZOOM"
+msgstr "ZOOM"
+
 msgid "SYSTEM INFO"
 msgstr "INFO SYSTÈME"
 
 msgid "ERROR: EVERY SYSTEM IS HIDDEN, RE-DISPLAYING ALL OF THEM NOW"
 msgstr ""
-"ERREUR : TOUS LES SYSTÈMES SONT CACHÉS, RÉAFFICHAGE DE TOUS DÈS MAINTENANT"
+"ERREUR : TOUS LES SYSTÈMES SONT CACHÉS, RÉ-AFFICHAGE DE TOUS DÈS MAINTENANT"
 
 msgid "QUICK SEARCH"
 msgstr "RECHERCHE RAPIDE"
 
 msgid "GO TO LETTER"
 msgstr "ALLER À LA LETTRE"
-
-msgid "COLLECTIONS"
-msgstr "COLLECTIONS"
 
 msgid "GO TO MANUFACTURER"
 msgstr "ALLER AU CONSTRUCTEUR"
@@ -1822,9 +1913,6 @@ msgid "%i GAME"
 msgid_plural "%i GAMES"
 msgstr[0] "%i JEU"
 msgstr[1] "%i JEUX"
-
-msgid "NETPLAY"
-msgstr "PARTIES EN RÉSEAU"
 
 msgid "RANDOM"
 msgstr "ALÉATOIRE"
@@ -1878,23 +1966,15 @@ msgstr "Nombre de parties"
 msgid "No Entries Found"
 msgstr "Aucune Entrée Trouvée"
 
-msgid "Favorites"
-msgstr "Favoris"
-
-msgid "START GAME"
-msgstr "DÉMARRER LE JEU"
-
-msgid "START NETPLAY HOST"
-msgstr "DÉMARRER L’HÔTE NET PLAY"
-
-msgid "SET PLAYER PASSWORD"
-msgstr "DÉFINIR MOT DE PASSE JOUEUR"
-
-msgid "SET VIEWER PASSWORD"
-msgstr "DÉFINIR MOT DE PASSE SPECTATEUR"
-
 msgid "Games similar to"
 msgstr "Jeux similaires à"
+
+msgid ""
+"A valid account is required. Please register an account on https://"
+"retroachievements.org"
+msgstr ""
+"Un compte valide est nécessaire. Veuillez créer un compte sur https://"
+"retroachievements.org"
 
 msgid "Searching"
 msgstr "Recherche"
@@ -1902,11 +1982,11 @@ msgstr "Recherche"
 msgid "NO GAMES FOUND - SKIP"
 msgstr "AUCUN JEU NE CORRESPOND - PASSER"
 
-msgid "AN ERROR HAS OCCURED"
-msgstr "UNE ERREUR S'EST PRODUITE"
-
 msgid "RETRY"
 msgstr "RECOMMENCER"
+
+msgid "SKIP"
+msgstr "PASSER"
 
 msgid "Downloading"
 msgstr "Téléchargement"
@@ -1999,13 +2079,19 @@ msgid "GAME TIME, DESCENDING"
 msgstr "TEMPS DE JEU, DÉCROISSANT"
 
 msgid "Extracting"
-msgstr "Extration"
+msgstr "Extraction"
 
-msgid "HASHING GAMES"
-msgstr "INDEXATION DES JEUX"
+msgid "SEARCHING RETROACHIEVEMENTS"
+msgstr "RECHERCHE DES SUCCÈS RÉTRO"
 
-msgid "FAVORITES"
-msgstr "FAVORIS"
+msgid "SEARCHING NETPLAY GAMES"
+msgstr "RECHERCHE DES PARTIES EN RÉSEAU"
+
+msgid "INDEXING COMPLETED"
+msgstr "INDEXATION TERMINÉE"
+
+msgid "UPDATE GAMES LISTS TO APPLY CHANGES."
+msgstr "METTEZ A JOUR LES LISTES DE JEUX POUR APPLIQUER LES MODIFICATIONS"
 
 msgid "GENRE"
 msgstr "GENRE"
@@ -2031,16 +2117,28 @@ msgstr "JEU ENFANT"
 msgid "ALREADY PLAYED"
 msgstr "DÉJA JOUÉ"
 
+msgid "HAS ACHIEVEMENTS"
+msgstr "SUCCÈS RÉTRO"
+
+msgid "VERTICAL"
+msgstr "VERTICAL"
+
 msgid "SCRAPING"
 msgstr "SCRAPE"
 
 msgid "SCRAPE FAILED"
 msgstr "ECHEC DU SCRAPE"
 
-msgid "SCRAPING FINISHED. REFRESH UPDATE GAMES LISTS TO APPLY CHANGES."
-msgstr ""
-"SCRAPE TERMINÉ. METTEZ A JOUR LES LISTES DE JEUX POUR APPLIQUER LES "
-"MODIFICATIONS."
+msgid "SCRAPING FINISHED"
+msgstr "SCRAPE TERMINÉ"
+
+#, c-format
+msgid "%s connected"
+msgstr "%s connectée"
+
+#, c-format
+msgid "%s disconnected"
+msgstr "%s déconnectée"
 
 msgid "SHIFTS FOR UPPER,LOWER, AND SPECIAL"
 msgstr "MAJ POUR MAJUSCULE, MINUSCULE ET SPECIAL"
@@ -2223,3 +2321,58 @@ msgstr "%d m"
 #, c-format
 msgid "%d s"
 msgstr "%d s"
+
+#~ msgid "RESET GAMELIST CUSTOMISATIONS"
+#~ msgstr "RAZ PERSONNALISATION DES LISTES DE JEUX"
+
+#~ msgid "SCRAPING IN PROGRESS"
+#~ msgstr "SCRAPE EN COURS"
+
+#~ msgid "subtitle text"
+#~ msgstr "sous-titre"
+
+#~ msgid "search"
+#~ msgstr "rechercher"
+
+#~ msgid "STOP"
+#~ msgstr "ARRÊTER"
+
+#~ msgid "stop (progress saved)"
+#~ msgstr "stop (avancement sauvegardé)"
+
+#~ msgid "GAME %i OF %i"
+#~ msgstr "JEU %i DE %i"
+
+#~ msgid ""
+#~ "WE CAN'T FIND ANY SYSTEMS!\n"
+#~ "CHECK THAT YOUR PATHS ARE CORRECT IN THE SYSTEMS CONFIGURATION FILE, AND "
+#~ "YOUR GAME DIRECTORY HAS AT LEAST ONE GAME WITH THE CORRECT EXTENSION."
+#~ msgstr ""
+#~ "AUCUN SYSTÈME TROUVÉ !\n"
+#~ "VÉRIFIEZ QUE VOS CHEMINS SONT CORRECTS DANS LA CONFIGURATION SYSTÈME, ET "
+#~ "QUE VOTRE DOSSIER JEUX CONTIENT AU MOINS UN JEU AVEC L'EXTENSION CORRECTE."
+
+#~ msgid "%i GAME SUCCESSFULLY SCRAPED!"
+#~ msgid_plural "%i GAMES SUCCESSFULLY SCRAPED!"
+#~ msgstr[0] "%i JEU SCRAPÉ"
+#~ msgstr[1] "%i JEUX SCRAPÉS"
+
+#~ msgid "%i GAME SKIPPED."
+#~ msgid_plural "%i GAMES SKIPPED."
+#~ msgstr[0] "%i JEU PASSÉ"
+#~ msgstr[1] "%i JEUX PASSÉS"
+
+#~ msgid "AUTOMATIC SCRAPER"
+#~ msgstr "SCRAPE AUTOMATIQUE"
+
+#~ msgid "REALLY SCRAPE?"
+#~ msgstr "VOULEZ-VOUS VRAIMENT SCRAPER ?"
+
+#~ msgid "MANUAL SCRAPER"
+#~ msgstr "SCRAPE MANUEL"
+
+#~ msgid "Favorites"
+#~ msgstr "Favoris"
+
+#~ msgid "AN ERROR HAS OCCURED"
+#~ msgstr "UNE ERREUR S'EST PRODUITE"

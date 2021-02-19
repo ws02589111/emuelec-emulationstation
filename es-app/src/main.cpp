@@ -13,7 +13,6 @@
 #include "MameNames.h"
 #include "platform.h"
 #include "PowerSaver.h"
-#include "ScraperCmdLine.h"
 #include "Settings.h"
 #include "SystemData.h"
 #include "SystemScreenSaver.h"
@@ -34,6 +33,7 @@
 #include "components/VideoVlcComponent.h"
 #include <csignal>
 #include "InputConfig.h"
+#include "RetroAchievements.h"
 
 #ifdef WIN32
 #include <Windows.h>
@@ -41,7 +41,6 @@
 #define PATH_MAX MAX_PATH
 #endif
 
-static bool scrape_cmdline = false;
 static std::string gPlayVideo;
 static int gPlayVideoDuration = 0;
 
@@ -181,9 +180,6 @@ bool parseArgs(int argc, char* argv[])
 			bool vsync = (strcmp(argv[i + 1], "on") == 0 || strcmp(argv[i + 1], "1") == 0) ? true : false;
 			Settings::getInstance()->setBool("VSync", vsync);
 			i++; // skip vsync value
-		}else if(strcmp(argv[i], "--scrape") == 0)
-		{
-			scrape_cmdline = true;
 		}else if(strcmp(argv[i], "--max-vram") == 0)
 		{
 			int maxVRAM = atoi(argv[i + 1]);
@@ -229,8 +225,7 @@ bool parseArgs(int argc, char* argv[])
 				"--draw-framerate		display the framerate\n"
 				"--no-exit			don't show the exit option in the menu\n"
 				"--no-splash			don't show the splash screen\n"
-				"--debug				more logging, show console on Windows\n"
-				"--scrape			scrape using command line interface\n"
+				"--debug				more logging, show console on Windows\n"				
 				"--windowed			not fullscreen, should be used with --resolution\n"
 				"--vsync [1/on or 0/off]		turn vsync on or off (default is on)\n"
 				"--max-vram [size]		Max VRAM to use in Mb before swapping. 0 for unlimited\n"
@@ -254,7 +249,7 @@ bool parseArgs(int argc, char* argv[])
 bool verifyHomeFolderExists()
 {
 	//make sure the config directory exists	
-	std::string configDir = Utils::FileSystem::getEsConfigPath(); // batocera
+	std::string configDir = Utils::FileSystem::getEsConfigPath();
 	if(!Utils::FileSystem::exists(configDir))
 	{
 		std::cout << "Creating config directory \"" << configDir << "\"\n";
@@ -308,7 +303,6 @@ void onExit()
 #include <direct.h>
 #endif
 
-// batocera
 int setLocale(char * argv1)
 {
 #if WIN32
@@ -415,7 +409,6 @@ void playVideo()
 	window.deinit(true);
 }
 
-
 int main(int argc, char* argv[])
 {	
 	// signal(SIGABRT, signalHandler);
@@ -479,7 +472,7 @@ int main(int argc, char* argv[])
 		playVideo();
 		return 0;
 	}
-
+	
 	//start the logger
 	Log::setupReportingLevel();
 	Log::init();	
@@ -489,10 +482,10 @@ int main(int argc, char* argv[])
 	atexit(&onExit);
 
 	// Set locale
-	setLocale(argv[0]); // batocera	
+	setLocale(argv[0]);	
 
-	// metadata init    // batocera
-	MetaDataList::initMetadata();     // require locale
+	// metadata init
+	MetaDataList::initMetadata();
 
 	Window window;
 	SystemScreenSaver screensaver(&window);
@@ -500,27 +493,24 @@ int main(int argc, char* argv[])
 	ViewController::init(&window);
 	CollectionSystemManager::init(&window);
 	MameNames::init();
-	window.pushGui(ViewController::get());
 
+	window.pushGui(ViewController::get());
+	if(!window.init())
+	{
+		LOG(LogError) << "Window failed to initialize!";
+		return 1;
+	}
+	
 	bool splashScreen = Settings::getInstance()->getBool("SplashScreen");
 	bool splashScreenProgress = Settings::getInstance()->getBool("SplashScreenProgress");
 
-	if(!scrape_cmdline)
+	if (splashScreen)
 	{
-		if(!window.init())
-		{
-			LOG(LogError) << "Window failed to initialize!";
-			return 1;
-		}
+		std::string progressText = _("Loading...");
+		if (splashScreenProgress)
+			progressText = _("Loading system config...");
 
-		if (splashScreen)
-		{
-			std::string progressText = _("Loading..."); // batocera
-			if (splashScreenProgress)
-				progressText = _("Loading system config..."); // batocera
-
-			window.renderSplashScreen(progressText);
-		}
+		window.renderSplashScreen(progressText);
 	}
 
 	const char* errorMsg = NULL;
@@ -530,8 +520,7 @@ int main(int argc, char* argv[])
 		if(errorMsg == NULL)
 		{
 			LOG(LogError) << "Unknown error occured while parsing system config file.";
-			if(!scrape_cmdline)
-				Renderer::deinit();
+			Renderer::deinit();
 			return 1;
 		}
 
@@ -539,9 +528,8 @@ int main(int argc, char* argv[])
 		window.pushGui(new GuiMsgBox(&window, errorMsg, _("QUIT"), [] { quitES(); }));
 	}
 
-	SystemConf* systemConf = SystemConf::getInstance(); // batocera
+	SystemConf* systemConf = SystemConf::getInstance();
 
-// batocera
 #ifdef _ENABLE_KODI_
 	if (systemConf->getBool("kodi.enabled", true) && systemConf->getBool("kodi.atstartup"))
 		ApiSystem::getInstance()->launchKodi(&window);
@@ -549,18 +537,7 @@ int main(int argc, char* argv[])
 
 	InputConfig::AssignActionButtons();
 
-	ApiSystem::getInstance()->getIpAdress(); // batocera
-
-	if (systemConf->getBool("updates.enabled")) 
-	{ 
-		NetworkThread* nthread = new NetworkThread(&window); 
-	}
-
-	//run the command line scraper then quit
-	if(scrape_cmdline)
-	{
-		return run_scraper_cmdline();
-	}
+	ApiSystem::getInstance()->getIpAdress();
 
 	//dont generate joystick events while we're loading (hopefully fixes "automatically started emulator" bug)
 	SDL_JoystickEventState(SDL_DISABLE);
@@ -569,39 +546,55 @@ int main(int argc, char* argv[])
 	// this makes for no delays when accessing content, but a longer startup time
 	ViewController::get()->preload();
 
-	if(splashScreen && splashScreenProgress)
-		window.renderSplashScreen(_("Done.")); // batocera
-
+	NetworkThread* nthread = new NetworkThread(&window);
 	HttpServerThread httpServer(&window);
 
-	//choose which GUI to open depending on if an input configuration already exists
+	if(splashScreen && splashScreenProgress)
+		window.renderSplashScreen(_("Done."));
+
+	// Choose which GUI to open depending on if an input configuration already exists
 	if(errorMsg == NULL)
 	{
 		if(Utils::FileSystem::exists(InputManager::getConfigPath()) && InputManager::getInstance()->getNumConfiguredDevices() > 0)
-		{
 			ViewController::get()->goToStart(true);
-		}else{
+		else
 			window.pushGui(new GuiDetectDevice(&window, true, [] { ViewController::get()->goToStart(true); }));
-		}
 	}
 
-	//generate joystick events since we're done loading
+	// Generate joystick events since we're done loading
 	SDL_JoystickEventState(SDL_ENABLE);
 	SDL_StopTextInput();
 
 	window.closeSplashScreen();
 
-	// batocera
 	// Create a flag in  temporary directory to signal READY state
 	ApiSystem::getInstance()->setReadyFlag();
 
-	// batocera, play music
+	// Play music
 	AudioManager::getInstance()->init();
 
 	if (ViewController::get()->getState().viewing == ViewController::GAME_LIST || ViewController::get()->getState().viewing == ViewController::SYSTEM_SELECT)
 		AudioManager::getInstance()->changePlaylist(ViewController::get()->getState().getSystem()->getTheme());
 	else
 		AudioManager::getInstance()->playRandomMusic();
+
+#ifdef WIN32	
+	DWORD displayFrequency = 60;
+
+	DEVMODE lpDevMode;
+	memset(&lpDevMode, 0, sizeof(DEVMODE));
+	lpDevMode.dmSize = sizeof(DEVMODE);
+	lpDevMode.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT | DM_DISPLAYFLAGS | DM_DISPLAYFREQUENCY;
+	lpDevMode.dmDriverExtra = 0;
+
+	if (EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &lpDevMode) != 0) {
+		displayFrequency = lpDevMode.dmDisplayFrequency; // default value if cannot retrieve from user settings.
+	}
+
+	int timeLimit = (1000 / displayFrequency) - 8;	 // Margin for vsync
+	if (timeLimit < 0)
+		timeLimit = 0;
+#endif
 
 	int lastTime = SDL_GetTicks();
 	int ps_time = SDL_GetTicks();
@@ -610,6 +603,10 @@ int main(int argc, char* argv[])
 
 	while(running)
 	{
+#ifdef WIN32	
+		int processStart = SDL_GetTicks();
+#endif
+
 		SDL_Event event;
 
 		bool ps_standby = PowerSaver::getState() && (int) SDL_GetTicks() - ps_time > PowerSaver::getMode();
@@ -660,6 +657,16 @@ int main(int argc, char* argv[])
 
 		TRYCATCH("Window.update" ,window.update(deltaTime))	
 		TRYCATCH("Window.render", window.render())
+
+#ifdef WIN32		
+		int processDuration = SDL_GetTicks() - processStart;
+		if (processDuration < timeLimit)
+		{
+			int timeToWait = timeLimit - processDuration;
+			if (timeToWait > 0 && timeToWait < 25 && Settings::getInstance()->getBool("VSync"))
+				Sleep(timeToWait);
+		}
+#endif
 
 		Renderer::swapBuffers();
 
