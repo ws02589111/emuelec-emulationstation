@@ -221,7 +221,7 @@ void GuiMenu::openEmuELECSettings()
 		videomode.push_back("576cvbs");
 		videomode.push_back("Custom");
 		videomode.push_back("-- AUTO-DETECTED RESOLUTIONS --");
-   for(std::stringstream ss(getShOutput(R"(/emuelec/scripts/emuelec-utils resolutions)")); getline(ss, a, ','); ) {
+   for(std::stringstream ss(getShOutput(R"(/usr/bin/emuelec-utils resolutions)")); getline(ss, a, ','); ) {
         videomode.push_back(a);
 	}
 		for (auto it = videomode.cbegin(); it != videomode.cend(); it++) {
@@ -244,7 +244,7 @@ void GuiMenu::openEmuELECSettings()
 					runSystemCommand("echo "+selectedVideoMode+" > /sys/class/display/mode", "", nullptr);
 					SystemConf::getInstance()->set("ee_videomode", selectedVideoMode);
 					LOG(LogInfo) << "Setting video to " << selectedVideoMode;
-					runSystemCommand("/storage/.config/emuelec/scripts/setres.sh", "", nullptr);
+					runSystemCommand("/usr/bin/setres.sh", "", nullptr);
 					SystemConf::getInstance()->saveSystemConf();
 				//	v_need_reboot = true;
 				}, _("NO"),nullptr));
@@ -302,7 +302,7 @@ void GuiMenu::openEmuELECSettings()
 		s->addSaveFunc([emuelec_blrgboptions_def] {
 			if (emuelec_blrgboptions_def->changed()) {
 				std::string selectedblrgb = emuelec_blrgboptions_def->getSelected();
-                runSystemCommand("/emuelec/scripts/odroidgoa_utils.sh bl " +selectedblrgb, "", nullptr);
+                runSystemCommand("/usr/bin/odroidgoa_utils.sh bl " +selectedblrgb, "", nullptr);
 				SystemConf::getInstance()->set("bl_rgb", selectedblrgb);
                 SystemConf::getInstance()->saveSystemConf();
 			}
@@ -325,7 +325,7 @@ void GuiMenu::openEmuELECSettings()
 		s->addSaveFunc([emuelec_powerled_def] {
 			if (emuelec_powerled_def->changed()) {
 				std::string selectedpowerled = emuelec_powerled_def->getSelected();
-                runSystemCommand("/emuelec/scripts/odroidgoa_utils.sh pl " +selectedpowerled, "", nullptr);
+                runSystemCommand("/usr/bin/odroidgoa_utils.sh pl " +selectedpowerled, "", nullptr);
 				SystemConf::getInstance()->set("gf_statusled", selectedpowerled);
                 SystemConf::getInstance()->saveSystemConf();
 			}
@@ -464,7 +464,30 @@ void GuiMenu::openEmuELECSettings()
 		SystemConf::getInstance()->set("advmame_auto_gamepad", advmamegpenabled ? "1" : "0");
 		SystemConf::getInstance()->saveSystemConf();
 	});
-	
+
+		auto emuelec_retroarch_menu_def = std::make_shared< OptionListComponent<std::string> >(mWindow, "RETROARCH MENU", false);
+		std::vector<std::string> ramenuoptions;
+		ramenuoptions.push_back("auto");
+		ramenuoptions.push_back("ozone");
+		ramenuoptions.push_back("xbm");
+		ramenuoptions.push_back("rgui");
+		
+		auto ramenuoptionsS = SystemConf::getInstance()->get("global.retroarch.menu_driver");
+		if (ramenuoptionsS.empty())
+		ramenuoptionsS = "auto";
+		
+		for (auto it = ramenuoptions.cbegin(); it != ramenuoptions.cend(); it++)
+		emuelec_retroarch_menu_def->add(*it, *it, ramenuoptionsS == *it);
+		
+		s->addWithLabel(_("RETROARCH MENU"), emuelec_retroarch_menu_def);
+		s->addSaveFunc([emuelec_retroarch_menu_def] {
+			if (emuelec_retroarch_menu_def->changed()) {
+				std::string selectedretroarch_menu = emuelec_retroarch_menu_def->getSelected();
+				SystemConf::getInstance()->set("global.retroarch.menu_driver", selectedretroarch_menu);
+				SystemConf::getInstance()->saveSystemConf();
+			}
+		});
+
 if (UIModeController::getInstance()->isUIModeFull())
 	{
         //Danger zone options
@@ -489,7 +512,7 @@ void GuiMenu::openDangerZone(Window* mWindow, std::string configName)
  auto setOverclock = [emuelec_oga_overclock](const std::string& value)
         {
             LOG(LogInfo) << "Setting OGA_OC to " + value;
-            runSystemCommand("/emuelec/scripts/odroidgoa_utils.sh oga_oc " + value, "", nullptr);
+            runSystemCommand("/usr/bin/odroidgoa_utils.sh oga_oc " + value, "", nullptr);
             SystemConf::getInstance()->set("ee_oga_oc", value);
             SystemConf::getInstance()->saveSystemConf();
         };
@@ -517,28 +540,28 @@ void GuiMenu::openDangerZone(Window* mWindow, std::string configName)
     dangerZone->addEntry(_("BACKUP EMUELEC CONFIGS"), true, [mWindow] { 
     mWindow->pushGui(new GuiMsgBox(mWindow, _("WARNING THIS WILL RESTART EMULATIONSTATION!\n\nAFTER THE SCRIPT IS DONE REMEMBER TO COPY THE FILE /storage/roms/backup/ee_backup_config.tar.gz TO SOME PLACE SAFE OR IT WILL BE DELETED ON NEXT REBOOT!\n\nBACKUP CURRENT CONFIG AND RESTART?"), _("YES"),
 				[] { 
-				runSystemCommand("systemd-run /emuelec/scripts/emuelec-utils ee_backup backup", "", nullptr);
+				runSystemCommand("systemd-run /usr/bin/emuelec-utils ee_backup backup", "", nullptr);
 				}, _("NO"), nullptr));
      });
 
     dangerZone->addEntry(_("RESET EMUELEC SCRIPTS AND BINARIES TO DEFAULT"), true, [mWindow] { 
     mWindow->pushGui(new GuiMsgBox(mWindow, _("WARNING: SYSTEM WILL RESET SCRIPTS AND BINARIES !\nUPDATE, DOWNLOADS, THEMES, BLUETOOTH PAIRINGS AND ROMS FOLDER WILL NOT BE AFFECTED.\n\nRESET SCRIPTS AND BINARIES TO DEFAULT AND RESTART?"), _("YES"),
 				[] { 
-				runSystemCommand("systemd-run /emuelec/scripts/emuelec-utils clearconfig EMUS", "", nullptr);
+				runSystemCommand("systemd-run /usr/bin/emuelec-utils clearconfig EMUS", "", nullptr);
 				}, _("NO"), nullptr));
      });
      
     dangerZone->addEntry(_("RESET RETROARCH CONFIG TO DEFAULT"), true, [mWindow] { 
     mWindow->pushGui(new GuiMsgBox(mWindow, _("WARNING: RETROARCH CONFIG WILL RESET TO DEFAULT\n\nPER-CORE CONFIGURATIONS WILL NOT BE AFFECTED BUT NO BACKUP WILL BE CREATED!\n\nRESET RETROARCH CONFIG TO DEFAULT?"), _("YES"),
 				[] { 
-				runSystemCommand("systemd-run /emuelec/scripts/emuelec-utils clearconfig retroarch", "", nullptr);
+				runSystemCommand("systemd-run /usr/bin/emuelec-utils clearconfig retroarch", "", nullptr);
 				}, _("NO"), nullptr));
      });
      
     dangerZone->addEntry(_("RESET SYSTEM TO DEFAULT CONFIG"), true, [mWindow] { 
     mWindow->pushGui(new GuiMsgBox(mWindow, _("WARNING: ALL CONFIGURATIONS WILL BE RESET AND NO BACKUP WILL BE CREATED!\n\nIF YOU WANT TO KEEP YOUR SETTINGS MAKE A BACKUP AND SAVE IT ON AN EXTERNAL DRIVE BEFORE RUNING THIS OPTION!\n\nRESET SYSTEM TO DEFAULT CONFIG AND RESTART?"), _("YES"),
 				[] { 
-				runSystemCommand("systemd-run /emuelec/scripts/emuelec-utils clearconfig ALL", "", nullptr);
+				runSystemCommand("systemd-run /usr/bin/emuelec-utils clearconfig ALL", "", nullptr);
 				}, _("NO"), nullptr));
      });
     dangerZone->addEntry(_("FORCE UPDATE"), true, [mWindow] { 
@@ -551,7 +574,7 @@ void GuiMenu::openDangerZone(Window* mWindow, std::string configName)
         
     mWindow->pushGui(new GuiMsgBox(mWindow, _("WARNING: A FORCE UPDATE WILL DOWNLOAD WHATEVER VERSION IS AVAILABLE FOR UPDATE REGARDLESS OF VERSION BASED ON THE TYPE YOU HAVE SELECTED IN THE UPDATE & DOWNLOADS (beta or stable)\n\nSYSTEM WILL RESET SCRIPTS AND BINARIES !\nDOWNLOADS, THEMES, BLUETOOTH PAIRINGS AND ROMS FOLDER WILL NOT BE AFFECTED.\n\nCONTINUE WITH FORCE UPDATE?"), _("YES"),
 				[] { 
-				runSystemCommand("systemd-run /emuelec/scripts/updatecheck.sh forceupdate", "", nullptr);
+				runSystemCommand("systemd-run /usr/bin/updatecheck.sh forceupdate", "", nullptr);
 				}, _("NO"), nullptr));
      });
 
@@ -846,7 +869,7 @@ void GuiMenu::addVersionInfo()
 		else
 #endif
 #ifdef _ENABLEEMUELEC	
-		mVersion.setText("EMUELEC ES V" + ApiSystem::getInstance()->getVersion() + buildDate + " IP:" + getShOutput(R"(/emuelec/scripts/emuelec-utils getip)"));
+		mVersion.setText("EMUELEC ES V" + ApiSystem::getInstance()->getVersion() + buildDate + " IP:" + getShOutput(R"(/usr/bin/emuelec-utils getip)"));
 #else
 		mVersion.setText("BATOCERA.LINUX ES V" + ApiSystem::getInstance()->getVersion() + buildDate);
 #endif
@@ -1500,9 +1523,9 @@ void GuiMenu::openSystemSettings_batocera()
 	auto emuelec_timezones = std::make_shared<OptionListComponent<std::string> >(mWindow, _("TIMEZONE"), false);
 	std::string currentTimezone = SystemConf::getInstance()->get("system.timezone");
 	if (currentTimezone.empty())
-		currentTimezone = std::string(getShOutput(R"(/emuelec/scripts/emuelec-utils current_timezone)"));
+		currentTimezone = std::string(getShOutput(R"(/usr/bin/emuelec-utils current_timezone)"));
 	std::string a;
-	for(std::stringstream ss(getShOutput(R"(/emuelec/scripts/emuelec-utils timezones)")); getline(ss, a, ','); ) {
+	for(std::stringstream ss(getShOutput(R"(/usr/bin/emuelec-utils timezones)")); getline(ss, a, ','); ) {
 		emuelec_timezones->add(a, a, currentTimezone == a); // emuelec
 	}
 	s->addWithLabel(_("TIMEZONE"), emuelec_timezones);
@@ -2181,10 +2204,10 @@ void GuiMenu::openGamesSettings_batocera()
 #endif
 
 	// smoothing
-	auto smoothing_enabled = std::make_shared<SwitchComponent>(mWindow);
-	smoothing_enabled->setState(SystemConf::getInstance()->get("global.smooth") == "1");
+	auto smoothing_enabled = std::make_shared<OptionListComponent<std::string>>(mWindow, _("SMOOTH GAMES"));
+	smoothing_enabled->addRange({ { _("AUTO"), "auto" },{ _("ON") , "1" },{ _("OFF") , "0" } }, SystemConf::getInstance()->get("global.smooth"));
 	s->addWithLabel(_("SMOOTH GAMES"), smoothing_enabled);
-	s->addSaveFunc([smoothing_enabled] { SystemConf::getInstance()->set("global.smooth", smoothing_enabled->getState() ? "1": "auto"); });
+	s->addSaveFunc([smoothing_enabled] { SystemConf::getInstance()->set("global.smooth", smoothing_enabled->getSelected()); });
 	
 #ifdef _ENABLEEMUELEC
 	// bezel
@@ -2204,16 +2227,16 @@ void GuiMenu::openGamesSettings_batocera()
 #endif
 
 	// rewind
-	auto rewind_enabled = std::make_shared<SwitchComponent>(mWindow);
-	rewind_enabled->setState(SystemConf::getInstance()->get("global.rewind") == "1");
+	auto rewind_enabled = std::make_shared<OptionListComponent<std::string>>(mWindow, _("REWIND"));
+	rewind_enabled->addRange({ { _("AUTO"), "auto" },{ _("ON") , "1" },{ _("OFF") , "0" } }, SystemConf::getInstance()->get("global.rewind"));
 	s->addWithLabel(_("REWIND"), rewind_enabled);
-	s->addSaveFunc([rewind_enabled] { SystemConf::getInstance()->set("global.rewind", rewind_enabled->getState() ? "1" : "auto"); });
+	s->addSaveFunc([rewind_enabled] { SystemConf::getInstance()->set("global.rewind", rewind_enabled->getSelected()); });
 	
 	// Integer scale
-	auto integerscale_enabled = std::make_shared<SwitchComponent>(mWindow);
-	integerscale_enabled->setState(SystemConf::getInstance()->get("global.integerscale") == "1");
+	auto integerscale_enabled = std::make_shared<OptionListComponent<std::string>>(mWindow, _("INTEGER SCALE (PIXEL PERFECT)"));
+	integerscale_enabled->addRange({ { _("AUTO"), "auto" },{ _("ON") , "1" },{ _("OFF") , "0" } }, SystemConf::getInstance()->get("global.integerscale"));
 	s->addWithLabel(_("INTEGER SCALE (PIXEL PERFECT)"), integerscale_enabled);
-	s->addSaveFunc([integerscale_enabled] { SystemConf::getInstance()->set("global.integerscale", integerscale_enabled->getState() ? "1" : "auto"); });
+	s->addSaveFunc([integerscale_enabled] { SystemConf::getInstance()->set("global.integerscale", integerscale_enabled->getSelected()); });
 
 	// autosave/load
 	auto autosave_enabled = std::make_shared<OptionListComponent<std::string>>(mWindow, _("AUTO SAVE/LOAD"));
@@ -2240,7 +2263,7 @@ void GuiMenu::openGamesSettings_batocera()
 
 #ifdef _ENABLEEMUELEC	
 	std::string a;
-	for(std::stringstream ss(getShOutput(R"(/emuelec/scripts/emuelec-utils getshaders)")); getline(ss, a, ','); )
+	for(std::stringstream ss(getShOutput(R"(/usr/bin/emuelec-utils getshaders)")); getline(ss, a, ','); )
 		shaders_choices->add(a, a, currentShader == a); // emuelec
 #else
 			for (auto shader : installedShaders)
@@ -4150,7 +4173,7 @@ void GuiMenu::popSpecificConfigurationGui(Window* mWindow, std::string title, st
 
 		shaders_choices->add(_("AUTO"), "auto", currentShader == "auto");
 		shaders_choices->add(_("NONE"), "none", currentShader == "none");
-		for(std::stringstream ss(getShOutput(R"(/emuelec/scripts/emuelec-utils getshaders)")); getline(ss, a, ','); )
+		for(std::stringstream ss(getShOutput(R"(/usr/bin/emuelec-utils getshaders)")); getline(ss, a, ','); )
 		shaders_choices->add(a, a, currentShader == a); // emuelec
 		systemConfiguration->addWithLabel(_("SHADERS SET"), shaders_choices);
 		systemConfiguration->addSaveFunc([shaders_choices, configName] { SystemConf::getInstance()->set(configName + ".shaderset", shaders_choices->getSelected()); });
@@ -4174,6 +4197,11 @@ void GuiMenu::popSpecificConfigurationGui(Window* mWindow, std::string title, st
 		vertical_enabled->add(_("ON"), "1", SystemConf::getInstance()->get(configName + ".vertical") == "1");
 		systemConfiguration->addWithLabel(_("ENABLE VERTICAL"), vertical_enabled);
 		systemConfiguration->addSaveFunc([configName, vertical_enabled] { SystemConf::getInstance()->set(configName + ".vertical", vertical_enabled->getSelected()); });
+        
+        auto vert_aspect_enabled = std::make_shared<OptionListComponent<std::string>>(mWindow, _("VERTICAL ASPECT RATIO"));
+		vert_aspect_enabled->addRange({ { _("16:9") , "1" }, { _("3:2") , "7" }, { _("21:9"), "4" } }, SystemConf::getInstance()->get(configName + ".vert_aspect"));
+		systemConfiguration->addWithLabel(_("VERTICAL ASPECT RATIO"), vert_aspect_enabled);
+		systemConfiguration->addSaveFunc([configName, vert_aspect_enabled] { SystemConf::getInstance()->set(configName + ".vert_aspect", vert_aspect_enabled->getSelected()); });
 	}
 #else
 	// Shaders preset
