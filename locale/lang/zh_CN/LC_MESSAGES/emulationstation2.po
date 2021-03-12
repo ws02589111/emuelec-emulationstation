@@ -2240,9 +2240,6 @@ msgstr "左侧摇杆 下"
 msgid "LEFT ANALOG RIGHT"
 msgstr "左侧摇杆 右"
 
-msgid "LEFT ANALOG RIGHT"
-msgstr ""
-
 msgid "RIGHT ANALOG UP"
 msgstr "右侧摇杆 上"
 
