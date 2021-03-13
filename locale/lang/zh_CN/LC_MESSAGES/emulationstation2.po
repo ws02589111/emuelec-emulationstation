@@ -1535,7 +1535,7 @@ msgstr "查找全部游戏"
 msgid "FIND NEW GAMES"
 msgstr "查找新游戏"
 
-msgid "UNABLE TO ACTIVATE RETROACHIEVEMENTS :\n"
+msgid "UNABLE TO ACTIVATE RETROACHIEVEMENTS :"
 msgstr "无法激活Retro成就 :"
 
 msgid "ENABLE NETPLAY"
@@ -2007,7 +2007,7 @@ msgid ""
 "A valid account is required. Please register an account on https://"
 "retroachievements.org"
 msgstr ""
-"请访问 https://retroachievements.org 注册一个有效的账户!\n"
+"请访问 https://retroachievements.org 注册一个有效的账户!"
 
 msgid "Searching"
 msgstr "搜索中"
