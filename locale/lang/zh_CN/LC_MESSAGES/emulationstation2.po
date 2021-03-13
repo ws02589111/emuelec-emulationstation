@@ -1535,8 +1535,8 @@ msgstr "查找全部游戏"
 msgid "FIND NEW GAMES"
 msgstr "查找新游戏"
 
-msgid "UNABLE TO ACTIVATE RETROACHIEVEMENTS :\n"
-msgstr "无法激活Retro成就 :\n"
+msgid "UNABLE TO ACTIVATE RETROACHIEVEMENTS :\r\n"
+msgstr "无法激活Retro成就 :"
 
 msgid "ENABLE NETPLAY"
 msgstr "启用联网游戏"
