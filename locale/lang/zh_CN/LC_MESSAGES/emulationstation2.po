@@ -2474,8 +2474,10 @@ msgstr ""
 #~ msgstr "状态"
 msgid "DANGER ZONE!"
 msgstr "危险设置区域！"
+
 msgid "You are about to set EmuELEC resolution to"
 msgstr "你即将设置 EmuELEC 分辨率为"
+
 msgid "Emulationstation will restart"
 msgstr "Emulationstation 即将重启"
 
