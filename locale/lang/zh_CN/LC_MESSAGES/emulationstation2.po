@@ -597,7 +597,7 @@ msgid "EDIT THIS GAME'S METADATA"
 msgstr "编辑此游戏的信息"
 
 msgid "VIEW PAD TO KEYBOARD INFORMATION"
-msgstr ""
+msgstr "查看键盘信息"
 
 msgid "RESET FILTERS"
 msgstr "重置筛选器"
@@ -1578,7 +1578,7 @@ msgid "SHOW SAVE SNAPSHOTS"
 msgstr "显示保存的快照"
 
 msgid "SHOW SNAPSHOTS IF NOT EMPTY"
-msgstr ""
+msgstr "显示非空快照"
 
 msgid "SHADERS SET"
 msgstr "着色器设置"
