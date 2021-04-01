@@ -1404,13 +1404,13 @@ msgid "LANGUAGE"
 msgstr "语言"
 
 msgid "SELECT YOUR TIMEZONE"
-msgstr ""
+msgstr "选择你的时区"
 
 msgid "TIMEZONE"
-msgstr ""
+msgstr "时区"
 
 msgid "SHOW CLOCK IN 12-HOUR FORMAT"
-msgstr ""
+msgstr "显示12小时制的时钟"
 
 msgid "POWER SAVER MODES"
 msgstr "省电模式"
@@ -2126,17 +2126,17 @@ msgstr "游戏时间，升序"
 msgid "GAME TIME, DESCENDING"
 msgstr "游戏时间，降序"
 
-msgid "SYSTEM, RELEASE YEAR, ASCENDING"
-msgstr ""
+msgid "SYSTEM, RELEASE YEAR"
+msgstr "系统, 发行时间, 升序"
 
 msgid "SYSTEM, RELEASE YEAR, DESCENDING"
-msgstr ""
+msgstr "系统, 发行时间， 降序"
 
 msgid "RELEASE YEAR, SYSTEM, ASCENDING"
-msgstr ""
+msgstr "发行时间, 系统, 升序"
 
 msgid "RELEASE YEAR, SYSTEM, DESCENDING"
-msgstr ""
+msgstr "发行时间, 系统, 降序"
 
 msgid "Extracting"
 msgstr "提取中"
