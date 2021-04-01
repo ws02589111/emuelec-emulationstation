@@ -1995,7 +1995,7 @@ msgid "MENU"
 msgstr "菜单"
 
 msgid "Full"
-msgstr "已满"
+msgstr "全部"
 
 msgid "Kiosk"
 msgstr "大厅"
@@ -2496,6 +2496,9 @@ msgstr ""
 msgid "DANGER ZONE!"
 msgstr "危险设置区域！"
 
+msgid "DANGER ZONE"
+msgstr "危险设置区域！"
+
 msgid "You are about to set EmuELEC resolution to"
 msgstr "你即将设置 EmuELEC 分辨率为"
 
@@ -2983,3 +2986,12 @@ msgstr "重启到 NAND"
 
 #~ msgid "UPDATE FAILED, THE SYSTEM WILL NOW REBOOT"
 #~ msgstr "更新失败，系统即将重启"
+
+msgid "ENABLE BLUETOOTH"
+msgstr "启用蓝牙"
+
+msgid "SHOW RETROARCH FPS"
+msgstr "显示RetroArch帧率"
+
+msgid "RETROARCH MENU"
+msgstr "RetroArch菜单主题"
