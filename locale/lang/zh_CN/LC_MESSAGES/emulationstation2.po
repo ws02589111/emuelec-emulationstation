@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: emulationstation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-23 23:34+0100\n"
+"POT-Creation-Date: 2021-04-02 21:48+0200\n"
 "Language: zh-CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -277,7 +277,7 @@ msgid "arcade"
 msgstr "街机"
 
 msgid "vertical arcade"
-msgstr ""
+msgstr "直立街机"
 
 msgid "collections"
 msgstr "合辑"
@@ -1652,6 +1652,9 @@ msgstr "默认"
 msgid "SHOW CONTROLLER ACTIVITY"
 msgstr "显示控制器活动"
 
+msgid "SHOW CONTROLLER BATTERY LEVEL"
+msgstr "显示手柄电量"
+
 msgid "YOU MUST APPLY THE THEME BEFORE EDIT CONFIGURATION"
 msgstr "在编辑配置之前必须应用主题"
 
@@ -1697,6 +1700,24 @@ msgstr "有多个游戏"
 msgid "SHOW '..' PARENT FOLDER"
 msgstr "显示 '..' 父文件夹"
 
+msgid "BEFORE NAME"
+msgstr "名字之前"
+
+msgid "AFTER NAME"
+msgstr "名字之后"
+
+msgid "SHOW LANGUAGE FLAG IN LISTS"
+msgstr "在列表中显示语言标记"
+
+msgid "SHOW SAVESTATES FLAG IN LISTS"
+msgstr "在列表中显示保存状态"
+
+msgid "SHOW MANUAL ICON IN LISTS"
+msgstr "在列表中显示手册图标"
+
+msgid "SHOW FILENAMES IN LISTS"
+msgstr "在列表中显示文件名"
+
 msgid "FILE EXTENSIONS"
 msgstr "文件扩展名"
 
@@ -1738,9 +1759,6 @@ msgstr "图标"
 
 msgid "ICON AND TEXT"
 msgstr "图标和文字"
-
-msgid "SHOW FILENAMES IN LISTS"
-msgstr "在列表中显示文件名"
 
 msgid "VOLUME"
 msgstr "音量"
@@ -2013,7 +2031,7 @@ msgid "No Entries Found"
 msgstr "找不到条目"
 
 msgid "FAVORITE"
-msgstr ""
+msgstr "喜爱"
 
 msgid "Games similar to"
 msgstr "类似的游戏"
@@ -2175,7 +2193,7 @@ msgid "HAS ACHIEVEMENTS"
 msgstr "取得的成就"
 
 msgid "VERTICAL"
-msgstr ""
+msgstr "直立"
 
 msgid "SCRAPING"
 msgstr "抓取"
