@@ -114,6 +114,11 @@ MetaDataType MetaDataList::getType(MetaDataId id) const
 	return mGameTypeMap[id];
 }
 
+MetaDataType MetaDataList::getType(const std::string name) const
+{
+	return getType(getId(name));
+}
+
 MetaDataId MetaDataList::getId(const std::string& key) const
 {
 	return mGameIdMap[key];
@@ -263,11 +268,6 @@ void MetaDataList::appendToXML(pugi::xml_node& parent, bool ignoreDefaults, cons
 		else 
 			parent.append_attribute(std::get<0>(element).c_str()).set_value(std::get<1>(element).c_str());
 	}
-}
-
-const std::string& MetaDataList::getName() const
-{
-	return mName;
 }
 
 void MetaDataList::set(MetaDataId id, const std::string& value)
@@ -452,4 +452,12 @@ void MetaDataList::importScrappedMetadata(const MetaDataList& source)
 
 	if (Utils::String::startsWith(source.getName(), "ZZZ(notgame)"))
 		set(MetaDataId::Hidden, "true");
+}
+
+std::string MetaDataList::getRelativeRootPath()
+{
+	if (mRelativeTo)
+		return mRelativeTo->getStartPath();
+
+	return "";
 }

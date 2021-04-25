@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: emulationstation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-02 21:48+0200\n"
+"POT-Creation-Date: 2021-04-23 07:28+0200\n"
 "Language: no\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -599,8 +599,20 @@ msgstr ""
 msgid "CONTROLLERS LINKS HAVE BEEN DELETED."
 msgstr "KONTROLLER PARINGER HAR BLITT SLETTET."
 
+msgid "FILE BROWSER"
+msgstr ""
+
 msgid "RESET"
 msgstr ""
+
+msgid "PARENT FOLDER"
+msgstr ""
+
+msgid "SCREENSHOTS FOLDER"
+msgstr ""
+
+msgid "SELECT"
+msgstr "VELG"
 
 msgid "ADD COMBINATION KEY"
 msgstr ""
@@ -832,9 +844,6 @@ msgstr ""
 msgid "TARGET DEVICE"
 msgstr ""
 
-msgid "SELECT"
-msgstr "VELG"
-
 msgid "TARGET ARCHITECTURE"
 msgstr ""
 
@@ -868,6 +877,9 @@ msgstr ""
 msgid "SAVE SNAPSHOTS"
 msgstr ""
 
+msgid "OPEN"
+msgstr ""
+
 msgid "START NETPLAY HOST"
 msgstr ""
 
@@ -892,6 +904,17 @@ msgstr ""
 msgid "FIND SIMILAR GAMES..."
 msgstr ""
 
+msgid "DELETE ITEM"
+msgstr ""
+
+msgid "DELETE GAME"
+msgstr ""
+
+msgid ""
+"THIS WILL DELETE THE ACTUAL GAME FILE(S)!\n"
+"ARE YOU SURE?"
+msgstr ""
+
 msgid "COLLECTIONS"
 msgstr ""
 
@@ -904,6 +927,9 @@ msgid "ADD TO %s"
 msgstr ""
 
 msgid "FAVORITES"
+msgstr ""
+
+msgid "ADD TO CUSTOM COLLECTION..."
 msgstr ""
 
 msgid "SCRAPE"
@@ -1023,6 +1049,9 @@ msgid "System"
 msgstr ""
 
 msgid "Architecture"
+msgstr ""
+
+msgid "Disk format"
 msgstr ""
 
 msgid "Temperature"
@@ -1301,13 +1330,19 @@ msgstr ""
 msgid "COMPLETE QUIT MENU"
 msgstr ""
 
-msgid "USE RETROARCH RGUI MENU"
+msgid "RETROARCH MENU DRIVER"
+msgstr ""
+
+msgid "AUTO"
+msgstr "AUTO"
+
+msgid "AUTOCONFIGURE EMULATORS CONTROLLERS"
 msgstr ""
 
 msgid "SWITCH A/B BUTTONS IN EMULATIONSTATION"
 msgstr ""
 
-msgid "AUTOCONFIGURE EMULATORS CONTROLLERS"
+msgid "CONTROL EMULATIONSTATION ONLY WITH FIRST JOYSTICK"
 msgstr ""
 
 msgid "SHOW NETWORK INDICATOR"
@@ -1420,9 +1455,6 @@ msgstr ""
 
 msgid "MULTIMEDIA KEYS"
 msgstr ""
-
-msgid "AUTO"
-msgstr "AUTO"
 
 msgid "ON"
 msgstr ""
@@ -1874,8 +1906,8 @@ msgid "EDIT METADATA"
 msgstr "ENDRE METADATA"
 
 msgid ""
-"THIS WILL DELETE THE ACTUAL GAME FILE(S)!\n"
-"ARE YOU SURE?"
+"SOME FILES YOU LINKED ARE LOCATED OUTSIDE THE GAMELIST PATH.\n"
+"DO YOU WANT TO USE A COPY OF THESE FILES RELATIVE TO THE GAMELIST ?"
 msgstr ""
 
 msgid "NO DEVICE FOUND"
@@ -1977,6 +2009,12 @@ msgstr "Utgitt"
 
 msgid "Times played"
 msgstr "Ganger spilt"
+
+#, c-format
+msgid "This folder contains %i game, including :%s"
+msgid_plural "This folder contains %i games, including :%s"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "No Entries Found"
 msgstr ""

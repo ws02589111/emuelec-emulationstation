@@ -92,7 +92,7 @@ namespace Renderer
 			screenWidth = screenHeight;
 			screenHeight = tmp;
 		}
-		else */if ((screenRotate == 1 || screenRotate == 3) && Settings::getInstance()->getBool("Windowed"))
+		else */if (screenRotate == 1 || screenRotate == 3)
 		{
 			int tmp = screenWidth;
 			screenWidth = screenHeight;
@@ -291,10 +291,20 @@ namespace Renderer
 		if(clipStack.size())
 		{
 			const Rect& top = clipStack.top();
-			if( top.x          >  box.x)          box.x = top.x;
-			if( top.y          >  box.y)          box.y = top.y;
-			if((top.x + top.w) < (box.x + box.w)) box.w = (top.x + top.w) - box.x;
-			if((top.y + top.h) < (box.y + box.h)) box.h = (top.y + top.h) - box.y;
+			if (top.x > box.x)
+			{
+				box.w += (box.x - top.x);
+				box.x = top.x;
+			}
+			if (top.y > box.y)
+			{
+				box.h += (box.y - top.y);
+				box.y = top.y;				
+			}
+			if((top.x + top.w) < (box.x + box.w)) 
+				box.w = (top.x + top.w) - box.x;
+			if((top.y + top.h) < (box.y + box.h)) 
+				box.h = (top.y + top.h) - box.y;
 		}
 
 		if(box.w < 0) box.w = 0;

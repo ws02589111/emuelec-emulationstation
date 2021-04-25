@@ -29,7 +29,7 @@
 #include "SaveStateRepository.h"
 
 FileData::FileData(FileType type, const std::string& path, SystemData* system)
-	: mPath(path), mType(type), mSystem(system), mParent(NULL), mMetadata(type == GAME ? GAME_METADATA : FOLDER_METADATA) // metadata is REALLY set in the constructor!
+	: mPath(path), mType(type), mSystem(system), mParent(nullptr), mDisplayName(nullptr), mMetadata(type == GAME ? GAME_METADATA : FOLDER_METADATA) // metadata is REALLY set in the constructor!
 {
 	// metadata needs at least a name field (since that's what getName() will return)
 	if (mMetadata.get(MetaDataId::Name).empty())
@@ -98,6 +98,9 @@ std::string FileData::getSystemName() const
 
 FileData::~FileData()
 {
+	if (mDisplayName)
+		delete mDisplayName;
+
 	if(mParent)
 		mParent->removeChild(this);
 
@@ -105,18 +108,23 @@ FileData::~FileData()
 		mSystem->removeFromIndex(this);	
 }
 
-std::string FileData::getDisplayName() const
+std::string& FileData::getDisplayName()
 {
-	std::string stem = Utils::FileSystem::getStem(getPath());
-	if(mSystem && mSystem->hasPlatformId(PlatformIds::ARCADE) || mSystem->hasPlatformId(PlatformIds::NEOGEO))
-		stem = MameNames::getInstance()->getRealName(stem);
+	if (mDisplayName == nullptr)
+	{
+		std::string stem = Utils::FileSystem::getStem(getPath());
+		if (mSystem && mSystem->hasPlatformId(PlatformIds::ARCADE) || mSystem->hasPlatformId(PlatformIds::NEOGEO))
+			stem = MameNames::getInstance()->getRealName(stem);
 
-	return stem;
+		mDisplayName = new std::string(stem);
+	}
+
+	return *mDisplayName;
 }
 
-std::string FileData::getCleanName() const
+std::string FileData::getCleanName()
 {
-	return Utils::String::removeParenthesis(this->getDisplayName());
+	return Utils::String::removeParenthesis(getDisplayName());
 }
 
 const std::string FileData::getThumbnailPath()
@@ -210,14 +218,12 @@ const bool FileData::hasCheevos()
 	return false;
 }
 
-static std::shared_ptr<bool> collectionShowSystemInfo;
-
 void FileData::resetSettings() 
 {
-	collectionShowSystemInfo = nullptr;
+	
 }
 
-const std::string FileData::getName()
+const std::string& FileData::getName()
 {
 	if (mSystem != nullptr && mSystem->getShowFilenames())
 		return getDisplayName();
@@ -239,7 +245,19 @@ const std::string FileData::getVideoPath()
 			video = path;
 		}
 	}
-	
+
+	if (video.empty() && getSourceFileData()->getSystem()->hasPlatformId(PlatformIds::IMAGEVIEWER))
+	{
+		if (getType() == FOLDER && ((FolderData*)this)->mChildren.size())
+			return ((FolderData*)this)->mChildren[0]->getVideoPath();
+		else if (getType() == GAME)
+		{
+			auto ext = Utils::String::toLower(Utils::FileSystem::getExtension(getPath()));
+			if (ext == ".mp4" || ext == ".avi" || ext == ".mkv")
+				return getPath();
+		}
+	}
+
 	return video;
 }
 
@@ -592,9 +610,9 @@ FileData* CollectionFileData::getSourceFileData()
 	return mSourceFileData;
 }
 
-const std::string CollectionFileData::getName()
+const std::string& CollectionFileData::getName()
 {
-	return getSourceFileData()->getName();
+	return mSourceFileData->getName();
 }
 
 const std::vector<FileData*> FolderData::getChildrenListToDisplay() 
@@ -639,7 +657,7 @@ const std::vector<FileData*> FolderData::getChildrenListToDisplay()
 	if (idx != nullptr && !idx->isFiltered())
 		idx = nullptr;
 
-	std::vector<FileData*>* items = &mChildren;
+  	std::vector<FileData*>* items = &mChildren;
 	
 	std::vector<FileData*> flatGameList;
 	if (showFoldersMode == "never")
@@ -739,6 +757,34 @@ const std::vector<FileData*> FolderData::getChildrenListToDisplay()
 	}
 
 	return ret;
+}
+
+std::shared_ptr<std::vector<FileData*>> FolderData::findChildrenListToDisplayAtCursor(FileData* toFind, std::stack<FileData*>& stack)
+{
+	auto items = getChildrenListToDisplay();
+
+	for (auto item : items)
+		if (toFind == item)
+			return std::make_shared<std::vector<FileData*>>(items);
+
+	for (auto item : items)
+	{
+		if (item->getType() != FOLDER)
+			continue;
+		
+		stack.push(item);
+
+		auto ret = ((FolderData*)item)->findChildrenListToDisplayAtCursor(toFind, stack);
+		if (ret != nullptr)
+			return ret;
+
+		stack.pop();		
+	}
+
+	if (stack.empty())
+		return std::make_shared<std::vector<FileData*>>(items);
+
+	return nullptr;
 }
 
 FileData* FolderData::findUniqueGameForFolder()

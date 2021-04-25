@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: emulationstation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-02 21:47+0200\n"
+"POT-Creation-Date: 2021-04-23 07:28+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: pajarorrojo\n"
 "Language-Team: \n"
@@ -173,10 +173,10 @@ msgid "enter hidden"
 msgstr "marcar como oculto"
 
 msgid "Kidgame"
-msgstr "Juego infantil"
+msgstr "Para niños"
 
 msgid "enter kidgame"
-msgstr "marcar como juego infantil"
+msgstr "marcar como juego para niños"
 
 msgid "Play count"
 msgstr "Nº de veces jugado"
@@ -245,7 +245,7 @@ msgid "never played"
 msgstr "nunca jugado"
 
 msgid "retroachievements"
-msgstr "retrologros"
+msgstr "retroachievements (logros)"
 
 msgid "arcade"
 msgstr "arcade"
@@ -404,13 +404,13 @@ msgid "SORT SYSTEMS"
 msgstr "ORDENAR SISTEMAS"
 
 msgid "START ON SYSTEM"
-msgstr "INICIAR BATOCERA DIRECTAMENTE EN UN SISTEMA"
+msgstr "INICIAR BATOCERA DIRECTAMENTE EN"
 
 msgid "NONE"
 msgstr "NINGUNO"
 
 msgid "RESTORE LAST SELECTED"
-msgstr "RESTAURAR ÚLTIMOS SELECCIONADOS"
+msgstr "DONDE LO DEJASTE"
 
 msgid "START ON GAMELIST"
 msgstr "INICIAR EN LA LISTA DE JUEGOS"
@@ -425,7 +425,7 @@ msgid "SHOW GAMES OF HIDDEN SYSTEMS IN COLLECTIONS"
 msgstr "MOSTRAR JUEGOS OCULTOS EN COLECCIONES"
 
 msgid "UPDATE GAMES LISTS"
-msgstr "ACTUALIZAR LAS LISTAS DE JUEGOS"
+msgstr "ACTUALIZAR LISTAS DE JUEGOS"
 
 msgid "Loading..."
 msgstr "Cargando..."
@@ -602,8 +602,20 @@ msgstr "NO SE ENCONTRARON DISPOSITIVOS BLUETOOTH"
 msgid "CONTROLLERS LINKS HAVE BEEN DELETED."
 msgstr "LOS MANDOS HAN SIDO DESVINCULADOS."
 
+msgid "FILE BROWSER"
+msgstr "EXAMINAR"
+
 msgid "RESET"
 msgstr "RESTABLECER"
+
+msgid "PARENT FOLDER"
+msgstr "CARPETA PRINCIPAL"
+
+msgid "SCREENSHOTS FOLDER"
+msgstr "CARPETA DE CAPTURAS DE PANTALLA"
+
+msgid "SELECT"
+msgstr "SELECCIONAR"
 
 msgid "ADD COMBINATION KEY"
 msgstr "AÑADIR COMBINACIÓN DE TECLAS"
@@ -835,9 +847,6 @@ msgstr "INSTALAR BATOCERA"
 msgid "TARGET DEVICE"
 msgstr "DISPOSITIVO DE DESTINO"
 
-msgid "SELECT"
-msgstr "SELECCIONAR"
-
 msgid "TARGET ARCHITECTURE"
 msgstr "ARQUITECTURA DE DESTINO"
 
@@ -871,6 +880,9 @@ msgstr "JUEGO"
 msgid "SAVE SNAPSHOTS"
 msgstr "PARTIDAS GUARDADAS"
 
+msgid "OPEN"
+msgstr "ABRIR"
+
 msgid "START NETPLAY HOST"
 msgstr "INICIAR EN NETPLAY COMO SERVIDOR"
 
@@ -895,6 +907,19 @@ msgstr "CONTRASEÑA PARA ESPECTADORES"
 msgid "FIND SIMILAR GAMES..."
 msgstr "BUSCAR JUEGOS SIMILARES..."
 
+msgid "DELETE ITEM"
+msgstr "BORRAR ELEMENTO"
+
+msgid "DELETE GAME"
+msgstr "BORRAR JUEGO"
+
+msgid ""
+"THIS WILL DELETE THE ACTUAL GAME FILE(S)!\n"
+"ARE YOU SURE?"
+msgstr ""
+"ESTO ELIMINARÁ EL ARCHIVO(S) DEL JUEGO ACTUAL!\n"
+"¿ESTÁS SEGURO?"
+
 msgid "COLLECTIONS"
 msgstr "COLECCIONES"
 
@@ -908,6 +933,9 @@ msgstr "AÑADIR A %s"
 
 msgid "FAVORITES"
 msgstr "FAVORITOS"
+
+msgid "ADD TO CUSTOM COLLECTION..."
+msgstr "AÑADIR A COLECCIÓN PERSONALIZADA"
 
 msgid "SCRAPE"
 msgstr "SCRAPEAR"
@@ -1028,6 +1056,9 @@ msgstr "Sistema"
 msgid "Architecture"
 msgstr "Arquitectura"
 
+msgid "Disk format"
+msgstr "Sistema de archivos"
+
 msgid "Temperature"
 msgstr "Temperatura"
 
@@ -1119,7 +1150,7 @@ msgid "SCRAPE FROM"
 msgstr "OBTENER LA INFORMACIÓN DE"
 
 msgid "IMAGE SOURCE"
-msgstr "ORIGEN DE LA IMAGEN"
+msgstr "TIPO DE IMAGEN"
 
 msgid "SCREENSHOT"
 msgstr "CAPTURA DE PANTALLA"
@@ -1143,10 +1174,10 @@ msgid "FAN ART"
 msgstr "ARTE"
 
 msgid "BOX SOURCE"
-msgstr "ORIGEN DE LA CAJA"
+msgstr "FORMATO DE CAJA"
 
 msgid "LOGO SOURCE"
-msgstr "ORIGEN DEL LOGO"
+msgstr "TIPO DE LOGO"
 
 msgid "WHEEL"
 msgstr "WHEEL"
@@ -1304,14 +1335,20 @@ msgstr "OCULTAR MIENTRAS JUEGAS"
 msgid "COMPLETE QUIT MENU"
 msgstr "SALIR AL MENÚ"
 
-msgid "USE RETROARCH RGUI MENU"
-msgstr "USAR INTERFAZ DE RETROARCH"
+msgid "RETROARCH MENU DRIVER"
+msgstr "TIPO DE INTERFAZ DE RETROARCH"
+
+msgid "AUTO"
+msgstr "AUTO"
+
+msgid "AUTOCONFIGURE EMULATORS CONTROLLERS"
+msgstr "AUTOCONFIGURAR LOS MANDOS EN EMULADORES"
 
 msgid "SWITCH A/B BUTTONS IN EMULATIONSTATION"
 msgstr "INVERTIR LOS BOTONES A/B EN EMULATIONSTATION"
 
-msgid "AUTOCONFIGURE EMULATORS CONTROLLERS"
-msgstr "AUTOCONFIGURAR LOS MANDOS EN EMULADORES"
+msgid "CONTROL EMULATIONSTATION ONLY WITH FIRST JOYSTICK"
+msgstr "CONTROLAR SISTEMA SOLO CON EL MANDO PRINCIPAL"
 
 msgid "SHOW NETWORK INDICATOR"
 msgstr "MOSTRAR INDICADOR DE RED"
@@ -1427,9 +1464,6 @@ msgstr "VERIFICAR BIOS ANTES DE EJECUTAR UN JUEGO"
 
 msgid "MULTIMEDIA KEYS"
 msgstr "TECLAS MULTIMEDIA"
-
-msgid "AUTO"
-msgstr "AUTO"
 
 msgid "ON"
 msgstr "ON"
@@ -1615,7 +1649,7 @@ msgid "SHOW CONTROLLER ACTIVITY"
 msgstr "MOSTRAR ACTIVIDAD DEL MANDO EN PANTALLA"
 
 msgid "SHOW CONTROLLER BATTERY LEVEL"
-msgstr ""
+msgstr "MOSTRAR EL NIVEL DE BATERÍA DEL MANDO"
 
 msgid "YOU MUST APPLY THE THEME BEFORE EDIT CONFIGURATION"
 msgstr "DEBES APLICAR EL TEMA ANTES DE EDITAR LA CONFIGURACIÓN"
@@ -1663,19 +1697,19 @@ msgid "SHOW '..' PARENT FOLDER"
 msgstr "MOSTRAR '..' CARPETA PRINCIPAL"
 
 msgid "BEFORE NAME"
-msgstr ""
+msgstr "ANTES DEL NOMBRE"
 
 msgid "AFTER NAME"
-msgstr ""
+msgstr "TRAS EL NOMBRE"
 
 msgid "SHOW LANGUAGE FLAG IN LISTS"
-msgstr ""
+msgstr "MOSTRAR BANDERAS DE IDIOMA EN LAS LISTAS"
 
 msgid "SHOW SAVESTATES FLAG IN LISTS"
-msgstr ""
+msgstr "MOSTRAR ICONO DE PARTIDAS GUARDADAS EN LAS LISTAS"
 
 msgid "SHOW MANUAL ICON IN LISTS"
-msgstr ""
+msgstr "MOSTRAR ICONO DE MANUAL EN LAS LISTAS"
 
 msgid "SHOW FILENAMES IN LISTS"
 msgstr "MOSTRAR NOMBRES DE ARCHIVO EN LAS LISTAS"
@@ -1729,7 +1763,7 @@ msgid "SYSTEM VOLUME"
 msgstr "VOLUMEN DEL SISTEMA"
 
 msgid "MUSIC VOLUME"
-msgstr "VOLUMEN DE MÚSICA"
+msgstr "VOLUMEN DE LA MÚSICA"
 
 msgid "SHOW OVERLAY WHEN VOLUME CHANGES"
 msgstr "MOSTRAR LA BARRA DE VOLUMEN AL CAMBIAR EL VOLUMEN"
@@ -1882,11 +1916,12 @@ msgid "EDIT METADATA"
 msgstr "EDITAR LOS METADATOS"
 
 msgid ""
-"THIS WILL DELETE THE ACTUAL GAME FILE(S)!\n"
-"ARE YOU SURE?"
+"SOME FILES YOU LINKED ARE LOCATED OUTSIDE THE GAMELIST PATH.\n"
+"DO YOU WANT TO USE A COPY OF THESE FILES RELATIVE TO THE GAMELIST ?"
 msgstr ""
-"ESTO ELIMINARÁ EL ARCHIVO(S) DEL JUEGO ACTUAL!\n"
-"¿ESTÁS SEGURO?"
+"ALGUNOS ARCHIVOS QUE HA VINCULADO SE ENCUENTRAN FUERA DE LA RUTA DE ACCESO "
+"DE LA LISTA DE JUEGOS.\n"
+"¿DESEAS USAR UNA COPIA DE ESTOS ARCHIVOS RELATIVOS A LA LISTA DE JUEGOS?"
 
 msgid "NO DEVICE FOUND"
 msgstr "NINGÚN DISPOSITIVO CONECTADO"
@@ -1986,13 +2021,19 @@ msgid "Kiosk"
 msgstr "Exposición"
 
 msgid "Kid"
-msgstr "Niño"
+msgstr "Para niños"
 
 msgid "Released"
 msgstr "Lanzamiento"
 
 msgid "Times played"
 msgstr "Veces jugado"
+
+#, c-format
+msgid "This folder contains %i game, including :%s"
+msgid_plural "This folder contains %i games, including :%s"
+msgstr[0] "Esta carpeta contiene %i juego, incluyendo :%s"
+msgstr[1] "Esta carpeta contiene %i juegos, incluyendo :%s"
 
 msgid "No Entries Found"
 msgstr "No se han encontrado entradas"
@@ -2369,6 +2410,12 @@ msgstr "%d m"
 #, c-format
 msgid "%d s"
 msgstr "%d s"
+
+#~ msgid "ADD TO CUSTOM COLLECTION"
+#~ msgstr "AÑADIR A COLECCIÓN PERSONALIZADA"
+
+#~ msgid "USE RETROARCH RGUI MENU"
+#~ msgstr "USAR INTERFAZ DE RETROARCH"
 
 #~ msgid "RESET GAMELIST CUSTOMISATIONS"
 #~ msgstr "RESTABLECER PERSONALIZACIONES DE LISTAS"

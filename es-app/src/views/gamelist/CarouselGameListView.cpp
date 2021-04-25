@@ -15,6 +15,9 @@ CarouselGameListView::CarouselGameListView(Window* window, FolderData* root)
 	: ISimpleGameListView(window, root),
 	mList(window), mDetails(this, &mList, mWindow, DetailedContainer::DetailedView)
 {
+	// Let DetailedContainer handle extras with activation scripts
+	mExtraMode = ThemeData::ExtraImportType::WITHOUT_ACTIVATESTORYBOARD;
+
 	mList.setSize(mSize.x(), mSize.y() * 0.8f);
 	mList.setPosition(0, mSize.y() * 0.2f);
 	mList.setDefaultZIndex(20);	
@@ -42,10 +45,10 @@ void CarouselGameListView::updateInfoPanel()
 {
 	if (mRoot->getSystem()->isCollection())
 		updateHelpPrompts();
-
+	
 	FileData* file = (mList.size() == 0 || mList.isScrolling()) ? NULL : mList.getSelected();
 	bool isClearing = mList.getObjects().size() == 0 && mList.getCursorIndex() == 0 && mList.getScrollingVelocity() == 0;
-	mDetails.updateControls(file, isClearing);
+	mDetails.updateControls(file, isClearing, mList.getCursorIndex() - mList.getLastCursor());
 }
 
 void CarouselGameListView::onFileChanged(FileData* file, FileChangeType change)
@@ -132,39 +135,16 @@ FileData* CarouselGameListView::getCursor()
 
 void CarouselGameListView::setCursor(FileData* cursor)
 {
-	if(!mList.setCursor(cursor) && (!cursor->isPlaceHolder()))
+	if (cursor && !mList.setCursor(cursor) && !cursor->isPlaceHolder())
 	{
-		auto children = mRoot->getChildrenListToDisplay();
-
-		auto gameIter = std::find(children.cbegin(), children.cend(), cursor);
-		if (gameIter == children.cend())
+		std::stack<FileData*> stack;
+		auto childrenToDisplay = mRoot->findChildrenListToDisplayAtCursor(cursor, stack);
+		if (childrenToDisplay != nullptr)
 		{
-			if (cursor->getParent() != nullptr)
-				children = cursor->getParent()->getChildrenListToDisplay();
-
-			// update our cursor stack in case our cursor just got set to some folder we weren't in before
-			if (mCursorStack.empty() || mCursorStack.top() != cursor->getParent())
-			{
-				std::stack<FileData*> tmp;
-				FileData* ptr = cursor->getParent();
-				while (ptr && ptr != mRoot)
-				{
-					tmp.push(ptr);
-					ptr = ptr->getParent();
-				}
-
-				// flip the stack and put it in mCursorStack
-				mCursorStack = std::stack<FileData*>();
-				while (!tmp.empty())
-				{
-					mCursorStack.push(tmp.top());
-					tmp.pop();
-				}
-			}
+			mCursorStack = stack;
+			populateList(*childrenToDisplay.get());
+			mList.setCursor(cursor);
 		}
-	
-		populateList(children);
-		mList.setCursor(cursor);
 	}
 }
 
@@ -249,4 +229,10 @@ int CarouselGameListView::getCursorIndex(){
 std::vector<FileData*> CarouselGameListView::getFileDataEntries()
 {
 	return mList.getObjects();	
+}
+
+void CarouselGameListView::update(int deltaTime)
+{
+	mDetails.update(deltaTime);
+	ISimpleGameListView::update(deltaTime);
 }

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: emulationstation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-02 21:47+0200\n"
+"POT-Creation-Date: 2021-04-23 07:28+0200\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -652,8 +652,20 @@ msgstr "NO S'HAN TROBAT DISPOSITIUS BLUETOOTH"
 msgid "CONTROLLERS LINKS HAVE BEEN DELETED."
 msgstr "S'HA ESBORRAT TOTS ELS COMANDAMENTS."
 
+msgid "FILE BROWSER"
+msgstr ""
+
 msgid "RESET"
 msgstr "REINICIA"
+
+msgid "PARENT FOLDER"
+msgstr ""
+
+msgid "SCREENSHOTS FOLDER"
+msgstr ""
+
+msgid "SELECT"
+msgstr "SELECCIONA"
 
 msgid "ADD COMBINATION KEY"
 msgstr "AFEGIR COMBINACIÓ DE TECLES"
@@ -879,9 +891,6 @@ msgstr ""
 msgid "TARGET DEVICE"
 msgstr "DISPOSITIU "
 
-msgid "SELECT"
-msgstr "SELECCIONA"
-
 msgid "TARGET ARCHITECTURE"
 msgstr "ARQUITECTURA DESTÍ"
 
@@ -895,6 +904,9 @@ msgid "GAME"
 msgstr ""
 
 msgid "SAVE SNAPSHOTS"
+msgstr ""
+
+msgid "OPEN"
 msgstr ""
 
 msgid "START NETPLAY HOST"
@@ -918,6 +930,12 @@ msgstr ""
 msgid "SET VIEWER PASSWORD"
 msgstr ""
 
+msgid "DELETE ITEM"
+msgstr ""
+
+msgid "DELETE GAME"
+msgstr ""
+
 msgid "COLLECTIONS"
 msgstr ""
 
@@ -927,6 +945,9 @@ msgstr ""
 
 #, c-format
 msgid "ADD TO %s"
+msgstr ""
+
+msgid "ADD TO CUSTOM COLLECTION"
 msgstr ""
 
 msgid "SCRAPE"
@@ -1029,6 +1050,9 @@ msgstr "Sistema"
 
 msgid "Architecture"
 msgstr "Arquitectura"
+
+msgid "Disk format"
+msgstr ""
 
 msgid "Temperature"
 msgstr "Temperatura"
@@ -1309,11 +1333,20 @@ msgstr "MENÚ DE SORTIDA COMPLET"
 msgid "USE RETROARCH RGUI MENU"
 msgstr "USAR MENU RGUI DE RETROARCH"
 
+msgid "RETROARCH MENU DRIVER"
+msgstr ""
+
+msgid "AUTO"
+msgstr "AUTO"
+
 msgid "SWITCH A/B BUTTONS IN EMULATIONSTATION"
 msgstr "INTERCANVIAR BOTONS A/B A EMULATIONSTATION"
 
 msgid "AUTOCONFIGURE EMULATORS CONTROLLERS"
 msgstr "AUTOCONFIGURAR COMANDAMENTS D'EMULADORS"
+
+msgid "CONTROL EMULATIONSTATION ONLY WITH FIRST JOYSTICK"
+msgstr ""
 
 msgid "SHOW NETWORK INDICATOR"
 msgstr "MOSTRAR INDICADOR DE XARXA"
@@ -1428,9 +1461,6 @@ msgstr "COMPROVAR BIOS ABANS D'INICIAR UN JOC"
 
 msgid "MULTIMEDIA KEYS"
 msgstr "TECLES D'AUDIOVISUALS"
-
-msgid "AUTO"
-msgstr "AUTO"
 
 msgid "ON"
 msgstr "ENCÉS"
@@ -1886,6 +1916,11 @@ msgstr ""
 "AIXÒ REALMENT ESBORRARÀ ELS ARXIUS DE JOC\n"
 "ESTEU SEGUR?"
 
+msgid ""
+"SOME FILES YOU LINKED ARE LOCATED OUTSIDE THE GAMELIST PATH.\n"
+"DO YOU WANT TO USE A COPY OF THESE FILES RELATIVE TO THE GAMELIST ?"
+msgstr ""
+
 msgid "NO DEVICE FOUND"
 msgstr "NO S'HA TROBAT EL DISPOSITIU"
 
@@ -1989,6 +2024,12 @@ msgstr "Publicat"
 
 msgid "Times played"
 msgstr "Nombre de vegades que s'ha jugat"
+
+#, c-format
+msgid "This folder contains %i game, including :%s"
+msgid_plural "This folder contains %i games, including :%s"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "No Entries Found"
 msgstr "No s'han trobat entrades"

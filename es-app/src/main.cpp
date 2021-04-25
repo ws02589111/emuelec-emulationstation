@@ -532,7 +532,18 @@ int main(int argc, char* argv[])
 
 #ifdef _ENABLE_KODI_
 	if (systemConf->getBool("kodi.enabled", true) && systemConf->getBool("kodi.atstartup"))
+	{
+		if (splashScreen)
+			window.closeSplashScreen();
+
 		ApiSystem::getInstance()->launchKodi(&window);
+
+		if (splashScreen)
+		{
+			window.renderSplashScreen("");
+			splashScreen = false;
+		}
+	}
 #endif
 
 	ApiSystem::getInstance()->getIpAdress();
@@ -581,7 +592,7 @@ int main(int argc, char* argv[])
 		displayFrequency = lpDevMode.dmDisplayFrequency; // default value if cannot retrieve from user settings.
 	}
 
-	int timeLimit = (1000 / displayFrequency) - 8;	 // Margin for vsync
+	int timeLimit = (1000 / displayFrequency) - 10;	 // Margin for vsync
 	if (timeLimit < 0)
 		timeLimit = 0;
 #endif

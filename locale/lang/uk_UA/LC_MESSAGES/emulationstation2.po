@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: batocera-emulationstation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-02 21:48+0200\n"
+"POT-Creation-Date: 2021-04-23 07:28+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Bennington111, viroot\n"
 "Language-Team: Ukrainian <https://4pda.ru/forum/index.php?showtopic=802556>\n"
@@ -604,8 +604,20 @@ msgstr "НЕ ЗНАЙДЕНО BLUETOOTH КОНТРОЛЛЕРІВ"
 msgid "CONTROLLERS LINKS HAVE BEEN DELETED."
 msgstr "BLUETOOTH КОНТРОЛЛЕРИ ВИДАЛЕНО"
 
+msgid "FILE BROWSER"
+msgstr ""
+
 msgid "RESET"
 msgstr "СКИДАННЯ"
+
+msgid "PARENT FOLDER"
+msgstr ""
+
+msgid "SCREENSHOTS FOLDER"
+msgstr ""
+
+msgid "SELECT"
+msgstr "ВИБІР"
 
 msgid "ADD COMBINATION KEY"
 msgstr "ДОДАТИ КОМБІНАЦІЇ КНОПОК"
@@ -837,9 +849,6 @@ msgstr "ВСТАНОВИТИ BATOCERA"
 msgid "TARGET DEVICE"
 msgstr "ЦІЛЬОВИЙ ПРИСТРІЙ"
 
-msgid "SELECT"
-msgstr "ВИБІР"
-
 msgid "TARGET ARCHITECTURE"
 msgstr "ЦІЛЬОВА АРХІТЕКТУРА"
 
@@ -873,6 +882,9 @@ msgstr ""
 msgid "SAVE SNAPSHOTS"
 msgstr ""
 
+msgid "OPEN"
+msgstr ""
+
 msgid "START NETPLAY HOST"
 msgstr ""
 
@@ -897,6 +909,19 @@ msgstr ""
 msgid "FIND SIMILAR GAMES..."
 msgstr "ЗНАЙТИ СХОЖІ ІГРИ..."
 
+msgid "DELETE ITEM"
+msgstr ""
+
+msgid "DELETE GAME"
+msgstr ""
+
+msgid ""
+"THIS WILL DELETE THE ACTUAL GAME FILE(S)!\n"
+"ARE YOU SURE?"
+msgstr ""
+"ВИДАЛЕННЯ ФАЙЛІВ ГРИ!\n"
+"ВИ ВПЕВНЕНІ?"
+
 msgid "COLLECTIONS"
 msgstr "КОЛЕКЦІЇ"
 
@@ -910,6 +935,9 @@ msgstr ""
 
 msgid "FAVORITES"
 msgstr "ВИБРАНЕ"
+
+msgid "ADD TO CUSTOM COLLECTION..."
+msgstr ""
 
 msgid "SCRAPE"
 msgstr "ЗАВАНТАЖИТИ ДАННІ"
@@ -1029,6 +1057,9 @@ msgstr "Система"
 
 msgid "Architecture"
 msgstr "Архітектура"
+
+msgid "Disk format"
+msgstr ""
 
 msgid "Temperature"
 msgstr "Температура"
@@ -1306,14 +1337,20 @@ msgstr ""
 msgid "COMPLETE QUIT MENU"
 msgstr ""
 
-msgid "USE RETROARCH RGUI MENU"
-msgstr "ВИКОРИСТАТИ МЕНЮ RETROARCH RGUI"
+msgid "RETROARCH MENU DRIVER"
+msgstr ""
+
+msgid "AUTO"
+msgstr "АВТО"
+
+msgid "AUTOCONFIGURE EMULATORS CONTROLLERS"
+msgstr "АВТОНАЛАШТУВАННЯ КОНТРОЛЛЕРІВ"
 
 msgid "SWITCH A/B BUTTONS IN EMULATIONSTATION"
 msgstr "ЗМІНИТИ МІСЦЯМИ КНОПКИ А/В"
 
-msgid "AUTOCONFIGURE EMULATORS CONTROLLERS"
-msgstr "АВТОНАЛАШТУВАННЯ КОНТРОЛЛЕРІВ"
+msgid "CONTROL EMULATIONSTATION ONLY WITH FIRST JOYSTICK"
+msgstr ""
 
 msgid "SHOW NETWORK INDICATOR"
 msgstr "ПОКАЗАТИ ІНДИКАТОР ІНТЕРНЕТУ"
@@ -1428,9 +1465,6 @@ msgstr ""
 
 msgid "MULTIMEDIA KEYS"
 msgstr "КНОПКИ МУЛЬТИМЕДІА"
-
-msgid "AUTO"
-msgstr "АВТО"
 
 msgid "ON"
 msgstr "ВКЛ"
@@ -1882,11 +1916,9 @@ msgid "EDIT METADATA"
 msgstr "РЕДАГУВАТИ МЕТАДАННІ"
 
 msgid ""
-"THIS WILL DELETE THE ACTUAL GAME FILE(S)!\n"
-"ARE YOU SURE?"
+"SOME FILES YOU LINKED ARE LOCATED OUTSIDE THE GAMELIST PATH.\n"
+"DO YOU WANT TO USE A COPY OF THESE FILES RELATIVE TO THE GAMELIST ?"
 msgstr ""
-"ВИДАЛЕННЯ ФАЙЛІВ ГРИ!\n"
-"ВИ ВПЕВНЕНІ?"
 
 msgid "NO DEVICE FOUND"
 msgstr "ПРИСТРІЙ НЕ ЗНАЙДЕНО"
@@ -1990,6 +2022,13 @@ msgstr "Вихід"
 
 msgid "Times played"
 msgstr "Зіграно раз"
+
+#, c-format
+msgid "This folder contains %i game, including :%s"
+msgid_plural "This folder contains %i games, including :%s"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "No Entries Found"
 msgstr "Записів не знайдено"
@@ -2372,6 +2411,9 @@ msgstr ""
 #, c-format
 msgid "%d s"
 msgstr ""
+
+#~ msgid "USE RETROARCH RGUI MENU"
+#~ msgstr "ВИКОРИСТАТИ МЕНЮ RETROARCH RGUI"
 
 #~ msgid "RESET GAMELIST CUSTOMISATIONS"
 #~ msgstr "СКИНУТИ НАЛАШТУВАННЯ СПИСКУ ІГР"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-02 21:48+0200\n"
+"POT-Creation-Date: 2021-04-23 07:28+0200\n"
 "PO-Revision-Date: 2020-08-15 15:32+0200\n"
 "Last-Translator: Quentin PAGÈS\n"
 "Language-Team: \n"
@@ -608,8 +608,20 @@ msgstr "CAP DE PERIFERIC BLUETOOTH PAS TROBAT"
 msgid "CONTROLLERS LINKS HAVE BEEN DELETED."
 msgstr "LIGAMS MANETA SUPRIMIT."
 
+msgid "FILE BROWSER"
+msgstr ""
+
 msgid "RESET"
 msgstr "REÏNICIALIZAR"
+
+msgid "PARENT FOLDER"
+msgstr ""
+
+msgid "SCREENSHOTS FOLDER"
+msgstr ""
+
+msgid "SELECT"
+msgstr "SELECCIONAR"
 
 msgid "ADD COMBINATION KEY"
 msgstr ""
@@ -841,9 +853,6 @@ msgstr ""
 msgid "TARGET DEVICE"
 msgstr ""
 
-msgid "SELECT"
-msgstr "SELECCIONAR"
-
 msgid "TARGET ARCHITECTURE"
 msgstr ""
 
@@ -877,6 +886,9 @@ msgstr ""
 msgid "SAVE SNAPSHOTS"
 msgstr ""
 
+msgid "OPEN"
+msgstr ""
+
 msgid "START NETPLAY HOST"
 msgstr ""
 
@@ -901,6 +913,17 @@ msgstr ""
 msgid "FIND SIMILAR GAMES..."
 msgstr ""
 
+msgid "DELETE ITEM"
+msgstr ""
+
+msgid "DELETE GAME"
+msgstr ""
+
+msgid ""
+"THIS WILL DELETE THE ACTUAL GAME FILE(S)!\n"
+"ARE YOU SURE?"
+msgstr ""
+
 msgid "COLLECTIONS"
 msgstr ""
 
@@ -914,6 +937,9 @@ msgstr ""
 
 msgid "FAVORITES"
 msgstr "FAVORITS"
+
+msgid "ADD TO CUSTOM COLLECTION..."
+msgstr ""
 
 msgid "SCRAPE"
 msgstr "RECUPERAR INFO"
@@ -1030,6 +1056,9 @@ msgstr "Sistèma"
 
 msgid "Architecture"
 msgstr "Arquitectura"
+
+msgid "Disk format"
+msgstr ""
 
 msgid "Temperature"
 msgstr "Temperatura"
@@ -1307,13 +1336,19 @@ msgstr ""
 msgid "COMPLETE QUIT MENU"
 msgstr ""
 
-msgid "USE RETROARCH RGUI MENU"
+msgid "RETROARCH MENU DRIVER"
+msgstr ""
+
+msgid "AUTO"
+msgstr "AUTO"
+
+msgid "AUTOCONFIGURE EMULATORS CONTROLLERS"
 msgstr ""
 
 msgid "SWITCH A/B BUTTONS IN EMULATIONSTATION"
 msgstr ""
 
-msgid "AUTOCONFIGURE EMULATORS CONTROLLERS"
+msgid "CONTROL EMULATIONSTATION ONLY WITH FIRST JOYSTICK"
 msgstr ""
 
 msgid "SHOW NETWORK INDICATOR"
@@ -1426,9 +1461,6 @@ msgstr ""
 
 msgid "MULTIMEDIA KEYS"
 msgstr ""
-
-msgid "AUTO"
-msgstr "AUTO"
 
 msgid "ON"
 msgstr "ACTIVAT"
@@ -1875,8 +1907,8 @@ msgid "EDIT METADATA"
 msgstr "MODIFICAR METADONADAS"
 
 msgid ""
-"THIS WILL DELETE THE ACTUAL GAME FILE(S)!\n"
-"ARE YOU SURE?"
+"SOME FILES YOU LINKED ARE LOCATED OUTSIDE THE GAMELIST PATH.\n"
+"DO YOU WANT TO USE A COPY OF THESE FILES RELATIVE TO THE GAMELIST ?"
 msgstr ""
 
 msgid "NO DEVICE FOUND"
@@ -1978,6 +2010,12 @@ msgstr "Sortida"
 
 msgid "Times played"
 msgstr "Temps jogat"
+
+#, c-format
+msgid "This folder contains %i game, including :%s"
+msgid_plural "This folder contains %i games, including :%s"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "No Entries Found"
 msgstr ""

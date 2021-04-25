@@ -145,6 +145,7 @@ public:
 	float getFloat(MetaDataId id) const;
 
 	MetaDataType getType(MetaDataId id) const;
+	MetaDataType getType(const std::string name) const;
 
 	bool wasChanged() const;
 	void resetChangedFlag();
@@ -155,10 +156,11 @@ public:
 
 	inline MetaDataListType getType() const { return mType; }
 	static const std::vector<MetaDataDecl>& getMDD() { return mMetaDataDecls; }
-
-	const std::string& getName() const;
+	inline const std::string& getName() const { return mName; }
 	
 	void importScrappedMetadata(const MetaDataList& source);
+
+	std::string getRelativeRootPath();
 
 private:
 	std::string		mName;

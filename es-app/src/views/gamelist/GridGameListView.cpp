@@ -17,6 +17,9 @@ GridGameListView::GridGameListView(Window* window, FolderData* root, const std::
 	mGrid(window),
 	mDetails(this, &mGrid, mWindow, DetailedContainer::GridView)
 {
+	// Let DetailedContainer handle extras with activation scripts
+	mExtraMode = ThemeData::ExtraImportType::WITHOUT_ACTIVATESTORYBOARD;
+
 	setTag("grid");
 
 	const float padding = 0.01f;
@@ -56,40 +59,18 @@ FileData* GridGameListView::getCursor()
 	return mGrid.getSelected();
 }
 
-void GridGameListView::setCursor(FileData* file)
+void GridGameListView::setCursor(FileData* cursor)
 {
-	if (!mGrid.setCursor(file) && file->getParent() != nullptr && !file->isPlaceHolder())
+	if (cursor && !mGrid.setCursor(cursor) && !cursor->isPlaceHolder())
 	{
-		auto children = mRoot->getChildrenListToDisplay();
-
-		auto gameIter = std::find(children.cbegin(), children.cend(), file);
-		if (gameIter == children.cend())
+		std::stack<FileData*> stack;
+		auto childrenToDisplay = mRoot->findChildrenListToDisplayAtCursor(cursor, stack);
+		if (childrenToDisplay != nullptr)
 		{
-			children = file->getParent()->getChildrenListToDisplay();
-
-			// update our cursor stack in case our cursor just got set to some folder we weren't in before
-			if (mCursorStack.empty() || mCursorStack.top() != file->getParent())
-			{
-				std::stack<FileData*> tmp;
-				FileData* ptr = file->getParent();
-				while (ptr && ptr != mRoot)
-				{
-					tmp.push(ptr);
-					ptr = ptr->getParent();
-				}
-
-				// flip the stack and put it in mCursorStack
-				mCursorStack = std::stack<FileData*>();
-				while (!tmp.empty())
-				{
-					mCursorStack.push(tmp.top());
-					tmp.pop();
-				}
-			}
+			mCursorStack = stack;
+			populateList(*childrenToDisplay.get());
+			mGrid.setCursor(cursor);
 		}
-
-		populateList(children);
-		mGrid.setCursor(file);
 	}
 }
 
@@ -271,7 +252,7 @@ void GridGameListView::updateInfoPanel()
 
 	FileData* file = (mGrid.size() == 0 || mGrid.isScrolling()) ? NULL : mGrid.getSelected();
 	bool isClearing = mGrid.getObjects().size() == 0 && mGrid.getCursorIndex() == 0 && mGrid.getScrollingVelocity() == 0;
-	mDetails.updateControls(file, isClearing);	
+	mDetails.updateControls(file, isClearing, mGrid.getCursorIndex() - mGrid.getLastCursor());
 }
 
 void GridGameListView::addPlaceholder()
@@ -283,7 +264,15 @@ void GridGameListView::addPlaceholder()
 
 void GridGameListView::launch(FileData* game)
 {
-	ViewController::get()->launch(game);
+	Vector3f target = mDetails.getLaunchTarget();
+	if (target == Vector3f(Renderer::getScreenWidth() / 2.0f, Renderer::getScreenHeight() / 2.0f, 0))
+	{
+		auto tile = mGrid.getSelectedTile();
+		if (tile != nullptr)
+			target = mGrid.getPosition() + tile->getLaunchTarget();
+	}
+
+	ViewController::get()->launch(game, target);
 }
 
 void GridGameListView::remove(FileData *game)
@@ -364,4 +353,10 @@ int GridGameListView::getCursorIndex()
 std::vector<FileData*> GridGameListView::getFileDataEntries()
 {
 	return mGrid.getObjects();
+}
+
+void GridGameListView::update(int deltaTime)
+{
+	mDetails.update(deltaTime);
+	ISimpleGameListView::update(deltaTime);
 }

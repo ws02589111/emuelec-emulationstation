@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-02 21:47+0200\n"
+"POT-Creation-Date: 2021-04-23 07:28+0200\n"
 "PO-Revision-Date: 2021-01-26 19:38+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -607,8 +607,20 @@ msgstr "HEB FFEINDIO DYFEISIAU BLUETOOTH"
 msgid "CONTROLLERS LINKS HAVE BEEN DELETED."
 msgstr "CYSYLLTIADAU RHEOLYDDION WEDI EU DILEU."
 
+msgid "FILE BROWSER"
+msgstr ""
+
 msgid "RESET"
 msgstr "AIL GYCHWYN"
+
+msgid "PARENT FOLDER"
+msgstr ""
+
+msgid "SCREENSHOTS FOLDER"
+msgstr ""
+
+msgid "SELECT"
+msgstr "DETHOL"
 
 msgid "ADD COMBINATION KEY"
 msgstr "YCHWANEGU ALLWEDD CYFUNO"
@@ -840,9 +852,6 @@ msgstr "GOSOD BATOCERA"
 msgid "TARGET DEVICE"
 msgstr "DYFAIS TARGED"
 
-msgid "SELECT"
-msgstr "DETHOL"
-
 msgid "TARGET ARCHITECTURE"
 msgstr "SYSTEM TARGED"
 
@@ -876,6 +885,9 @@ msgstr "GÊM"
 msgid "SAVE SNAPSHOTS"
 msgstr "ARBED CIPLUNIAU"
 
+msgid "OPEN"
+msgstr ""
+
 msgid "START NETPLAY HOST"
 msgstr "DECHRAU GWESTEIA NETPLAY"
 
@@ -900,6 +912,19 @@ msgstr "GOSOD CYFRINAIR GWYLIWR"
 msgid "FIND SIMILAR GAMES..."
 msgstr "DOD O HYD I GEMAU TEBYG ..."
 
+msgid "DELETE ITEM"
+msgstr ""
+
+msgid "DELETE GAME"
+msgstr ""
+
+msgid ""
+"THIS WILL DELETE THE ACTUAL GAME FILE(S)!\n"
+"ARE YOU SURE?"
+msgstr ""
+"BYDD HYN YN DILEU'R FFEIL(IAU) GÊM GWIRIONEDDOL!\n"
+"WYT TI'N SIWR?"
+
 msgid "COLLECTIONS"
 msgstr "CASGLIADAU"
 
@@ -913,6 +938,9 @@ msgstr "YCHWANEGU I %s"
 
 msgid "FAVORITES"
 msgstr "FFEFRYNNAU"
+
+msgid "ADD TO CUSTOM COLLECTION..."
+msgstr ""
 
 msgid "SCRAPE"
 msgstr "CRAFU"
@@ -1032,6 +1060,9 @@ msgstr "System"
 
 msgid "Architecture"
 msgstr "System"
+
+msgid "Disk format"
+msgstr ""
 
 msgid "Temperature"
 msgstr "Tymheredd"
@@ -1309,14 +1340,20 @@ msgstr "CUDDIO PAN YN RHEDEG GÊM"
 msgid "COMPLETE QUIT MENU"
 msgstr "DEWISLEN GADAEL TERFYNOL"
 
-msgid "USE RETROARCH RGUI MENU"
-msgstr "DEFNYDDIO DEWISLEN RGUI RETROARCH"
+msgid "RETROARCH MENU DRIVER"
+msgstr ""
+
+msgid "AUTO"
+msgstr "AWTO"
+
+msgid "AUTOCONFIGURE EMULATORS CONTROLLERS"
+msgstr "TRAWSWEDDU AWTOMATIG RHEOLYDDION EFELYCHWYR"
 
 msgid "SWITCH A/B BUTTONS IN EMULATIONSTATION"
 msgstr "CYFNEWID BOTYMAU A/B YN EMULATIONSTATION"
 
-msgid "AUTOCONFIGURE EMULATORS CONTROLLERS"
-msgstr "TRAWSWEDDU AWTOMATIG RHEOLYDDION EFELYCHWYR"
+msgid "CONTROL EMULATIONSTATION ONLY WITH FIRST JOYSTICK"
+msgstr ""
 
 msgid "SHOW NETWORK INDICATOR"
 msgstr "DANGOS DANGOSYDD RHWYDWAITH"
@@ -1432,9 +1469,6 @@ msgstr "GWIRIO BIOS CYN RHEDEG GÊM"
 
 msgid "MULTIMEDIA KEYS"
 msgstr "ALLWEDDAU AMLGYFRWNG"
-
-msgid "AUTO"
-msgstr "AWTO"
 
 msgid "ON"
 msgstr "YMLAEN"
@@ -1886,11 +1920,9 @@ msgid "EDIT METADATA"
 msgstr "GOLYGU METADATA"
 
 msgid ""
-"THIS WILL DELETE THE ACTUAL GAME FILE(S)!\n"
-"ARE YOU SURE?"
+"SOME FILES YOU LINKED ARE LOCATED OUTSIDE THE GAMELIST PATH.\n"
+"DO YOU WANT TO USE A COPY OF THESE FILES RELATIVE TO THE GAMELIST ?"
 msgstr ""
-"BYDD HYN YN DILEU'R FFEIL(IAU) GÊM GWIRIONEDDOL!\n"
-"WYT TI'N SIWR?"
 
 msgid "NO DEVICE FOUND"
 msgstr "DIM DYFAIS WEDI EI DDARGANFOD"
@@ -2008,6 +2040,16 @@ msgstr "Rhyddhawyd"
 
 msgid "Times played"
 msgstr "Nifer o weithiau chwaraewyd"
+
+#, c-format
+msgid "This folder contains %i game, including :%s"
+msgid_plural "This folder contains %i games, including :%s"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
 
 msgid "No Entries Found"
 msgstr "Ni ddarganfuwyd unrhyw gofnodion"
@@ -2412,6 +2454,9 @@ msgstr "%d m"
 #, c-format
 msgid "%d s"
 msgstr "%d e"
+
+#~ msgid "USE RETROARCH RGUI MENU"
+#~ msgstr "DEFNYDDIO DEWISLEN RGUI RETROARCH"
 
 #~ msgid "RESET GAMELIST CUSTOMISATIONS"
 #~ msgstr "AILOSOD RHESTR GEMAU WEDI'I ADDASU"

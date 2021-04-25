@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: emulationstation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-02 21:47+0200\n"
+"POT-Creation-Date: 2021-04-23 07:28+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -602,8 +602,20 @@ msgstr "NEM TALÁLHATÓ BLUETOOTH ESZKÖZ"
 msgid "CONTROLLERS LINKS HAVE BEEN DELETED."
 msgstr "KONTROLLER PÁROSÍTÁSOK TÖRÖLVE."
 
+msgid "FILE BROWSER"
+msgstr ""
+
 msgid "RESET"
 msgstr ""
+
+msgid "PARENT FOLDER"
+msgstr ""
+
+msgid "SCREENSHOTS FOLDER"
+msgstr ""
+
+msgid "SELECT"
+msgstr "KIVÁLASZT"
 
 msgid "ADD COMBINATION KEY"
 msgstr ""
@@ -835,9 +847,6 @@ msgstr "BATOCERA TELEPÍTÉSE"
 msgid "TARGET DEVICE"
 msgstr "CÉL ESZKÖZ"
 
-msgid "SELECT"
-msgstr "KIVÁLASZT"
-
 msgid "TARGET ARCHITECTURE"
 msgstr "CÉL ARCHITEKTÚRA"
 
@@ -871,6 +880,9 @@ msgstr "JÁTÉK"
 msgid "SAVE SNAPSHOTS"
 msgstr "PILLANATKÉPEK ELMENTÉSE"
 
+msgid "OPEN"
+msgstr ""
+
 msgid "START NETPLAY HOST"
 msgstr ""
 
@@ -895,6 +907,19 @@ msgstr "NÉZŐ JELSZÓ BEÁLLÍTÁSA"
 msgid "FIND SIMILAR GAMES..."
 msgstr "HASONLÓ JÁTÉKOK KERESÉSE..."
 
+msgid "DELETE ITEM"
+msgstr ""
+
+msgid "DELETE GAME"
+msgstr ""
+
+msgid ""
+"THIS WILL DELETE THE ACTUAL GAME FILE(S)!\n"
+"ARE YOU SURE?"
+msgstr ""
+"EZZEL LETÖRLÖD AZ AKTUÁLIS JÁTÉK FÁJLOKAT!\n"
+"BIZTOS VAGY BENNE?"
+
 msgid "COLLECTIONS"
 msgstr "GYŰJTEMÉNYEK"
 
@@ -908,6 +933,9 @@ msgstr "HOZZÁADÁS %s-HOZ"
 
 msgid "FAVORITES"
 msgstr "KEDVENCEK"
+
+msgid "ADD TO CUSTOM COLLECTION..."
+msgstr ""
 
 msgid "SCRAPE"
 msgstr "LEKÉRÉS"
@@ -1027,6 +1055,9 @@ msgstr "Rendszer"
 
 msgid "Architecture"
 msgstr "Architektúra"
+
+msgid "Disk format"
+msgstr ""
 
 msgid "Temperature"
 msgstr "Hőfok"
@@ -1304,14 +1335,20 @@ msgstr "ELREJTVE JÁTÉK FUTÁSA KÖZBEN"
 msgid "COMPLETE QUIT MENU"
 msgstr ""
 
-msgid "USE RETROARCH RGUI MENU"
-msgstr "RETROARCH RGUI MENÜ HASZNÁLATA"
+msgid "RETROARCH MENU DRIVER"
+msgstr ""
+
+msgid "AUTO"
+msgstr "AUTO"
+
+msgid "AUTOCONFIGURE EMULATORS CONTROLLERS"
+msgstr "EMULÁTOR KONTROLLEREK AUTOMATIKUS KONFIGURÁCIÓJA"
 
 msgid "SWITCH A/B BUTTONS IN EMULATIONSTATION"
 msgstr "A/B GOMBOK FELCSERÉLÉSE AZ EMUATIONSTATION FELÜLETEN"
 
-msgid "AUTOCONFIGURE EMULATORS CONTROLLERS"
-msgstr "EMULÁTOR KONTROLLEREK AUTOMATIKUS KONFIGURÁCIÓJA"
+msgid "CONTROL EMULATIONSTATION ONLY WITH FIRST JOYSTICK"
+msgstr ""
 
 msgid "SHOW NETWORK INDICATOR"
 msgstr "HÁLÓZATI JELZŐ MEGJELENÍTÉSE"
@@ -1426,9 +1463,6 @@ msgstr "JÁTÉK FUTTATÁSA ELŐTT A BIOSOK ELLENŐRZÉSE"
 
 msgid "MULTIMEDIA KEYS"
 msgstr "MULTIMÉDIA KULCSOK"
-
-msgid "AUTO"
-msgstr "AUTO"
 
 msgid "ON"
 msgstr "BE"
@@ -1880,11 +1914,9 @@ msgid "EDIT METADATA"
 msgstr "META SZERKESZTÉSE"
 
 msgid ""
-"THIS WILL DELETE THE ACTUAL GAME FILE(S)!\n"
-"ARE YOU SURE?"
+"SOME FILES YOU LINKED ARE LOCATED OUTSIDE THE GAMELIST PATH.\n"
+"DO YOU WANT TO USE A COPY OF THESE FILES RELATIVE TO THE GAMELIST ?"
 msgstr ""
-"EZZEL LETÖRLÖD AZ AKTUÁLIS JÁTÉK FÁJLOKAT!\n"
-"BIZTOS VAGY BENNE?"
 
 msgid "NO DEVICE FOUND"
 msgstr "ESZKÖZ NEM TALÁLHATÓ"
@@ -1985,6 +2017,12 @@ msgstr "Kiadva"
 
 msgid "Times played"
 msgstr "Játszott idő"
+
+#, c-format
+msgid "This folder contains %i game, including :%s"
+msgid_plural "This folder contains %i games, including :%s"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "No Entries Found"
 msgstr ""
@@ -2359,6 +2397,9 @@ msgstr "%d p"
 #, c-format
 msgid "%d s"
 msgstr "%d mp"
+
+#~ msgid "USE RETROARCH RGUI MENU"
+#~ msgstr "RETROARCH RGUI MENÜ HASZNÁLATA"
 
 #~ msgid "SCRAPING IN PROGRESS"
 #~ msgstr "LEKÉRÉS FOLYAMATBAN"

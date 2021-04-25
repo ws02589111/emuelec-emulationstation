@@ -75,7 +75,9 @@ bool Win32ApiSystem::isScriptingSupported(ScriptId script)
 		executables.push_back("batocera-wifi");
 		break;
 	case ApiSystem::RETROACHIVEMENTS:
+#ifdef CHEEVOS_DEV_LOGIN
 		executables.push_back("emulatorLauncher");
+#endif
 		break;
 	case ApiSystem::BLUETOOTH:
 #if _DEBUG
@@ -133,7 +135,7 @@ int executeCMD(LPSTR lpCommandLine, std::string& output)
 
 #define BUFSIZE		32768
 
-	STARTUPINFO si;
+	STARTUPINFOW si;
 	SECURITY_ATTRIBUTES sa;
 	PROCESS_INFORMATION pi;
 	HANDLE g_hChildStd_IN_Rd, g_hChildStd_OUT_Wr, g_hChildStd_OUT_Rd, g_hChildStd_IN_Wr;  //pipe handles
@@ -151,7 +153,7 @@ int executeCMD(LPSTR lpCommandLine, std::string& output)
 			/*The dwFlags member tells CreateProcess how to make the process.
 			STARTF_USESTDHANDLES: validates the hStd* members.
 			STARTF_USESHOWWINDOW: validates the wShowWindow member*/
-			GetStartupInfo(&si);
+			GetStartupInfoW(&si);
 
 			si.dwFlags = STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW;
 			si.wShowWindow = SW_HIDE;
@@ -161,7 +163,8 @@ int executeCMD(LPSTR lpCommandLine, std::string& output)
 			si.hStdInput = g_hChildStd_IN_Rd;
 
 			//spawn the child process
-			if (CreateProcess(NULL, lpCommandLine, NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi))
+			std::wstring commandLineW = Utils::String::convertToWideString(lpCommandLine);
+			if (CreateProcessW(NULL, (LPWSTR)commandLineW.c_str(), NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi))
 			{
 				unsigned long bread;   //bytes read
 				unsigned long avail;   //bytes available
@@ -952,16 +955,21 @@ bool Win32ApiSystem::launchKodi(Window *window)
 
 	ApiSystem::launchExternalWindow_before(window);
 
-	SHELLEXECUTEINFO lpExecInfo;
-	lpExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
-	lpExecInfo.lpFile = command.c_str();
-	lpExecInfo.fMask = SEE_MASK_DOENVSUBST | SEE_MASK_NOCLOSEPROCESS;
-	lpExecInfo.lpVerb = "open";
-	
-	if (!args.empty())
-		lpExecInfo.lpParameters = args.c_str();
+	std::wstring wexe = Utils::String::convertToWideString(command);
+	std::wstring wargs = Utils::String::convertToWideString(args);
 
-	ShellExecuteEx(&lpExecInfo);
+	SHELLEXECUTEINFOW lpExecInfo;
+	lpExecInfo.cbSize = sizeof(SHELLEXECUTEINFOW);
+	lpExecInfo.lpFile = wexe.c_str();
+	lpExecInfo.lpDirectory = NULL;
+	lpExecInfo.fMask = SEE_MASK_DOENVSUBST | SEE_MASK_NOCLOSEPROCESS;
+	lpExecInfo.hwnd = NULL;
+	lpExecInfo.nShow = SW_SHOW;  // show command prompt with normal window size 
+	lpExecInfo.hInstApp = (HINSTANCE)SE_ERR_DDEFAIL;   //WINSHELLAPI BOOL WINAPI result;
+	lpExecInfo.lpVerb = L"open";
+	lpExecInfo.lpParameters = wargs.c_str();
+
+	ShellExecuteExW(&lpExecInfo);
 
 	bool ret = lpExecInfo.hProcess != NULL;
 	if (lpExecInfo.hProcess != NULL)
@@ -975,8 +983,14 @@ bool Win32ApiSystem::launchKodi(Window *window)
 	return ret;
 }
 
+static std::map<std::string, std::string> g_emulatorLauncherPathCache;
+
 std::string Win32ApiSystem::getEmulatorLauncherPath(const std::string variable)
 {
+	auto it = g_emulatorLauncherPathCache.find(variable);
+	if (it != g_emulatorLauncherPathCache.cend())
+		return it->second;
+
 	std::string path = Utils::FileSystem::getExePath() + "/emulatorLauncher.cfg";
 	if (!Utils::FileSystem::exists(path))
 		path = Utils::FileSystem::getEsConfigPath() + "/emulatorLauncher.cfg";
@@ -984,7 +998,10 @@ std::string Win32ApiSystem::getEmulatorLauncherPath(const std::string variable)
 		path = Utils::FileSystem::getParent(Utils::FileSystem::getEsConfigPath()) + "/emulatorLauncher.cfg";
 
 	if (!Utils::FileSystem::exists(path))
+	{
+		g_emulatorLauncherPathCache[variable] = "";
 		return "";
+	}
 
 	std::string line;
 	std::ifstream systemConf(path);
@@ -1002,7 +1019,9 @@ std::string Win32ApiSystem::getEmulatorLauncherPath(const std::string variable)
 				systemConf.close();
 
 				std::string relativeTo = Utils::FileSystem::getParent(path);
-				return Utils::FileSystem::getAbsolutePath(line.substr(idx + 1), relativeTo);
+				auto ret = Utils::FileSystem::getAbsolutePath(line.substr(idx + 1), relativeTo);
+				g_emulatorLauncherPathCache[variable] = ret;
+				return ret;
 			}
 		}
 		systemConf.close();
@@ -1014,15 +1033,22 @@ std::string Win32ApiSystem::getEmulatorLauncherPath(const std::string variable)
 
 		auto dir = Utils::FileSystem::getCanonicalPath(Utils::FileSystem::getParent(path) + "/../system/" + name);
 		if (Utils::FileSystem::isDirectory(dir))
+		{
+			g_emulatorLauncherPathCache[variable] = dir;
 			return dir;
+		}
 	}
 	else
 	{
 		auto dir = Utils::FileSystem::getCanonicalPath(Utils::FileSystem::getParent(path) + "/../" + variable);
 		if (Utils::FileSystem::isDirectory(dir))
+		{
+			g_emulatorLauncherPathCache[variable] = dir;
 			return dir;
+		}
 	}
 
+	g_emulatorLauncherPathCache[variable] = "";
 	return "";
 }
 
