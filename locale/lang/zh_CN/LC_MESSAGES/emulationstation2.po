@@ -690,16 +690,16 @@ msgid "CONTROLLERS LINKS HAVE BEEN DELETED."
 msgstr "控制器链接已被删除。"
 
 msgid "FILE BROWSER"
-msgstr ""
+msgstr "文件管理"
 
 msgid "RESET"
 msgstr "重置"
 
 msgid "PARENT FOLDER"
-msgstr ""
+msgstr "上一级目录"
 
 msgid "SCREENSHOTS FOLDER"
-msgstr ""
+msgstr "截图保存文件夹"
 
 msgid "SELECT"
 msgstr "选择"
@@ -944,7 +944,7 @@ msgid "SAVE SNAPSHOTS"
 msgstr "保存快照"
 
 msgid "OPEN"
-msgstr ""
+msgstr "开启"
 
 msgid "START NETPLAY HOST"
 msgstr "启动联机游戏主机"
@@ -968,10 +968,10 @@ msgid "SET VIEWER PASSWORD"
 msgstr "设置观战密码"
 
 msgid "DELETE ITEM"
-msgstr ""
+msgstr "删除项目"
 
 msgid "DELETE GAME"
-msgstr ""
+msgstr "删除游戏"
 
 msgid ""
 "THIS WILL DELETE THE ACTUAL GAME FILE(S)!\n"
@@ -995,7 +995,7 @@ msgid "FAVORITES"
 msgstr "收藏"
 
 msgid "ADD TO CUSTOM COLLECTION..."
-msgstr ""
+msgstr "添加到自定义合辑"
 
 msgid "SCRAPE"
 msgstr "抓取元数据"
@@ -1096,7 +1096,7 @@ msgid "Architecture"
 msgstr "结构"
 
 msgid "Disk format"
-msgstr ""
+msgstr "磁盘格式"
 
 msgid "Temperature"
 msgstr "温度"
@@ -1375,7 +1375,7 @@ msgid "COMPLETE QUIT MENU"
 msgstr "完成并推出"
 
 msgid "RETROARCH MENU DRIVER"
-msgstr ""
+msgstr "RETROARCH菜单主题"
 
 msgid "AUTO"
 msgstr "自动"
@@ -1387,7 +1387,7 @@ msgid "SWITCH A/B BUTTONS IN EMULATIONSTATION"
 msgstr "在EMULATIONSTATION中切换 A/B 按键"
 
 msgid "CONTROL EMULATIONSTATION ONLY WITH FIRST JOYSTICK"
-msgstr ""
+msgstr "仅允许第一个控制器控制EMULATIONSTATION"
 
 msgid "SHOW NETWORK INDICATOR"
 msgstr "显示网络标识"
@@ -1957,6 +1957,8 @@ msgid ""
 "SOME FILES YOU LINKED ARE LOCATED OUTSIDE THE GAMELIST PATH.\n"
 "DO YOU WANT TO USE A COPY OF THESE FILES RELATIVE TO THE GAMELIST ?"
 msgstr ""
+"您链接的某些文件位于游戏列表路径之外.\n"
+"您是否想要使用与游戏清单相关的这些文件的副本 ?"
 
 msgid "NO DEVICE FOUND"
 msgstr "未找到设备"
