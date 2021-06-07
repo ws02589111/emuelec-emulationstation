@@ -41,6 +41,7 @@ public:
 	void	applyTheme(const std::shared_ptr<ThemeData>& theme, const std::string& view, const std::string& element, unsigned int properties);
 
 	int getLastCursor() { return mLastCursor; }
+	void resetLastCursor() { mLastCursor = -1; }
 
 protected:
 	void onCursorChanged(const CursorState& state) override;
@@ -100,6 +101,9 @@ private:
 	std::string		mScrollSound;
 	float			mTransitionSpeed;
 	float			mMinLogoOpacity;
+
+	bool			mAnyLogoHasScaleStoryboard;
+	bool			mAnyLogoHasOpacityStoryboard;
 
 public:
 	bool isHorizontalCarousel() { return mType == HORIZONTAL || mType == HORIZONTAL_WHEEL; }

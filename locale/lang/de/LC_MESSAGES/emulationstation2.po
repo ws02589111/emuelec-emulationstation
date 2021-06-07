@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: emulationstation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-04 13:09+0200\n"
+"POT-Creation-Date: 2021-06-05 21:07+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -83,10 +83,10 @@ msgid "enter path to manual"
 msgstr "Pfad zum Handbuch eingeben"
 
 msgid "Magazine"
-msgstr ""
+msgstr "Magazin"
 
 msgid "enter path to magazine"
-msgstr ""
+msgstr "Pfad zum Magazin eingeben"
 
 msgid "Map"
 msgstr "Karte"
@@ -154,6 +154,18 @@ msgstr "Genre"
 msgid "enter game genre"
 msgstr "Genre eingeben"
 
+msgid "Game family"
+msgstr "Spiele-Familie"
+
+msgid "enter game family"
+msgstr "Spiele-Familie eingeben"
+
+msgid "Genres"
+msgstr "Genres"
+
+msgid "enter game genres"
+msgstr "Spiele-Genres eingeben"
+
 msgid "Arcade system"
 msgstr "Arcade System"
 
@@ -194,7 +206,7 @@ msgid "Last played"
 msgstr "Zuletzt gespielt"
 
 msgid "enter last played date"
-msgstr "Datum Zuletzt gespielt eintragen"
+msgstr "Datum zuletzt gespielt eintragen"
 
 msgid "Crc32"
 msgstr "Crc32"
@@ -258,6 +270,9 @@ msgstr "arcade"
 
 msgid "vertical arcade"
 msgstr "vertical arcade"
+
+msgid "lightgun games"
+msgstr "Lightgun-Spiele"
 
 msgid "collections"
 msgstr "Sammlungen"
@@ -443,6 +458,9 @@ msgstr "SAMMLUNGEN AUSWÄHLEN"
 msgid "AUTOMATIC COLLECTIONS"
 msgstr "AUTOMATISCHE SAMMLUNGEN"
 
+msgid "PER GENRE"
+msgstr "PER GENRE"
+
 msgid "ARCADE SYSTEMS"
 msgstr "ARCADE SYSTEME"
 
@@ -541,7 +559,7 @@ msgid "CLOSE"
 msgstr "SCHLIESSEN"
 
 msgid "ARE YOU SURE YOU WANT TO DELETE THIS ITEM ?"
-msgstr "SIND SIE SICHER, DASS SIE DIESES ELEMENT LÖSCHEN MÖCHTEN ?"
+msgstr "BIST DU SICHER, DASS DU DIESES ELEMENT LÖSCHEN MÖCHTEST ?"
 
 msgid "INPUT"
 msgstr "EINGABE"
@@ -830,8 +848,9 @@ msgstr "ÄNDERUNGEN SPEICHERN?"
 msgid "ARE YOU SURE ?"
 msgstr "BIST DU SICHER?"
 
-msgid "UPDATING EMULATIONSTATION"
-msgstr "AKTUALISIERUNG EMULATIONSTATION"
+#, c-format
+msgid "UPDATING %s"
+msgstr "AKTUALISIERE %s"
 
 msgid "UPDATING BATOCERA"
 msgstr "AKTUALISIERE BATOCERA"
@@ -844,6 +863,14 @@ msgstr "SYSTEM NEU STARTEN UM ANZUWENDEN"
 
 msgid "REALLY UPDATE?"
 msgstr "WIRKLICH AKTUALISIEREN?"
+
+#, c-format
+msgid ""
+"YOU ARE CURRENTLY USING VERSION : %s\n"
+"DO YOU WANT TO UPDATE TO VERSION : %s ?"
+msgstr ""
+"MOMENTAN NUTZT DU VERSION : %s\r\n"
+"AKTUALISIEREN AUF VERSION : %s ?"
 
 msgid "NETWORK CONNECTION NEEDED"
 msgstr "NETZWERKVERBINDUNG BENÖTIGT"
@@ -873,7 +900,7 @@ msgid "VIEW GAME MANUAL"
 msgstr "SPIEL-ANLEITUNG ANSEHEN"
 
 msgid "VIEW GAME MAGAZINE"
-msgstr ""
+msgstr "SPIELE-MAGAZIN ANSEHEN"
 
 msgid "VIEW GAME MAP"
 msgstr "SPIELE-KARTE ANSEHEN"
@@ -979,7 +1006,7 @@ msgid "CURRENT THEME"
 msgstr "AKTUELLES THEME"
 
 msgid "Unlocked on"
-msgstr "Freigeschalten am"
+msgstr "Freigeschaltet am"
 
 msgid "THIS GAME HAS NO ACHIEVEMENT YET"
 msgstr "DIESES SPIEL HAT NOCH KEINE ERRUNGENSCHAFTEN"
@@ -1110,6 +1137,18 @@ msgstr "FLATTEN-GLOW"
 
 msgid "RGA SCALING"
 msgstr "RGA SKALIERUNG"
+
+msgid "GL VENDOR"
+msgstr "GL HERSTELLER"
+
+msgid "GL RENDERER"
+msgstr "GL RENDERER"
+
+msgid "GL VERSION"
+msgstr "GL VERSION"
+
+msgid "GLSL VERSION"
+msgstr ""
 
 msgid "MAIN MENU"
 msgstr "HAUPTMENÜ"
@@ -1246,15 +1285,6 @@ msgstr "BENUTZERDATEN-VERBRAUCH"
 msgid "SYSTEM DISK USAGE"
 msgstr "SYSTEMDATEN-VERBRAUCH"
 
-msgid "GL VENDOR"
-msgstr ""
-
-msgid "GL RENDERER"
-msgstr ""
-
-msgid "GL VERSION"
-msgstr ""
-
 msgid "DEVELOPER"
 msgstr "ENTWICKLER"
 
@@ -1280,10 +1310,11 @@ msgid "TOOLS"
 msgstr "WERKZEUGE"
 
 msgid "ENABLE PUBLIC WEB ACCESS"
-msgstr ""
+msgstr "ÖFFENTLICHEN WEBZUGRIFF AKTIVIEREN"
 
-msgid "Allow public web access API using "
-msgstr ""
+#, c-format
+msgid "Allow public web access API using %s"
+msgstr "Verwendung der öffentlichen Webzugriffs-API %s erlauben"
 
 msgid "A REBOOT OF THE SYSTEM IS REQUIRED TO APPLY THE NEW CONFIGURATION"
 msgstr ""
@@ -1312,7 +1343,7 @@ msgid "CLEAN GAMELISTS & REMOVE UNUSED MEDIAS"
 msgstr "BEREINIGE SPIELLISTE & LÖSCHE UNBENUTZTE MEDIEN"
 
 msgid "Cleaning "
-msgstr "Am Bereinigen "
+msgstr "Räume auf "
 
 msgid "CLEAR CACHES"
 msgstr "LEERE CACHES"
@@ -1336,7 +1367,7 @@ msgid "DATA MANAGEMENT"
 msgstr "DATEI-MANAGEMENT"
 
 msgid "IGNORE MULTIFILE DISK CONTENT (CUE/GDI/CCD/M3U)"
-msgstr ""
+msgstr "MULTIDISK DATEIEN IGNORIEREN (CUE/GDI/CCD/M3U)"
 
 msgid "ENABLE FILTERS"
 msgstr "FILTER AKTIVIEREN"
@@ -1348,7 +1379,7 @@ msgid "PARSE GAMESLISTS ONLY"
 msgstr "NUR SPIELELISTEN PARSEN"
 
 msgid "SEARCH FOR LOCAL ART"
-msgstr "SUCHE NACH LOKALER KUNST"
+msgstr "SUCHE NACH LOKALEN DATEIEN"
 
 msgid "UI"
 msgstr "UI"
@@ -1379,6 +1410,14 @@ msgstr "AUTOKONFIGURIERE EMULATOREN CONTROLLER"
 
 msgid "SWITCH A/B BUTTONS IN EMULATIONSTATION"
 msgstr "A/B BUTTONS IN EMULATIONSTATION WECHSELN"
+
+msgid "ACCESS GAME OPTIONS WITH NORTH BUTTON"
+msgstr "ZUGRIFF AUF SPIELOPTIONEN MIT DER NORDTASTE"
+
+msgid "Inverts north button (savestates) & long press south (game options)"
+msgstr ""
+"Invertiert die Nordtaste (Savestates) & langes Drücken der Südtaste "
+"(Spieloptionen)"
 
 msgid "CONTROL EMULATIONSTATION ONLY WITH FIRST JOYSTICK"
 msgstr "EMULATIONSTATION NUR MIT ERSTEM JOYSTICK STEUERN"
@@ -1946,6 +1985,9 @@ msgstr "BIST DU SICHER, DASS DU DIESES LAUFWERK FORMATIEREN WILLST?"
 msgid "EDIT METADATA"
 msgstr "METADATEN BEARBEITEN"
 
+msgid "GENRES"
+msgstr "GENRES"
+
 msgid ""
 "SOME FILES YOU LINKED ARE LOCATED OUTSIDE THE GAMELIST PATH.\n"
 "DO YOU WANT TO USE A COPY OF THESE FILES RELATIVE TO THE GAMELIST ?"
@@ -1988,7 +2030,7 @@ msgid "GO TO HARDWARE"
 msgstr "GEHE ZU HARDWARE"
 
 msgid "GO TO DECADE"
-msgstr "GEHE ZU DEKADE"
+msgstr "GEHE ZU JAHRZEHNT"
 
 msgid "CONFIGURATION"
 msgstr "KONFIGURATION"
@@ -2037,7 +2079,7 @@ msgid "Preloading UI"
 msgstr "Vorladen des UI"
 
 msgid "Loading theme"
-msgstr "Lade theme"
+msgstr "Lade Theme"
 
 msgid "Loading gamelists"
 msgstr "Lade Gamelists"
@@ -2069,14 +2111,14 @@ msgstr[1] "Dieser Ordner beinhaltet %i Spiele, einschließlich :%s"
 msgid "No Entries Found"
 msgstr "Keine Einträge gefunden"
 
+msgid "Games similar to"
+msgstr "Spiele ähnlich zu"
+
 msgid "GAME OPTIONS"
 msgstr "SPIEL-OPTIONEN"
 
 msgid "FAVORITE"
 msgstr "FAVORIT"
-
-msgid "Games similar to"
-msgstr "Spiele ähnlich zu"
 
 msgid ""
 "A valid account is required. Please register an account on https://"
@@ -2188,7 +2230,7 @@ msgid "GAME TIME, DESCENDING"
 msgstr "SPIELZEIT, ABSTEIGEND"
 
 msgid "SYSTEM, RELEASE YEAR, ASCENDING"
-msgstr "SYSTEM, ERSCHEIUNGSJAHR, AUFSTEIGEND"
+msgstr "SYSTEM, ERSCHEINUNGSJAHR, AUFSTEIGEND"
 
 msgid "SYSTEM, RELEASE YEAR, DESCENDING"
 msgstr "SYSTEM, ERSCHEINUNGSJAHR, ABSTEIGEND"
@@ -2215,7 +2257,10 @@ msgid "UPDATE GAMES LISTS TO APPLY CHANGES."
 msgstr "AKTUALISIERE DIE SPIELELISTE UM DIE ÄNDERUNGEN ANZUWENDEN."
 
 msgid "GENRE"
-msgstr "GATTUNG"
+msgstr "GENRE"
+
+msgid "FAMILY"
+msgstr "FAMILIE"
 
 msgid "PLAYERS"
 msgstr "SPIELER"
@@ -2444,6 +2489,12 @@ msgstr "%d Min"
 #, c-format
 msgid "%d s"
 msgstr "%d S"
+
+#~ msgid "UPDATING EMULATIONSTATION"
+#~ msgstr "AKTUALISIERE EMULATIONSTATION"
+
+#~ msgid "Allow public web access API using "
+#~ msgstr "Erlaube die Verwendung der öffentl. Webzugriffs-API "
 
 #~ msgid "ADD TO CUSTOM COLLECTION"
 #~ msgstr "ZUR BENUTZERDEFINIERTEN SAMMLUNG HINZUFÜGEN"

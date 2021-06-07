@@ -111,6 +111,8 @@ public:
     bool isFreeSpaceLimit();
 
     virtual std::string getVersion();
+	virtual std::string getApplicationName();
+
     std::string getRootPassword();
 
     bool setOverscan(bool enable);
@@ -210,6 +212,7 @@ public:
 	virtual std::string getSevenZipCommand() { return "7zr"; }
 
 	virtual std::vector<std::string> getTimezones();
+	virtual std::string getCurrentTimezone();
 	virtual bool setTimezone(std::string tz);
 
 	virtual std::vector<PadInfo> getPadsInfo();

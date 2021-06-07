@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: emulationstation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-04 13:09+0200\n"
+"POT-Creation-Date: 2021-06-05 21:02+0200\n"
 "Language: zh-CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -112,10 +112,10 @@ msgid "enter path to manual"
 msgstr "输入手册路径"
 
 msgid "Magazine"
-msgstr ""
+msgstr "杂志"
 
 msgid "enter path to magazine"
-msgstr ""
+msgstr "输入杂志路径"
 
 msgid "Map"
 msgstr "地图"
@@ -182,6 +182,18 @@ msgstr "游戏类型"
 
 msgid "enter game genre"
 msgstr "输入游戏类型"
+
+msgid "Game family"
+msgstr "游戏家族"
+
+msgid "enter game family"
+msgstr "进入游戏家族"
+
+msgid "Genres"
+msgstr "流派"
+
+msgid "enter game genres"
+msgstr "进入游戏流派"
 
 msgid "Arcade system"
 msgstr "游戏系统"
@@ -284,6 +296,9 @@ msgstr "街机"
 
 msgid "vertical arcade"
 msgstr "直立街机"
+
+msgid "lightgun games"
+msgstr "光枪游戏"
 
 msgid "collections"
 msgstr "合辑"
@@ -477,6 +492,9 @@ msgstr "选择合辑"
 
 msgid "AUTOMATIC COLLECTIONS"
 msgstr "自动合辑"
+
+msgid "PER GENRE"
+msgstr "按类型"
 
 msgid "ARCADE SYSTEMS"
 msgstr "游戏系统"
@@ -907,8 +925,9 @@ msgstr "是否保存更改?"
 msgid "ARE YOU SURE ?"
 msgstr "确定吗？"
 
-msgid "UPDATING EMULATIONSTATION"
-msgstr "更新模拟器"
+#, c-format
+msgid "UPDATING %s"
+msgstr ""
 
 msgid "UPDATING BATOCERA"
 msgstr "更新 BATOCERA"
@@ -921,6 +940,14 @@ msgstr "重启系统并应用"
 
 msgid "REALLY UPDATE?"
 msgstr "是否进行更新?"
+
+#, c-format
+msgid ""
+"YOU ARE CURRENTLY USING VERSION : %s\n"
+"DO YOU WANT TO UPDATE TO VERSION : %s ?"
+msgstr ""
+"你现在正在使用版本: %s\n"
+"你想要更新到版本: %s 吗?"
 
 msgid "NETWORK CONNECTION NEEDED"
 msgstr "需要连接到互联网"
@@ -1146,6 +1173,18 @@ msgstr "FLATTEN-GLOW 着色器集"
 msgid "RGA SCALING"
 msgstr "RGA缩放"
 
+msgid "GL VENDOR"
+msgstr "GL供应商"
+
+msgid "GL RENDERER"
+msgstr "GL渲染器"
+
+msgid "GL VERSION"
+msgstr "GL版本"
+
+msgid "GLSL VERSION"
+msgstr "GLSL版本"
+
 msgid "MAIN MENU"
 msgstr "主菜单"
 
@@ -1243,7 +1282,7 @@ msgid "SCRAPE BOX BACKSIDE"
 msgstr ""
 
 msgid "SCRAPE MAP"
-msgstr ""
+msgstr "抓取地图"
 
 msgid "SCRAPE MANUAL"
 msgstr "抓取手册"
@@ -1281,15 +1320,6 @@ msgstr "用户磁盘使用"
 msgid "SYSTEM DISK USAGE"
 msgstr "系统磁盘使用"
 
-msgid "GL VENDOR"
-msgstr ""
-
-msgid "GL RENDERER"
-msgstr ""
-
-msgid "GL VERSION"
-msgstr ""
-
 msgid "DEVELOPER"
 msgstr "开发者选项"
 
@@ -1315,10 +1345,11 @@ msgid "TOOLS"
 msgstr "工具"
 
 msgid "ENABLE PUBLIC WEB ACCESS"
-msgstr ""
+msgstr "开启公共网页访问"
 
-msgid "Allow public web access API using "
-msgstr ""
+#, c-format
+msgid "Allow public web access API using %s"
+msgstr "允许使用 %s 访问公共网页API"
 
 msgid "A REBOOT OF THE SYSTEM IS REQUIRED TO APPLY THE NEW CONFIGURATION"
 msgstr "需要重新启动系统才能应用新配置"
@@ -1369,7 +1400,7 @@ msgid "DATA MANAGEMENT"
 msgstr "数据管理"
 
 msgid "IGNORE MULTIFILE DISK CONTENT (CUE/GDI/CCD/M3U)"
-msgstr ""
+msgstr "忽略多文件磁盘内容(CUE/GDI/CCD/M3U)"
 
 msgid "ENABLE FILTERS"
 msgstr "启用筛选器"
@@ -1412,6 +1443,12 @@ msgstr "自动配置模拟的控制设备"
 
 msgid "SWITCH A/B BUTTONS IN EMULATIONSTATION"
 msgstr "在EMULATIONSTATION中切换 A/B 按键"
+
+msgid "ACCESS GAME OPTIONS WITH NORTH BUTTON"
+msgstr "使用NORTH按钮访问游戏选项"
+
+msgid "Inverts north button (savestates) & long press south (game options)"
+msgstr "反转north按钮(状态保存) & 长按south按钮(游戏选项)"
 
 msgid "CONTROL EMULATIONSTATION ONLY WITH FIRST JOYSTICK"
 msgstr "仅允许第一个控制器控制EMULATIONSTATION"
@@ -1977,6 +2014,9 @@ msgstr "您确定要格式化此驱动器吗？"
 msgid "EDIT METADATA"
 msgstr "编辑元数据"
 
+msgid "GENRES"
+msgstr "流派"
+
 msgid ""
 "SOME FILES YOU LINKED ARE LOCATED OUTSIDE THE GAMELIST PATH.\n"
 "DO YOU WANT TO USE A COPY OF THESE FILES RELATIVE TO THE GAMELIST ?"
@@ -2230,6 +2270,9 @@ msgstr "查找联机游戏"
 
 msgid "GENRE"
 msgstr "类型"
+
+msgid "FAMILY"
+msgstr "家庭"
 
 msgid "PLAYERS"
 msgstr "玩家数"
@@ -2494,6 +2537,9 @@ msgstr ""
 #, c-format
 msgid "%d s"
 msgstr ""
+
+#~ msgid "UPDATING EMULATIONSTATION"
+#~ msgstr "更新模拟器"
 
 #~ msgid "USE RETROARCH RGUI MENU"
 #~ msgstr "使用 RETROARCH 的用户界面菜单"

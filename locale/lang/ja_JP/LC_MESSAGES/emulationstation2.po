@@ -1,16 +1,16 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: batocera-es v31(2021/05/01)\n"
+"Project-Id-Version: batocera-es v31beta(2021/06/04)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-04 13:09+0200\n"
-"PO-Revision-Date: 2021-05-02 19:31+0900\n"
+"POT-Creation-Date: 2021-06-05 21:07+0200\n"
+"PO-Revision-Date: 2021-06-06 00:24+0900\n"
 "Last-Translator: mikakunin\n"
 "Language-Team: mikakunin\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 msgid "UPDATE AVAILABLE"
@@ -154,6 +154,18 @@ msgstr "ジャンル"
 msgid "enter game genre"
 msgstr "ジャンルを入力"
 
+msgid "Game family"
+msgstr "ファミリーゲーム"
+
+msgid "enter game family"
+msgstr "ファミリーゲームを入力"
+
+msgid "Genres"
+msgstr "ジャンル"
+
+msgid "enter game genres"
+msgstr "ジャンルを入力"
+
 msgid "Arcade system"
 msgstr "アーケードシステム"
 
@@ -258,6 +270,9 @@ msgstr "アーケード"
 
 msgid "vertical arcade"
 msgstr "縦表示アーケード"
+
+msgid "lightgun games"
+msgstr "ガンコントローラ ゲーム"
 
 msgid "collections"
 msgstr "コレクション"
@@ -441,6 +456,9 @@ msgstr "コレクションを選択"
 
 msgid "AUTOMATIC COLLECTIONS"
 msgstr "自動コレクション"
+
+msgid "PER GENRE"
+msgstr "ジャンルごと"
 
 msgid "ARCADE SYSTEMS"
 msgstr "アーケードシステム"
@@ -829,8 +847,9 @@ msgstr "変更を保存しますか？"
 msgid "ARE YOU SURE ?"
 msgstr "よろしいですか？"
 
-msgid "UPDATING EMULATIONSTATION"
-msgstr "エミュレーションステーションの更新"
+#, c-format
+msgid "UPDATING %s"
+msgstr "%s を更新しています"
 
 msgid "UPDATING BATOCERA"
 msgstr "BATOCERA更新中"
@@ -843,6 +862,14 @@ msgstr "再起動で更新が適用されます"
 
 msgid "REALLY UPDATE?"
 msgstr "更新しますか？"
+
+#, c-format
+msgid ""
+"YOU ARE CURRENTLY USING VERSION : %s\n"
+"DO YOU WANT TO UPDATE TO VERSION : %s ?"
+msgstr ""
+"現在バージョン %s を使用しています\r\n"
+"バージョン %s に更新しますか?"
 
 msgid "NETWORK CONNECTION NEEDED"
 msgstr "ネットワーク接続が必要です"
@@ -1110,6 +1137,18 @@ msgstr "FLATTEN-GLOW"
 msgid "RGA SCALING"
 msgstr "RGAスケーリング"
 
+msgid "GL VENDOR"
+msgstr "GL ベンダー"
+
+msgid "GL RENDERER"
+msgstr "GL レンダラー"
+
+msgid "GL VERSION"
+msgstr "GL バージョン"
+
+msgid "GLSL VERSION"
+msgstr "GLSL バージョン"
+
 msgid "MAIN MENU"
 msgstr "メインメニュー"
 
@@ -1245,15 +1284,6 @@ msgstr "データ使用量/容量"
 msgid "SYSTEM DISK USAGE"
 msgstr "システムデータ使用量/容量"
 
-msgid "GL VENDOR"
-msgstr "GL ベンダー"
-
-msgid "GL RENDERER"
-msgstr "GL レンダラー"
-
-msgid "GL VERSION"
-msgstr "GL バージョン"
-
 msgid "DEVELOPER"
 msgstr "その他の設定"
 
@@ -1280,10 +1310,11 @@ msgid "TOOLS"
 msgstr "ツール"
 
 msgid "ENABLE PUBLIC WEB ACCESS"
-msgstr ""
+msgstr "パブリックWebアクセスを有効"
 
-msgid "Allow public web access API using "
-msgstr ""
+#, c-format
+msgid "Allow public web access API using %s"
+msgstr "%s を使用しパブリックWebアクセスAPIを許可"
 
 msgid "A REBOOT OF THE SYSTEM IS REQUIRED TO APPLY THE NEW CONFIGURATION"
 msgstr "新しい構成を適用するには、システムの再起動が必要です"
@@ -1380,6 +1411,12 @@ msgstr "エミュレーターのコントローラーの自動設定"
 msgid "SWITCH A/B BUTTONS IN EMULATIONSTATION"
 msgstr "ESメニューでの A/B ボタンの入れ替え"
 
+msgid "ACCESS GAME OPTIONS WITH NORTH BUTTON"
+msgstr "△(上)ボタンでゲームオプションを開く"
+
+msgid "Inverts north button (savestates) & long press south (game options)"
+msgstr "△(上)を反転（ステートセーブ）、×（下）を長押し（ゲームオプション）"
+
 msgid "CONTROL EMULATIONSTATION ONLY WITH FIRST JOYSTICK"
 msgstr "最初のコントローラだけでESメニューを操作する"
 
@@ -1447,7 +1484,7 @@ msgid "POWER SAVER MODES"
 msgstr "省電力モード(rpi用)"
 
 msgid "UI MODE"
-msgstr "UI　モード"
+msgstr "UI モード"
 
 msgid ""
 "You are changing the UI to a restricted mode:\n"
@@ -1609,10 +1646,10 @@ msgid "AUTO SAVE/LOAD"
 msgstr "自動セーブ/ロード"
 
 msgid "SHOW SAVE SNAPSHOTS"
-msgstr "保存時スナップショットを表示"
+msgstr "保存時スナップショットを表示する"
 
 msgid "SHOW SNAPSHOTS IF NOT EMPTY"
-msgstr "スナップショットがあるなら表示する"
+msgstr "スナップショットがあれば表示する"
 
 msgid "SHADERS SET"
 msgstr "シェーダー設定"
@@ -1944,6 +1981,9 @@ msgstr "このドライブをフォーマットしますか？"
 msgid "EDIT METADATA"
 msgstr "メタ情報を編集"
 
+msgid "GENRES"
+msgstr "ジャンル"
+
 msgid ""
 "SOME FILES YOU LINKED ARE LOCATED OUTSIDE THE GAMELIST PATH.\n"
 "DO YOU WANT TO USE A COPY OF THESE FILES RELATIVE TO THE GAMELIST ?"
@@ -2061,14 +2101,14 @@ msgstr[0] "このフォルダには、%i 種のゲームがあります( %s を�
 msgid "No Entries Found"
 msgstr "エントリが見つかりません"
 
+msgid "Games similar to"
+msgstr "類似ゲーム→"
+
 msgid "GAME OPTIONS"
 msgstr "ゲーム設定"
 
 msgid "FAVORITE"
 msgstr "気に入り"
-
-msgid "Games similar to"
-msgstr "類似ゲーム→"
 
 msgid ""
 "A valid account is required. Please register an account on https://"
@@ -2208,6 +2248,9 @@ msgstr "「ゲームリストを更新」で変更を適用します。"
 
 msgid "GENRE"
 msgstr "ジャンル"
+
+msgid "FAMILY"
+msgstr "ファミリー"
 
 msgid "PLAYERS"
 msgstr "プレイヤー数"
@@ -2426,3 +2469,6 @@ msgstr "%d 分"
 #, c-format
 msgid "%d s"
 msgstr "%d 秒"
+
+#~ msgid "UPDATING EMULATIONSTATION"
+#~ msgstr "エミュレーションステーションの更新"

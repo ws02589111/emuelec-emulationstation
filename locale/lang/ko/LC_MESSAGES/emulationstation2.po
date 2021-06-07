@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: emulationstation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-04 13:09+0200\n"
+"POT-Creation-Date: 2021-06-05 21:02+0200\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -151,6 +151,18 @@ msgstr "장르"
 msgid "enter game genre"
 msgstr "장르 입력"
 
+msgid "Game family"
+msgstr ""
+
+msgid "enter game family"
+msgstr ""
+
+msgid "Genres"
+msgstr ""
+
+msgid "enter game genres"
+msgstr ""
+
 msgid "Arcade system"
 msgstr "아케이드 시스템"
 
@@ -254,6 +266,9 @@ msgid "arcade"
 msgstr "아케이드"
 
 msgid "vertical arcade"
+msgstr ""
+
+msgid "lightgun games"
 msgstr ""
 
 msgid "collections"
@@ -436,6 +451,9 @@ msgid "SELECT COLLECTIONS"
 msgstr "컬렉션 선택"
 
 msgid "AUTOMATIC COLLECTIONS"
+msgstr ""
+
+msgid "PER GENRE"
 msgstr ""
 
 msgid "ARCADE SYSTEMS"
@@ -825,7 +843,8 @@ msgstr "변경 사항을 저장 하시겠습니까?"
 msgid "ARE YOU SURE ?"
 msgstr "확실합니까?"
 
-msgid "UPDATING EMULATIONSTATION"
+#, c-format
+msgid "UPDATING %s"
 msgstr ""
 
 msgid "UPDATING BATOCERA"
@@ -839,6 +858,12 @@ msgstr "적용하려면 시스템을 재시작하세요"
 
 msgid "REALLY UPDATE?"
 msgstr "정말로 업데이트 하시겠습니까?"
+
+#, c-format
+msgid ""
+"YOU ARE CURRENTLY USING VERSION : %s\n"
+"DO YOU WANT TO UPDATE TO VERSION : %s ?"
+msgstr ""
 
 msgid "NETWORK CONNECTION NEEDED"
 msgstr "인터넷 연결이 필요합니다"
@@ -1106,6 +1131,18 @@ msgstr "평면빛"
 msgid "RGA SCALING"
 msgstr ""
 
+msgid "GL VENDOR"
+msgstr ""
+
+msgid "GL RENDERER"
+msgstr ""
+
+msgid "GL VERSION"
+msgstr ""
+
+msgid "GLSL VERSION"
+msgstr ""
+
 msgid "MAIN MENU"
 msgstr "메인 메뉴"
 
@@ -1241,15 +1278,6 @@ msgstr "사용자 디스크 사용량"
 msgid "SYSTEM DISK USAGE"
 msgstr "시스템 디스크 사용량"
 
-msgid "GL VENDOR"
-msgstr ""
-
-msgid "GL RENDERER"
-msgstr ""
-
-msgid "GL VERSION"
-msgstr ""
-
 msgid "DEVELOPER"
 msgstr "개발자"
 
@@ -1277,7 +1305,8 @@ msgstr "도구"
 msgid "ENABLE PUBLIC WEB ACCESS"
 msgstr ""
 
-msgid "Allow public web access API using "
+#, c-format
+msgid "Allow public web access API using %s"
 msgstr ""
 
 msgid "A REBOOT OF THE SYSTEM IS REQUIRED TO APPLY THE NEW CONFIGURATION"
@@ -1371,6 +1400,12 @@ msgid "AUTOCONFIGURE EMULATORS CONTROLLERS"
 msgstr "에뮬레이터 컨트롤러 자동 설정"
 
 msgid "SWITCH A/B BUTTONS IN EMULATIONSTATION"
+msgstr ""
+
+msgid "ACCESS GAME OPTIONS WITH NORTH BUTTON"
+msgstr ""
+
+msgid "Inverts north button (savestates) & long press south (game options)"
 msgstr ""
 
 msgid "CONTROL EMULATIONSTATION ONLY WITH FIRST JOYSTICK"
@@ -1935,6 +1970,9 @@ msgstr "이 드라이브를 포맷하는 것을 정말로 원합니까?"
 msgid "EDIT METADATA"
 msgstr "게임 정보 편집"
 
+msgid "GENRES"
+msgstr ""
+
 msgid ""
 "SOME FILES YOU LINKED ARE LOCATED OUTSIDE THE GAMELIST PATH.\n"
 "DO YOU WANT TO USE A COPY OF THESE FILES RELATIVE TO THE GAMELIST ?"
@@ -2045,13 +2083,13 @@ msgstr[0] ""
 msgid "No Entries Found"
 msgstr "항목을 찾지 못했습니다"
 
+msgid "Games similar to"
+msgstr ""
+
 msgid "GAME OPTIONS"
 msgstr "게임 옵션"
 
 msgid "FAVORITE"
-msgstr ""
-
-msgid "Games similar to"
 msgstr ""
 
 msgid ""
@@ -2190,6 +2228,9 @@ msgstr ""
 
 msgid "GENRE"
 msgstr "장르"
+
+msgid "FAMILY"
+msgstr ""
 
 msgid "PLAYERS"
 msgstr "플레이어수"

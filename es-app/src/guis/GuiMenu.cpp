@@ -79,6 +79,11 @@
 #define fake_gettext_flatten_glow	_("FLATTEN-GLOW")
 #define fake_gettext_rgascaling		_("RGA SCALING")
 
+#define fake_gettext_glvendor		_("GL VENDOR")
+#define fake_gettext_glvrenderer	_("GL RENDERER")
+#define fake_gettext_glversion		_("GL VERSION")
+#define fake_gettext_glslversion	_("GLSL VERSION")
+
 GuiMenu::GuiMenu(Window *window, bool animate) : GuiComponent(window), mMenu(window, _("MAIN MENU").c_str()), mVersion(window)
 {
 	// MAIN MENU
@@ -861,15 +866,7 @@ void GuiMenu::addVersionInfo()
 	if (!ApiSystem::getInstance()->getVersion().empty())
 	{
 #if WIN32
-		std::string aboutInfo;
-
-		std::string localVersionFile = Utils::FileSystem::getExePath() + "/about.info";
-		if (Utils::FileSystem::exists(localVersionFile))
-		{
-			aboutInfo = Utils::FileSystem::readAllText(localVersionFile);
-		}
-			aboutInfo = Utils::String::replace(Utils::String::replace(aboutInfo, "\r", ""), "\n", "");
-
+		std::string aboutInfo = ApiSystem::getInstance()->getApplicationName()+ " V"+ ApiSystem::getInstance()->getVersion();
 		if (!aboutInfo.empty())
 			mVersion.setText(aboutInfo + buildDate);
 		else
@@ -1035,13 +1032,12 @@ void GuiMenu::openSystemInformations_batocera()
 		color);
 	informationsGui->addWithLabel(_("SYSTEM DISK USAGE"), systemspace);
 #endif
-
-	auto glvendor = std::make_shared<TextComponent>(window, Renderer::GLVendor(), font, color);
-	informationsGui->addWithLabel(_("GL VENDOR"), glvendor);
-	auto glrenderer = std::make_shared<TextComponent>(window, Renderer::GLRenderer(), font, color);
-	informationsGui->addWithLabel(_("GL RENDERER"), glrenderer);
-	auto glversion = std::make_shared<TextComponent>(window, Renderer::GLVersion(), font, color);
-	informationsGui->addWithLabel(_("GL VERSION"), glversion);
+	
+	for (auto info : Renderer::getDriverInformation())
+	{
+		auto glversion = std::make_shared<TextComponent>(window, info.second, font, color);
+		informationsGui->addWithLabel(_(info.first.c_str()), glversion);
+	}
 
 	// various informations
 	std::vector<std::string> infos = ApiSystem::getInstance()->getSystemInformations();
@@ -1137,7 +1133,7 @@ void GuiMenu::openDeveloperSettings()
 
 	auto webAccess = std::make_shared<SwitchComponent>(mWindow);
 	webAccess->setState(Settings::getInstance()->getBool("PublicWebAccess"));
-	s->addWithDescription(_("ENABLE PUBLIC WEB ACCESS"), _("Allow public web access API using ") + " http://" + hostName + ":1234", webAccess);
+	s->addWithDescription(_("ENABLE PUBLIC WEB ACCESS"), Utils::String::format(_("Allow public web access API using %s").c_str(), std::string("http://" + hostName + ":1234").c_str()), webAccess);
 	s->addSaveFunc([webAccess, window]
 	{ 
 		if (Settings::getInstance()->setBool("PublicWebAccess", webAccess->getState()))
@@ -1388,13 +1384,22 @@ void GuiMenu::openDeveloperSettings()
 	auto invertJoy = std::make_shared<SwitchComponent>(mWindow);
 	invertJoy->setState(Settings::getInstance()->getBool("InvertButtons"));
 	s->addWithLabel(_("SWITCH A/B BUTTONS IN EMULATIONSTATION"), invertJoy);
-	s->addSaveFunc([this, invertJoy]
+	s->addSaveFunc([this, s, invertJoy]
 	{
 		if (Settings::getInstance()->setBool("InvertButtons", invertJoy->getState()))
 		{
 			InputConfig::AssignActionButtons();
-			ViewController::get()->reloadAll(mWindow);
+			s->setVariable("reloadAll", true);
 		}
+	});
+
+	auto invertLongPress = std::make_shared<SwitchComponent>(mWindow);
+	invertLongPress->setState(Settings::getInstance()->getBool("GameOptionsAtNorth"));
+	s->addWithDescription(_("ACCESS GAME OPTIONS WITH NORTH BUTTON"), _("Inverts north button (savestates) & long press south (game options)"), invertLongPress);
+	s->addSaveFunc([this, s, invertLongPress]
+	{
+		if (Settings::getInstance()->setBool("GameOptionsAtNorth", invertLongPress->getState()))
+			s->setVariable("reloadAll", true);
 	});
 
 	auto firstJoystickOnly = std::make_shared<SwitchComponent>(mWindow);
@@ -1441,8 +1446,15 @@ void GuiMenu::openDeveloperSettings()
 	optimizeVideo->setState(Settings::getInstance()->getBool("OptimizeVideo"));
 	s->addWithLabel(_("OPTIMIZE VIDEO VRAM USE"), optimizeVideo);
 	s->addSaveFunc([optimizeVideo] { Settings::getInstance()->setBool("OptimizeVideo", optimizeVideo->getState()); });
-
-
+	
+	s->onFinalize([s, window]
+	{
+		if (s->getVariable("reloadAll"))
+		{
+			ViewController::get()->reloadAll(window);
+			window->closeSplashScreen();
+		}
+	});
 
 	mWindow->pushGui(s);
 }
@@ -1622,15 +1634,21 @@ void GuiMenu::openSystemSettings_batocera()
 	auto availableTimezones = ApiSystem::getInstance()->getTimezones();
 	if (availableTimezones.size() > 0)
 	{
-		std::string currentTZ = SystemConf::getInstance()->get("system.timezone");
+		std::string currentTZ = ApiSystem::getInstance()->getCurrentTimezone();
+
+		bool valid_tz = false;
+		for (auto list_tz : availableTimezones){
+			if (currentTZ == list_tz) {
+				valid_tz = true;
+			}
+		}
+		if (!valid_tz)
+			currentTZ = "Europe/Paris";
 
 		auto tzChoices= std::make_shared<OptionListComponent<std::string> >(mWindow, _("SELECT YOUR TIMEZONE"), false);
 
 		for (auto tz : availableTimezones)
 			tzChoices->add(_(Utils::String::toUpper(tz).c_str()), tz, currentTZ == tz);
-
-		if (!tzChoices->hasSelection())
-			tzChoices->selectFirstItem();
 
 		s->addWithLabel(_("TIMEZONE"), tzChoices);
 		s->addSaveFunc([tzChoices] {
@@ -2116,7 +2134,7 @@ void GuiMenu::openRetroachievementsSettings()
 	auto installedRSounds = ApiSystem::getInstance()->getRetroachievementsSoundsList();
 	if (installedRSounds.size() > 0)
 	{
-		std::string currentSound = SystemConf::getInstance()->get("global.retroachievements_sound");
+		std::string currentSound = SystemConf::getInstance()->get("global.retroachievements.sound");
 
 		auto rsounds_choices = std::make_shared<OptionListComponent<std::string> >(mWindow, _("RETROACHIEVEMENTS UNLOCK SOUND"), false);
 		rsounds_choices->add(_("none"), "none", currentSound.empty() || currentSound == "none");
@@ -2128,7 +2146,7 @@ void GuiMenu::openRetroachievementsSettings()
 			rsounds_choices->selectFirstItem();
 
 		retroachievements->addWithLabel(_("UNLOCK SOUND"), rsounds_choices);
-		retroachievements->addSaveFunc([rsounds_choices] { SystemConf::getInstance()->set("global.retroachievements_sound", rsounds_choices->getSelected()); });
+		retroachievements->addSaveFunc([rsounds_choices] { SystemConf::getInstance()->set("global.retroachievements.sound", rsounds_choices->getSelected()); });
 	}
 
 	// retroachievements, username, password
@@ -4210,7 +4228,7 @@ void GuiMenu::popSystemConfigurationGui(Window* mWindow, SystemData* systemData)
 void GuiMenu::popGameConfigurationGui(Window* mWindow, FileData* fileData)
 {
 	popSpecificConfigurationGui(mWindow,
-		fileData->getCleanName(),
+		fileData->getName(),
 		fileData->getConfigurationName(),
 		fileData->getSourceFileData()->getSystem(),
 		fileData);

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-04 13:09+0200\n"
+"POT-Creation-Date: 2021-06-05 21:02+0200\n"
 "PO-Revision-Date: 2021-01-26 19:38+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -155,6 +155,18 @@ msgstr "Genre"
 msgid "enter game genre"
 msgstr "gosod genre gemau"
 
+msgid "Game family"
+msgstr ""
+
+msgid "enter game family"
+msgstr ""
+
+msgid "Genres"
+msgstr ""
+
+msgid "enter game genres"
+msgstr ""
+
 msgid "Arcade system"
 msgstr "System arcêd"
 
@@ -258,6 +270,9 @@ msgid "arcade"
 msgstr "arcêd"
 
 msgid "vertical arcade"
+msgstr ""
+
+msgid "lightgun games"
 msgstr ""
 
 msgid "collections"
@@ -446,6 +461,9 @@ msgstr "DEWIS CASGLIADAU"
 
 msgid "AUTOMATIC COLLECTIONS"
 msgstr "CASGLIADAU AWTOMATIG"
+
+msgid "PER GENRE"
+msgstr ""
 
 msgid "ARCADE SYSTEMS"
 msgstr "SYSTEMAU ARCÊD"
@@ -834,8 +852,9 @@ msgstr "ARBED NEWIDIADAU?"
 msgid "ARE YOU SURE ?"
 msgstr "WYT TI'N SIWR ?"
 
-msgid "UPDATING EMULATIONSTATION"
-msgstr "DIWEDDARU EMULATIONSTATION"
+#, c-format
+msgid "UPDATING %s"
+msgstr ""
 
 msgid "UPDATING BATOCERA"
 msgstr "DIWEDDARU BATOCERA"
@@ -848,6 +867,12 @@ msgstr "AILGYCHWYN Y SYSTEM I GWBLHAU'R WEITHRED"
 
 msgid "REALLY UPDATE?"
 msgstr "IAWN I DDIWEDDARU?"
+
+#, c-format
+msgid ""
+"YOU ARE CURRENTLY USING VERSION : %s\n"
+"DO YOU WANT TO UPDATE TO VERSION : %s ?"
+msgstr ""
 
 msgid "NETWORK CONNECTION NEEDED"
 msgstr "ANGEN CYSWLLT RHWYDWAITH"
@@ -1115,6 +1140,18 @@ msgstr "TYWYN-FFLATIO"
 msgid "RGA SCALING"
 msgstr "GRADDIO RGA"
 
+msgid "GL VENDOR"
+msgstr ""
+
+msgid "GL RENDERER"
+msgstr ""
+
+msgid "GL VERSION"
+msgstr ""
+
+msgid "GLSL VERSION"
+msgstr ""
+
 msgid "MAIN MENU"
 msgstr "PRIF DDEWISLEN"
 
@@ -1250,15 +1287,6 @@ msgstr "DISG DEFNYDDWR A DEFNYDDIWYD"
 msgid "SYSTEM DISK USAGE"
 msgstr "SYSTEM DISG A DEFNYDDIWYD"
 
-msgid "GL VENDOR"
-msgstr ""
-
-msgid "GL RENDERER"
-msgstr ""
-
-msgid "GL VERSION"
-msgstr ""
-
 msgid "DEVELOPER"
 msgstr "DATBLYGWR"
 
@@ -1286,7 +1314,8 @@ msgstr "OFFER"
 msgid "ENABLE PUBLIC WEB ACCESS"
 msgstr ""
 
-msgid "Allow public web access API using "
+#, c-format
+msgid "Allow public web access API using %s"
 msgstr ""
 
 msgid "A REBOOT OF THE SYSTEM IS REQUIRED TO APPLY THE NEW CONFIGURATION"
@@ -1381,6 +1410,12 @@ msgstr "TRAWSWEDDU AWTOMATIG RHEOLYDDION EFELYCHWYR"
 
 msgid "SWITCH A/B BUTTONS IN EMULATIONSTATION"
 msgstr "CYFNEWID BOTYMAU A/B YN EMULATIONSTATION"
+
+msgid "ACCESS GAME OPTIONS WITH NORTH BUTTON"
+msgstr ""
+
+msgid "Inverts north button (savestates) & long press south (game options)"
+msgstr ""
 
 msgid "CONTROL EMULATIONSTATION ONLY WITH FIRST JOYSTICK"
 msgstr ""
@@ -1946,6 +1981,9 @@ msgstr "A YDYCH CHI'N SIWR EICH BOD EISIAU FFORMATIO'R GYRRWR HWN?"
 msgid "EDIT METADATA"
 msgstr "GOLYGU METADATA"
 
+msgid "GENRES"
+msgstr ""
+
 msgid ""
 "SOME FILES YOU LINKED ARE LOCATED OUTSIDE THE GAMELIST PATH.\n"
 "DO YOU WANT TO USE A COPY OF THESE FILES RELATIVE TO THE GAMELIST ?"
@@ -2081,14 +2119,14 @@ msgstr[5] ""
 msgid "No Entries Found"
 msgstr "Ni ddarganfuwyd unrhyw gofnodion"
 
+msgid "Games similar to"
+msgstr "Gemau tebyg i"
+
 msgid "GAME OPTIONS"
 msgstr "OPSIYNAU GÊM"
 
 msgid "FAVORITE"
 msgstr ""
-
-msgid "Games similar to"
-msgstr "Gemau tebyg i"
 
 msgid ""
 "A valid account is required. Please register an account on https://"
@@ -2227,6 +2265,9 @@ msgstr "DIWEDDARU RHESTR GEMAU I YMGEISIO NEWIDIADAU."
 
 msgid "GENRE"
 msgstr "GENRE"
+
+msgid "FAMILY"
+msgstr ""
 
 msgid "PLAYERS"
 msgstr "CHWARAEWYR"
@@ -2481,6 +2522,9 @@ msgstr "%d m"
 #, c-format
 msgid "%d s"
 msgstr "%d e"
+
+#~ msgid "UPDATING EMULATIONSTATION"
+#~ msgstr "DIWEDDARU EMULATIONSTATION"
 
 #~ msgid "USE RETROARCH RGUI MENU"
 #~ msgstr "DEFNYDDIO DEWISLEN RGUI RETROARCH"
